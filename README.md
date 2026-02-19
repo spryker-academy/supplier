@@ -232,12 +232,16 @@ $config[KernelConstants::CORE_NAMESPACES] = [
 
 ### 2. Run Code Generation
 
-```bash
-# Generate transfer objects
-vendor/bin/console transfer:generate
+**⚠️ IMPORTANT:** This package does NOT include generated Propel entity classes (Orm namespace).
+You MUST generate them by running `propel:install` first!
 
-# Install Propel (creates database schema)
+```bash
+# 1. FIRST: Generate Propel entity classes (required!)
+#    This creates the Orm classes that the modules depend on
 vendor/bin/console propel:install
+
+# 2. Generate transfer objects
+vendor/bin/console transfer:generate
 
 # Build navigation cache
 vendor/bin/console navigation:build-cache
