@@ -1,0 +1,1531 @@
+<?php
+
+namespace Orm\Zed\Oauth\Persistence\Base;
+
+use \Exception;
+use \PDO;
+use Orm\Zed\Oauth\Persistence\SpyOauthAccessToken as ChildSpyOauthAccessToken;
+use Orm\Zed\Oauth\Persistence\SpyOauthAccessTokenQuery as ChildSpyOauthAccessTokenQuery;
+use Orm\Zed\Oauth\Persistence\Map\SpyOauthAccessTokenTableMap;
+use Propel\Runtime\Propel;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
+use Spryker\Zed\PropelOrm\Business\Model\Formatter\TypeAwareSimpleArrayFormatter;
+use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria as SprykerCriteria;
+use Spryker\Zed\PropelReplicationCache\Business\PropelReplicationCacheFacade;
+use Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException;
+
+/**
+ * Base class that represents a query for the `spy_oauth_access_token` table.
+ *
+ * @method     ChildSpyOauthAccessTokenQuery orderByIdOauthAccessToken($order = Criteria::ASC) Order by the id_oauth_access_token column
+ * @method     ChildSpyOauthAccessTokenQuery orderByFkOauthClient($order = Criteria::ASC) Order by the fk_oauth_client column
+ * @method     ChildSpyOauthAccessTokenQuery orderByExpirityDate($order = Criteria::ASC) Order by the expirity_date column
+ * @method     ChildSpyOauthAccessTokenQuery orderByIdentifier($order = Criteria::ASC) Order by the identifier column
+ * @method     ChildSpyOauthAccessTokenQuery orderByScopes($order = Criteria::ASC) Order by the scopes column
+ * @method     ChildSpyOauthAccessTokenQuery orderByUserIdentifier($order = Criteria::ASC) Order by the user_identifier column
+ * @method     ChildSpyOauthAccessTokenQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     ChildSpyOauthAccessTokenQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
+ *
+ * @method     ChildSpyOauthAccessTokenQuery groupByIdOauthAccessToken() Group by the id_oauth_access_token column
+ * @method     ChildSpyOauthAccessTokenQuery groupByFkOauthClient() Group by the fk_oauth_client column
+ * @method     ChildSpyOauthAccessTokenQuery groupByExpirityDate() Group by the expirity_date column
+ * @method     ChildSpyOauthAccessTokenQuery groupByIdentifier() Group by the identifier column
+ * @method     ChildSpyOauthAccessTokenQuery groupByScopes() Group by the scopes column
+ * @method     ChildSpyOauthAccessTokenQuery groupByUserIdentifier() Group by the user_identifier column
+ * @method     ChildSpyOauthAccessTokenQuery groupByCreatedAt() Group by the created_at column
+ * @method     ChildSpyOauthAccessTokenQuery groupByUpdatedAt() Group by the updated_at column
+ *
+ * @method     ChildSpyOauthAccessTokenQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildSpyOauthAccessTokenQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildSpyOauthAccessTokenQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method     ChildSpyOauthAccessTokenQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildSpyOauthAccessTokenQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildSpyOauthAccessTokenQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildSpyOauthAccessTokenQuery leftJoinOauthClient($relationAlias = null) Adds a LEFT JOIN clause to the query using the OauthClient relation
+ * @method     ChildSpyOauthAccessTokenQuery rightJoinOauthClient($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OauthClient relation
+ * @method     ChildSpyOauthAccessTokenQuery innerJoinOauthClient($relationAlias = null) Adds a INNER JOIN clause to the query using the OauthClient relation
+ *
+ * @method     ChildSpyOauthAccessTokenQuery joinWithOauthClient($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OauthClient relation
+ *
+ * @method     ChildSpyOauthAccessTokenQuery leftJoinWithOauthClient() Adds a LEFT JOIN clause and with to the query using the OauthClient relation
+ * @method     ChildSpyOauthAccessTokenQuery rightJoinWithOauthClient() Adds a RIGHT JOIN clause and with to the query using the OauthClient relation
+ * @method     ChildSpyOauthAccessTokenQuery innerJoinWithOauthClient() Adds a INNER JOIN clause and with to the query using the OauthClient relation
+ *
+ * @method     \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ *
+ * @method     ChildSpyOauthAccessToken|null findOne(?ConnectionInterface $con = null) Return the first ChildSpyOauthAccessToken matching the query
+ * @method     ChildSpyOauthAccessToken findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSpyOauthAccessToken matching the query, or a new ChildSpyOauthAccessToken object populated from the query conditions when no match is found
+ *
+ * @method     ChildSpyOauthAccessToken|null findOneByIdOauthAccessToken(int $id_oauth_access_token) Return the first ChildSpyOauthAccessToken filtered by the id_oauth_access_token column
+ * @method     ChildSpyOauthAccessToken|null findOneByFkOauthClient(string $fk_oauth_client) Return the first ChildSpyOauthAccessToken filtered by the fk_oauth_client column
+ * @method     ChildSpyOauthAccessToken|null findOneByExpirityDate(string $expirity_date) Return the first ChildSpyOauthAccessToken filtered by the expirity_date column
+ * @method     ChildSpyOauthAccessToken|null findOneByIdentifier(string $identifier) Return the first ChildSpyOauthAccessToken filtered by the identifier column
+ * @method     ChildSpyOauthAccessToken|null findOneByScopes(string $scopes) Return the first ChildSpyOauthAccessToken filtered by the scopes column
+ * @method     ChildSpyOauthAccessToken|null findOneByUserIdentifier(string $user_identifier) Return the first ChildSpyOauthAccessToken filtered by the user_identifier column
+ * @method     ChildSpyOauthAccessToken|null findOneByCreatedAt(string $created_at) Return the first ChildSpyOauthAccessToken filtered by the created_at column
+ * @method     ChildSpyOauthAccessToken|null findOneByUpdatedAt(string $updated_at) Return the first ChildSpyOauthAccessToken filtered by the updated_at column
+ *
+ * @method     ChildSpyOauthAccessToken requirePk($key, ?ConnectionInterface $con = null) Return the ChildSpyOauthAccessToken by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOne(?ConnectionInterface $con = null) Return the first ChildSpyOauthAccessToken matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ *
+ * @method     ChildSpyOauthAccessToken requireOneByIdOauthAccessToken(int $id_oauth_access_token) Return the first ChildSpyOauthAccessToken filtered by the id_oauth_access_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByFkOauthClient(string $fk_oauth_client) Return the first ChildSpyOauthAccessToken filtered by the fk_oauth_client column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByExpirityDate(string $expirity_date) Return the first ChildSpyOauthAccessToken filtered by the expirity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByIdentifier(string $identifier) Return the first ChildSpyOauthAccessToken filtered by the identifier column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByScopes(string $scopes) Return the first ChildSpyOauthAccessToken filtered by the scopes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByUserIdentifier(string $user_identifier) Return the first ChildSpyOauthAccessToken filtered by the user_identifier column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByCreatedAt(string $created_at) Return the first ChildSpyOauthAccessToken filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSpyOauthAccessToken requireOneByUpdatedAt(string $updated_at) Return the first ChildSpyOauthAccessToken filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ *
+ * @method     ChildSpyOauthAccessToken[]|Collection find(?ConnectionInterface $con = null) Return ChildSpyOauthAccessToken objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> find(?ConnectionInterface $con = null) Return ChildSpyOauthAccessToken objects based on current ModelCriteria
+ *
+ * @method     ChildSpyOauthAccessToken[]|Collection findByIdOauthAccessToken(int|array<int> $id_oauth_access_token) Return ChildSpyOauthAccessToken objects filtered by the id_oauth_access_token column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByIdOauthAccessToken(int|array<int> $id_oauth_access_token) Return ChildSpyOauthAccessToken objects filtered by the id_oauth_access_token column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByFkOauthClient(string|array<string> $fk_oauth_client) Return ChildSpyOauthAccessToken objects filtered by the fk_oauth_client column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByFkOauthClient(string|array<string> $fk_oauth_client) Return ChildSpyOauthAccessToken objects filtered by the fk_oauth_client column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByExpirityDate(string|array<string> $expirity_date) Return ChildSpyOauthAccessToken objects filtered by the expirity_date column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByExpirityDate(string|array<string> $expirity_date) Return ChildSpyOauthAccessToken objects filtered by the expirity_date column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByIdentifier(string|array<string> $identifier) Return ChildSpyOauthAccessToken objects filtered by the identifier column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByIdentifier(string|array<string> $identifier) Return ChildSpyOauthAccessToken objects filtered by the identifier column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByScopes(string|array<string> $scopes) Return ChildSpyOauthAccessToken objects filtered by the scopes column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByScopes(string|array<string> $scopes) Return ChildSpyOauthAccessToken objects filtered by the scopes column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByUserIdentifier(string|array<string> $user_identifier) Return ChildSpyOauthAccessToken objects filtered by the user_identifier column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByUserIdentifier(string|array<string> $user_identifier) Return ChildSpyOauthAccessToken objects filtered by the user_identifier column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildSpyOauthAccessToken objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByCreatedAt(string|array<string> $created_at) Return ChildSpyOauthAccessToken objects filtered by the created_at column
+ * @method     ChildSpyOauthAccessToken[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildSpyOauthAccessToken objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildSpyOauthAccessToken> findByUpdatedAt(string|array<string> $updated_at) Return ChildSpyOauthAccessToken objects filtered by the updated_at column
+ *
+ * @method     ChildSpyOauthAccessToken[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSpyOauthAccessToken> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ */
+abstract class SpyOauthAccessTokenQuery extends ModelCriteria
+{
+
+    /**
+     * @var bool
+     */
+    protected $isForUpdateEnabled = false;
+
+    /**
+     * @deprecated Use {@link \Propel\Runtime\ActiveQuery\Criteria::lockForUpdate()} instead.
+     *
+     * @param bool $isForUpdateEnabled
+     *
+     * @return $this The primary criteria object
+     */
+    public function forUpdate($isForUpdateEnabled)
+    {
+        $this->isForUpdateEnabled = $isForUpdateEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    public function createSelectSql(&$params): string
+    {
+        $sql = parent::createSelectSql($params);
+        if ($this->isForUpdateEnabled) {
+            $sql .= ' FOR UPDATE';
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Clear the conditions to allow the reuse of the query object.
+     * The ModelCriteria's Model and alias 'all the properties set by construct) will remain.
+     *
+     * @return $this The primary criteria object
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        $this->isSelfSelected = false;
+        $this->forUpdate(false);
+
+        return $this;
+    }
+
+
+    /**
+     * @param int $affectedRows
+     * @param \Propel\Runtime\Connection\ConnectionInterface $con
+     *
+     * @return int|null
+     */
+    protected function postUpdate(int $affectedRows, ConnectionInterface $con): ?int
+    {
+        $class = get_class($this);
+        PropelReplicationCacheFacade::getInstance()->setKey($class);
+
+        return null;
+    }
+
+    /**
+     * @param int $affectedRows
+     * @param \Propel\Runtime\Connection\ConnectionInterface $con
+     *
+     * @return int|null
+     */
+    protected function postDelete(int $affectedRows, ConnectionInterface $con): ?int
+    {
+        $class = get_class($this);
+        PropelReplicationCacheFacade::getInstance()->setKey($class);
+
+        return null;
+    }
+
+    /**
+     * Issue a SELECT query based on the current ModelCriteria
+     * and format the list of results with the current formatter
+     * By default, returns an array of model objects
+     *
+     * @param \Propel\Runtime\Connection\ConnectionInterface|null $con an optional connection object
+     *
+     * @return \Propel\Runtime\Collection\ObjectCollection|\Propel\Runtime\ActiveRecord\ActiveRecordInterface[]|mixed the list of results, formatted by the current formatter
+     */
+    public function find(?ConnectionInterface $con = null)
+    {
+        $class = get_class($this);
+        $mustUseWriteContext = PropelReplicationCacheFacade::getInstance()->hasKey($class);
+
+        if ($mustUseWriteContext) {
+            $con = Propel::getWriteConnection($this->getDbName());
+        } elseif ($con === null) {
+            $con = Propel::getReadConnection($this->getDbName());
+        }
+
+        return parent::find($con);
+    }
+
+    /**
+     * Issue a SELECT ... LIMIT 1 query based on the current ModelCriteria
+     * and format the result with the current formatter
+     * By default, returns a model object.
+     *
+     * Does not work with ->with()s containing one-to-many relations.
+     *
+     * @param \Propel\Runtime\Connection\ConnectionInterface|null $con an optional connection object
+     *
+     * @return mixed the result, formatted by the current formatter
+     */
+    public function findOne(?ConnectionInterface $con = null)
+    {
+        $class = get_class($this);
+        $mustUseWriteContext = PropelReplicationCacheFacade::getInstance()->hasKey($class);
+
+        if ($mustUseWriteContext) {
+            $con = Propel::getWriteConnection($this->getDbName());
+        } elseif ($con === null) {
+            $con = Propel::getReadConnection($this->getDbName());
+        }
+
+        return parent::findOne($con);
+    }
+
+    /**
+     * Issue an existence check on the current ModelCriteria
+     *
+     * @param \Propel\Runtime\Connection\ConnectionInterface|null $con an optional connection object
+     *
+     * @return bool column existence
+     */
+    public function exists(?ConnectionInterface $con = null): bool
+    {
+        $class = get_class($this);
+        $mustUseWriteContext = PropelReplicationCacheFacade::getInstance()->hasKey($class);
+
+        if ($mustUseWriteContext) {
+            $con = Propel::getWriteConnection($this->getDbName());
+        } elseif ($con === null) {
+            $con = Propel::getReadConnection($this->getDbName());
+        }
+
+        return parent::exists($con);
+    }
+
+    /**
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return void
+     */
+    public function configureSelectColumns(): void
+    {
+        if (!$this->select) {
+            return;
+        }
+
+        if ($this->formatter === null) {
+            $this->setFormatter(new TypeAwareSimpleArrayFormatter());
+        }
+
+        parent::configureSelectColumns();
+     }
+        protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
+
+    /**
+     * Initializes internal state of \Orm\Zed\Oauth\Persistence\Base\SpyOauthAccessTokenQuery object.
+     *
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
+     */
+    public function __construct($dbName = 'zed', $modelName = '\\Orm\\Zed\\Oauth\\Persistence\\SpyOauthAccessToken', $modelAlias = null)
+    {
+        parent::__construct($dbName, $modelName, $modelAlias);
+    }
+
+    /**
+     * Returns a new ChildSpyOauthAccessTokenQuery object.
+     *
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
+     *
+     * @return ChildSpyOauthAccessTokenQuery
+     */
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
+    {
+        if ($criteria instanceof ChildSpyOauthAccessTokenQuery) {
+            return $criteria;
+        }
+        $query = new ChildSpyOauthAccessTokenQuery();
+        if (null !== $modelAlias) {
+            $query->setModelAlias($modelAlias);
+        }
+        if ($criteria instanceof Criteria) {
+            $query->mergeWith($criteria);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Find object by primary key.
+     * Propel uses the instance pool to skip the database if the object exists.
+     * Go fast if the query is untouched.
+     *
+     * <code>
+     * $obj  = $c->findPk(12, $con);
+     * </code>
+     *
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con an optional connection object
+     *
+     * @return ChildSpyOauthAccessToken|array|mixed the result, formatted by the current formatter
+     */
+    public function findPk($key, ?ConnectionInterface $con = null)
+    {
+        if ($key === null) {
+            return null;
+        }
+        $class = get_class($this);
+        $mustUseWriteContext = PropelReplicationCacheFacade::getInstance()->hasKey($class);
+
+        if ($mustUseWriteContext) {
+            $con = Propel::getWriteConnection($this->getDbName());
+        } elseif ($con === null) {
+            $con = Propel::getReadConnection($this->getDbName());
+        }
+
+
+        if ($con === null) {
+            $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
+        }
+
+        $this->basePreSelect($con);
+
+        if (
+            $this->formatter || $this->modelAlias || $this->with || $this->select
+            || $this->selectColumns || $this->asColumns || $this->selectModifiers
+            || $this->map || $this->having || $this->joins
+        ) {
+            return $this->findPkComplex($key, $con);
+        }
+
+        if ((null !== ($obj = SpyOauthAccessTokenTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+            // the object is already in the instance pool
+            return $obj;
+        }
+
+        return $this->findPkSimple($key, $con);
+    }
+
+    /**
+     * Find object by primary key using raw SQL to go fast.
+     * Bypass doSelect() and the object formatter by using generated code.
+     *
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildSpyOauthAccessToken A model object, or null if the key is not found
+     */
+    protected function findPkSimple($key, ConnectionInterface $con)
+    {
+        $sql = 'SELECT `id_oauth_access_token`, `fk_oauth_client`, `expirity_date`, `identifier`, `scopes`, `user_identifier`, `created_at`, `updated_at` FROM `spy_oauth_access_token` WHERE `id_oauth_access_token` = :p0';
+        try {
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (Exception $e) {
+            Propel::log($e->getMessage(), Propel::LOG_ERR);
+            throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), 0, $e);
+        }
+        $obj = null;
+        if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+            /** @var ChildSpyOauthAccessToken $obj */
+            $obj = new ChildSpyOauthAccessToken();
+            $obj->hydrate($row);
+            SpyOauthAccessTokenTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+        }
+        $stmt->closeCursor();
+
+        return $obj;
+    }
+
+    /**
+     * Find object by primary key.
+     *
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
+     *
+     * @return ChildSpyOauthAccessToken|array|mixed the result, formatted by the current formatter
+     */
+    protected function findPkComplex($key, ConnectionInterface $con)
+    {
+        // As the query uses a PK condition, no limit(1) is necessary.
+        $criteria = $this->isKeepQuery() ? clone $this : $this;
+        $dataFetcher = $criteria
+            ->filterByPrimaryKey($key)
+            ->doSelect($con);
+
+        return $criteria->getFormatter()->init($criteria)->formatOne($dataFetcher);
+    }
+
+    /**
+     * Find objects by primary key
+     * <code>
+     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * </code>
+     * @param     array $keys Primary keys to use for the query
+     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @return    Collection|array|mixed the list of results, formatted by the current formatter
+     */
+    public function findPks($keys, ConnectionInterface $con = null)
+    {
+        $class = get_class($this);
+        $mustUseWriteContext = PropelReplicationCacheFacade::getInstance()->hasKey($class);
+
+        if ($mustUseWriteContext) {
+            $con = Propel::getWriteConnection($this->getDbName());
+        } elseif ($con === null) {
+            $con = Propel::getReadConnection($this->getDbName());
+        }
+
+
+        if ($con === null) {
+            $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
+        }
+
+        $this->basePreSelect($con);
+        $criteria = $this->isKeepQuery() ? clone $this : $this;
+        $dataFetcher = $criteria
+            ->filterByPrimaryKeys($keys)
+            ->doSelect($con);
+
+        return $criteria->getFormatter()->init($criteria)->format($dataFetcher);
+    }
+
+    /**
+     * Filter the query by primary key
+     *
+     * @param mixed $key Primary key to use for the query
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPrimaryKey($key)
+    {
+
+        $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $key, Criteria::EQUAL);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query by a list of primary keys
+     *
+     * @param array|int $keys The list of primary key to use for the query
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPrimaryKeys($keys)
+    {
+
+        $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $keys, Criteria::IN);
+
+        return $this;
+    }
+
+    /**
+     * Applies SprykerCriteria::BETWEEN filtering criteria for the column.
+     *
+     * @param array $idOauthAccessToken Filter value.
+     * [
+     *    'min' => 3, 'max' => 5
+     * ]
+     *
+     * 'min' and 'max' are optional, when neither is specified, throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIdOauthAccessToken_Between(array $idOauthAccessToken)
+    {
+        return $this->filterByIdOauthAccessToken($idOauthAccessToken, SprykerCriteria::BETWEEN);
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $idOauthAccessTokens Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIdOauthAccessToken_In(array $idOauthAccessTokens)
+    {
+        return $this->filterByIdOauthAccessToken($idOauthAccessTokens, Criteria::IN);
+    }
+
+    /**
+     * Filter the query on the id_oauth_access_token column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdOauthAccessToken(1234); // WHERE id_oauth_access_token = 1234
+     * $query->filterByIdOauthAccessToken(array(12, 34), Criteria::IN); // WHERE id_oauth_access_token IN (12, 34)
+     * $query->filterByIdOauthAccessToken(array('min' => 12), SprykerCriteria::BETWEEN); // WHERE id_oauth_access_token > 12
+     * </code>
+     *
+     * @param     mixed $idOauthAccessToken The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent. Add Criteria::IN explicitly.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals. Add SprykerCriteria::BETWEEN explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByIdOauthAccessToken($idOauthAccessToken = null, $comparison = Criteria::EQUAL)
+    {
+
+        if (is_array($idOauthAccessToken)) {
+            $useMinMax = false;
+            if (isset($idOauthAccessToken['min'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::GREATER_EQUAL && $comparison != Criteria::GREATER_THAN) {
+                    throw new AmbiguousComparisonException('\'min\' requires explicit Criteria::GREATER_EQUAL, Criteria::GREATER_THAN or SprykerCriteria::BETWEEN when \'max\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $idOauthAccessToken['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idOauthAccessToken['max'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::LESS_EQUAL && $comparison != Criteria::LESS_THAN) {
+                    throw new AmbiguousComparisonException('\'max\' requires explicit Criteria::LESS_EQUAL, Criteria::LESS_THAN or SprykerCriteria::BETWEEN when \'min\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $idOauthAccessToken['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+
+            if (!in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+                throw new AmbiguousComparisonException('$idOauthAccessToken of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+            }
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $idOauthAccessToken, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $fkOauthClients Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByFkOauthClient_In(array $fkOauthClients)
+    {
+        return $this->filterByFkOauthClient($fkOauthClients, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $fkOauthClient Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByFkOauthClient_Like($fkOauthClient)
+    {
+        return $this->filterByFkOauthClient($fkOauthClient, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the fk_oauth_client column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFkOauthClient('fooValue');   // WHERE fk_oauth_client = 'fooValue'
+     * $query->filterByFkOauthClient('%fooValue%', Criteria::LIKE); // WHERE fk_oauth_client LIKE '%fooValue%'
+     * $query->filterByFkOauthClient([1, 'foo'], Criteria::IN); // WHERE fk_oauth_client IN (1, 'foo')
+     * </code>
+     *
+     * @param     string|string[] $fkOauthClient The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE). Add Criteria::LIKE explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByFkOauthClient($fkOauthClient = null, $comparison = Criteria::EQUAL)
+    {
+        if ($comparison == Criteria::LIKE || $comparison == Criteria::ILIKE) {
+            $fkOauthClient = str_replace('*', '%', $fkOauthClient);
+        }
+
+        if (is_array($fkOauthClient) && !in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+            throw new AmbiguousComparisonException('$fkOauthClient of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_FK_OAUTH_CLIENT, $fkOauthClient, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies SprykerCriteria::BETWEEN filtering criteria for the column.
+     *
+     * @param array $expirityDate Filter value.
+     * [
+     *    'min' => 3, 'max' => 5
+     * ]
+     *
+     * 'min' and 'max' are optional, when neither is specified, throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByExpirityDate_Between(array $expirityDate)
+    {
+        return $this->filterByExpirityDate($expirityDate, SprykerCriteria::BETWEEN);
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $expirityDates Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByExpirityDate_In(array $expirityDates)
+    {
+        return $this->filterByExpirityDate($expirityDates, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $expirityDate Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByExpirityDate_Like($expirityDate)
+    {
+        return $this->filterByExpirityDate($expirityDate, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the expirity_date column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByExpirityDate('2011-03-14'); // WHERE expirity_date = '2011-03-14'
+     * $query->filterByExpirityDate('now'); // WHERE expirity_date = '2011-03-14'
+     * $query->filterByExpirityDate(array('max' => 'yesterday'), SprykerCriteria::BETWEEN); // WHERE expirity_date > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $expirityDate The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent. Add Criteria::IN explicitly.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals. Add SprykerCriteria::BETWEEN explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByExpirityDate($expirityDate = null, $comparison = Criteria::EQUAL)
+    {
+
+        if (is_array($expirityDate)) {
+            $useMinMax = false;
+            if (isset($expirityDate['min'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::GREATER_EQUAL && $comparison != Criteria::GREATER_THAN) {
+                    throw new AmbiguousComparisonException('\'min\' requires explicit Criteria::GREATER_EQUAL, Criteria::GREATER_THAN or SprykerCriteria::BETWEEN when \'max\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_EXPIRITY_DATE, $expirityDate['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($expirityDate['max'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::LESS_EQUAL && $comparison != Criteria::LESS_THAN) {
+                    throw new AmbiguousComparisonException('\'max\' requires explicit Criteria::LESS_EQUAL, Criteria::LESS_THAN or SprykerCriteria::BETWEEN when \'min\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_EXPIRITY_DATE, $expirityDate['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+
+            if (!in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+                throw new AmbiguousComparisonException('$expirityDate of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+            }
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_EXPIRITY_DATE, $expirityDate, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $identifiers Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIdentifier_In(array $identifiers)
+    {
+        return $this->filterByIdentifier($identifiers, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $identifier Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIdentifier_Like($identifier)
+    {
+        return $this->filterByIdentifier($identifier, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the identifier column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdentifier('fooValue');   // WHERE identifier = 'fooValue'
+     * $query->filterByIdentifier('%fooValue%', Criteria::LIKE); // WHERE identifier LIKE '%fooValue%'
+     * $query->filterByIdentifier([1, 'foo'], Criteria::IN); // WHERE identifier IN (1, 'foo')
+     * </code>
+     *
+     * @param     string|string[] $identifier The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE). Add Criteria::LIKE explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByIdentifier($identifier = null, $comparison = Criteria::EQUAL)
+    {
+        if ($comparison == Criteria::LIKE || $comparison == Criteria::ILIKE) {
+            $identifier = str_replace('*', '%', $identifier);
+        }
+
+        if (is_array($identifier) && !in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+            throw new AmbiguousComparisonException('$identifier of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_IDENTIFIER, $identifier, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $scopess Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByScopes_In(array $scopess)
+    {
+        return $this->filterByScopes($scopess, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $scopes Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByScopes_Like($scopes)
+    {
+        return $this->filterByScopes($scopes, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the scopes column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByScopes('fooValue');   // WHERE scopes = 'fooValue'
+     * $query->filterByScopes('%fooValue%', Criteria::LIKE); // WHERE scopes LIKE '%fooValue%'
+     * $query->filterByScopes([1, 'foo'], Criteria::IN); // WHERE scopes IN (1, 'foo')
+     * </code>
+     *
+     * @param     string|string[] $scopes The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE). Add Criteria::LIKE explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByScopes($scopes = null, $comparison = Criteria::EQUAL)
+    {
+        if ($comparison == Criteria::LIKE || $comparison == Criteria::ILIKE) {
+            $scopes = str_replace('*', '%', $scopes);
+        }
+
+        if (is_array($scopes) && !in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+            throw new AmbiguousComparisonException('$scopes of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_SCOPES, $scopes, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $userIdentifiers Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUserIdentifier_In(array $userIdentifiers)
+    {
+        return $this->filterByUserIdentifier($userIdentifiers, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $userIdentifier Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUserIdentifier_Like($userIdentifier)
+    {
+        return $this->filterByUserIdentifier($userIdentifier, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the user_identifier column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUserIdentifier('fooValue');   // WHERE user_identifier = 'fooValue'
+     * $query->filterByUserIdentifier('%fooValue%', Criteria::LIKE); // WHERE user_identifier LIKE '%fooValue%'
+     * $query->filterByUserIdentifier([1, 'foo'], Criteria::IN); // WHERE user_identifier IN (1, 'foo')
+     * </code>
+     *
+     * @param     string|string[] $userIdentifier The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE). Add Criteria::LIKE explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByUserIdentifier($userIdentifier = null, $comparison = Criteria::EQUAL)
+    {
+        if ($comparison == Criteria::LIKE || $comparison == Criteria::ILIKE) {
+            $userIdentifier = str_replace('*', '%', $userIdentifier);
+        }
+
+        if (is_array($userIdentifier) && !in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+            throw new AmbiguousComparisonException('$userIdentifier of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_USER_IDENTIFIER, $userIdentifier, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies SprykerCriteria::BETWEEN filtering criteria for the column.
+     *
+     * @param array $createdAt Filter value.
+     * [
+     *    'min' => 3, 'max' => 5
+     * ]
+     *
+     * 'min' and 'max' are optional, when neither is specified, throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCreatedAt_Between(array $createdAt)
+    {
+        return $this->filterByCreatedAt($createdAt, SprykerCriteria::BETWEEN);
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $createdAts Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCreatedAt_In(array $createdAts)
+    {
+        return $this->filterByCreatedAt($createdAts, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $createdAt Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCreatedAt_Like($createdAt)
+    {
+        return $this->filterByCreatedAt($createdAt, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the created_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+     * $query->filterByCreatedAt(array('max' => 'yesterday'), SprykerCriteria::BETWEEN); // WHERE created_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $createdAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent. Add Criteria::IN explicitly.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals. Add SprykerCriteria::BETWEEN explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByCreatedAt($createdAt = null, $comparison = Criteria::EQUAL)
+    {
+
+        if (is_array($createdAt)) {
+            $useMinMax = false;
+            if (isset($createdAt['min'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::GREATER_EQUAL && $comparison != Criteria::GREATER_THAN) {
+                    throw new AmbiguousComparisonException('\'min\' requires explicit Criteria::GREATER_EQUAL, Criteria::GREATER_THAN or SprykerCriteria::BETWEEN when \'max\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($createdAt['max'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::LESS_EQUAL && $comparison != Criteria::LESS_THAN) {
+                    throw new AmbiguousComparisonException('\'max\' requires explicit Criteria::LESS_EQUAL, Criteria::LESS_THAN or SprykerCriteria::BETWEEN when \'min\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+
+            if (!in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+                throw new AmbiguousComparisonException('$createdAt of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+            }
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_CREATED_AT, $createdAt, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Applies SprykerCriteria::BETWEEN filtering criteria for the column.
+     *
+     * @param array $updatedAt Filter value.
+     * [
+     *    'min' => 3, 'max' => 5
+     * ]
+     *
+     * 'min' and 'max' are optional, when neither is specified, throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUpdatedAt_Between(array $updatedAt)
+    {
+        return $this->filterByUpdatedAt($updatedAt, SprykerCriteria::BETWEEN);
+    }
+
+    /**
+     * Applies Criteria::IN filtering criteria for the column.
+     *
+     * @param array $updatedAts Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUpdatedAt_In(array $updatedAts)
+    {
+        return $this->filterByUpdatedAt($updatedAts, Criteria::IN);
+    }
+
+    /**
+     * Applies SprykerCriteria::LIKE filtering criteria for the column.
+     *
+     * @param string $updatedAt Filter value.
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByUpdatedAt_Like($updatedAt)
+    {
+        return $this->filterByUpdatedAt($updatedAt, Criteria::LIKE);
+    }
+
+    /**
+     * Filter the query on the updated_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday'), SprykerCriteria::BETWEEN); // WHERE updated_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $updatedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent. Add Criteria::IN explicitly.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals. Add SprykerCriteria::BETWEEN explicitly.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     *
+     * @throws \Spryker\Zed\Propel\Business\Exception\AmbiguousComparisonException
+     */
+    public function filterByUpdatedAt($updatedAt = null, $comparison = Criteria::EQUAL)
+    {
+
+        if (is_array($updatedAt)) {
+            $useMinMax = false;
+            if (isset($updatedAt['min'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::GREATER_EQUAL && $comparison != Criteria::GREATER_THAN) {
+                    throw new AmbiguousComparisonException('\'min\' requires explicit Criteria::GREATER_EQUAL, Criteria::GREATER_THAN or SprykerCriteria::BETWEEN when \'max\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updatedAt['max'])) {
+                if ($comparison != SprykerCriteria::BETWEEN && $comparison != Criteria::LESS_EQUAL && $comparison != Criteria::LESS_THAN) {
+                    throw new AmbiguousComparisonException('\'max\' requires explicit Criteria::LESS_EQUAL, Criteria::LESS_THAN or SprykerCriteria::BETWEEN when \'min\' is also needed as comparison criteria.');
+                }
+                $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+
+            if (!in_array($comparison, [Criteria::IN, Criteria::NOT_IN])) {
+                throw new AmbiguousComparisonException('$updatedAt of type array requires one of [Criteria::IN, Criteria::NOT_IN] as comparison criteria.');
+            }
+        }
+
+        $query = $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+
+        return $query;
+    }
+
+    /**
+     * Filter the query by a related \Orm\Zed\Oauth\Persistence\SpyOauthClient object
+     *
+     * @param \Orm\Zed\Oauth\Persistence\SpyOauthClient|ObjectCollection $spyOauthClient The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByOauthClient($spyOauthClient, ?string $comparison = null)
+    {
+        if ($spyOauthClient instanceof \Orm\Zed\Oauth\Persistence\SpyOauthClient) {
+            return $this
+                ->addUsingAlias(SpyOauthAccessTokenTableMap::COL_FK_OAUTH_CLIENT, $spyOauthClient->getIdentifier(), $comparison);
+        } elseif ($spyOauthClient instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(SpyOauthAccessTokenTableMap::COL_FK_OAUTH_CLIENT, $spyOauthClient->toKeyValue('PrimaryKey', 'Identifier'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterByOauthClient() only accepts arguments of type \Orm\Zed\Oauth\Persistence\SpyOauthClient or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OauthClient relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinOauthClient(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OauthClient');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OauthClient');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OauthClient relation SpyOauthClient object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery A secondary query class using the current class as primary query
+     */
+    public function useOauthClientQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOauthClient($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OauthClient', '\Orm\Zed\Oauth\Persistence\SpyOauthClientQuery');
+    }
+
+    /**
+     * Use the OauthClient relation SpyOauthClient object
+     *
+     * @param callable(\Orm\Zed\Oauth\Persistence\SpyOauthClientQuery):\Orm\Zed\Oauth\Persistence\SpyOauthClientQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withOauthClientQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::INNER_JOIN
+    ) {
+        $relatedQuery = $this->useOauthClientQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the OauthClient relation to the SpyOauthClient table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery The inner query object of the EXISTS statement
+     */
+    public function useOauthClientExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery */
+        $q = $this->useExistsQuery('OauthClient', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the OauthClient relation to the SpyOauthClient table for a NOT EXISTS query.
+     *
+     * @see useOauthClientExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useOauthClientNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery */
+        $q = $this->useExistsQuery('OauthClient', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the OauthClient relation to the SpyOauthClient table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery The inner query object of the IN statement
+     */
+    public function useInOauthClientQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery */
+        $q = $this->useInQuery('OauthClient', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the OauthClient relation to the SpyOauthClient table for a NOT IN query.
+     *
+     * @see useOauthClientInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOauthClientQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery */
+        $q = $this->useInQuery('OauthClient', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Exclude object from result
+     *
+     * @param ChildSpyOauthAccessToken $spyOauthAccessToken Object to remove from the list of results
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function prune($spyOauthAccessToken = null)
+    {
+        if ($spyOauthAccessToken) {
+            $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_ID_OAUTH_ACCESS_TOKEN, $spyOauthAccessToken->getIdOauthAccessToken(), Criteria::NOT_EQUAL);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Code to execute before every SELECT statement
+     *
+     * @param ConnectionInterface $con The connection object used by the query
+     */
+    protected function basePreSelect(ConnectionInterface $con): void
+    {
+        // \Spryker\Zed\AclEntity\Persistence\Propel\Behavior\AclEntityBehavior behavior
+        // phpcs:ignoreFile
+        /**
+         * @var string|null $action
+         */
+        /** @var \Spryker\Zed\AclEntity\Business\AclEntityFacadeInterface $aclEntityFacade */
+        $aclEntityFacade = \Spryker\Zed\Kernel\Locator::getInstance()->aclEntity()->facade();
+        if ($aclEntityFacade->isActive() && !$this->isSegmentQuery()) {
+            $aclEntityMetadataConfigRequestTransfer = new \Generated\Shared\Transfer\AclEntityMetadataConfigRequestTransfer();
+            $aclEntityMetadataConfigRequestTransfer->setModelName($this->getModelName());
+            $aclEntityConfigTransfer = $aclEntityFacade->getAclEntityMetadataConfig(true, $aclEntityMetadataConfigRequestTransfer);
+            if (!in_array($this->getModelName(), $aclEntityConfigTransfer->getAclEntityAllowList())) {
+                $this->getPersistenceFactory()
+                    ->createAclQueryDirector($aclEntityConfigTransfer)
+                    ->applyAclRuleOnSelectQuery($this);
+            }
+        }
+
+
+        $this->preSelect($con);
+    }
+
+    /**
+     * Code to execute before every DELETE statement
+     *
+     * @param ConnectionInterface $con The connection object used by the query
+     * @return int|null
+     */
+    protected function basePreDelete(ConnectionInterface $con): ?int
+    {
+        // \Spryker\Zed\AclEntity\Persistence\Propel\Behavior\AclEntityBehavior behavior
+        // phpcs:ignoreFile
+        /**
+         * @var string|null $action
+         */
+        /** @var \Spryker\Zed\AclEntity\Business\AclEntityFacadeInterface $aclEntityFacade */
+        $aclEntityFacade = \Spryker\Zed\Kernel\Locator::getInstance()->aclEntity()->facade();
+        if ($aclEntityFacade->isActive() && !$this->isSegmentQuery()) {
+            $aclEntityMetadataConfigRequestTransfer = new \Generated\Shared\Transfer\AclEntityMetadataConfigRequestTransfer();
+            $aclEntityMetadataConfigRequestTransfer->setModelName($this->getModelName());
+            $aclEntityConfigTransfer = $aclEntityFacade->getAclEntityMetadataConfig(true, $aclEntityMetadataConfigRequestTransfer);
+            if (!in_array($this->getModelName(), $aclEntityConfigTransfer->getAclEntityAllowList())) {
+                $this->getPersistenceFactory()
+                    ->createAclQueryDirector($aclEntityConfigTransfer)
+                    ->applyAclRuleOnDeleteQuery($this);
+            }
+        }
+
+
+        return $this->preDelete($con);
+    }
+
+    /**
+     * Code to execute before every UPDATE statement
+     *
+     * @param array $values The associative array of columns and values for the update
+     * @param ConnectionInterface $con The connection object used by the query
+     * @param bool $forceIndividualSaves If false (default), the resulting call is a Criteria::doUpdate(), otherwise it is a series of save() calls on all the found objects
+     *
+     * @return int|null
+     */
+    protected function basePreUpdate(&$values, ConnectionInterface $con, $forceIndividualSaves = false): ?int
+    {
+        // \Spryker\Zed\AclEntity\Persistence\Propel\Behavior\AclEntityBehavior behavior
+        // phpcs:ignoreFile
+        /**
+         * @var string|null $action
+         */
+        /** @var \Spryker\Zed\AclEntity\Business\AclEntityFacadeInterface $aclEntityFacade */
+        $aclEntityFacade = \Spryker\Zed\Kernel\Locator::getInstance()->aclEntity()->facade();
+        if ($aclEntityFacade->isActive() && !$this->isSegmentQuery()) {
+            $aclEntityMetadataConfigRequestTransfer = new \Generated\Shared\Transfer\AclEntityMetadataConfigRequestTransfer();
+            $aclEntityMetadataConfigRequestTransfer->setModelName($this->getModelName());
+            $aclEntityConfigTransfer = $aclEntityFacade->getAclEntityMetadataConfig(true, $aclEntityMetadataConfigRequestTransfer);
+            if (!in_array($this->getModelName(), $aclEntityConfigTransfer->getAclEntityAllowList())) {
+                $this->getPersistenceFactory()
+                    ->createAclQueryDirector($aclEntityConfigTransfer)
+                    ->applyAclRuleOnUpdateQuery($this);
+            }
+        }
+
+
+        return $this->preUpdate($values, $con, $forceIndividualSaves);
+    }
+
+    /**
+     * Deletes all rows from the spy_oauth_access_token table.
+     *
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    public function doDeleteAll(?ConnectionInterface $con = null): int
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(SpyOauthAccessTokenTableMap::DATABASE_NAME);
+        }
+
+        // use transaction because $criteria could contain info
+        // for more than one table or we could emulating ON DELETE CASCADE, etc.
+        return $con->transaction(function () use ($con) {
+            $affectedRows = 0; // initialize var to track total num of affected rows
+            $affectedRows += parent::doDeleteAll($con);
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            SpyOauthAccessTokenTableMap::clearInstancePool();
+            SpyOauthAccessTokenTableMap::clearRelatedInstancePool();
+
+            return $affectedRows;
+        });
+    }
+
+    /**
+     * Performs a DELETE on the database based on the current ModelCriteria
+     *
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     *                         if supported by native driver or if emulated using Propel.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public function delete(?ConnectionInterface $con = null): int
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(SpyOauthAccessTokenTableMap::DATABASE_NAME);
+        }
+
+        $criteria = $this;
+
+        // Set the correct dbName
+        $criteria->setDbName(SpyOauthAccessTokenTableMap::DATABASE_NAME);
+
+        // use transaction because $criteria could contain info
+        // for more than one table or we could emulating ON DELETE CASCADE, etc.
+        return $con->transaction(function () use ($con, $criteria) {
+            $affectedRows = 0; // initialize var to track total num of affected rows
+
+            SpyOauthAccessTokenTableMap::removeInstanceFromPool($criteria);
+
+            $affectedRows += ModelCriteria::delete($con);
+            SpyOauthAccessTokenTableMap::clearRelatedInstancePool();
+
+            return $affectedRows;
+        });
+    }
+
+    // timestampable behavior
+
+    /**
+     * Filter by the latest updated
+     *
+     * @param int $nbDays Maximum age of the latest update in days
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function recentlyUpdated($nbDays = 7)
+    {
+        $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
+    }
+
+    /**
+     * Order by update date desc
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function lastUpdatedFirst()
+    {
+        $this->addDescendingOrderByColumn(SpyOauthAccessTokenTableMap::COL_UPDATED_AT);
+
+        return $this;
+    }
+
+    /**
+     * Order by update date asc
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function firstUpdatedFirst()
+    {
+        $this->addAscendingOrderByColumn(SpyOauthAccessTokenTableMap::COL_UPDATED_AT);
+
+        return $this;
+    }
+
+    /**
+     * Order by create date desc
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function lastCreatedFirst()
+    {
+        $this->addDescendingOrderByColumn(SpyOauthAccessTokenTableMap::COL_CREATED_AT);
+
+        return $this;
+    }
+
+    /**
+     * Filter by the latest created
+     *
+     * @param int $nbDays Maximum age of in days
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function recentlyCreated($nbDays = 7)
+    {
+        $this->addUsingAlias(SpyOauthAccessTokenTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
+    }
+
+    /**
+     * Order by create date asc
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function firstCreatedFirst()
+    {
+        $this->addAscendingOrderByColumn(SpyOauthAccessTokenTableMap::COL_CREATED_AT);
+
+        return $this;
+    }
+
+    // \Spryker\Zed\AclEntity\Persistence\Propel\Behavior\AclEntityBehavior behavior
+    // phpcs:ignoreFile
+    /**
+     * @return \Spryker\Zed\AclEntity\Persistence\AclEntityPersistenceFactory
+     */
+    protected function getPersistenceFactory(): \Spryker\Zed\AclEntity\Persistence\AclEntityPersistenceFactory
+    {
+        return (new \Spryker\Zed\Kernel\ClassResolver\Persistence\PersistenceFactoryResolver())
+            ->resolve(\Spryker\Zed\AclEntity\Persistence\AclEntityPersistenceFactory::class);
+    }
+    // phpcs:ignoreFile
+    /**
+     * @return bool
+     */
+    protected function isSegmentQuery(): bool
+    {
+        $segmentTableTemplate = sprintf(
+            \Spryker\Service\AclEntity\SegmentConnectorGenerator\SegmentConnectorGenerator::CONNECTOR_CLASS_TEMPLATE,
+            \Spryker\Service\AclEntity\SegmentConnectorGenerator\SegmentConnectorGenerator::ENTITY_PREFIX_DEFAULT,
+            ''
+        );
+
+        return strpos($this->getModelShortName(), $segmentTableTemplate) === 0;
+    }
+
+}
