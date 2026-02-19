@@ -19,7 +19,7 @@ This comprehensive training module covers real-world Spryker development through
 
 ## 🎯 Prerequisites
 
-- PHP 8.1 or higher
+- PHP 8.4 or higher
 - Completed HelloWorld training module (recommended)
 - Spryker project (B2B/B2C Demo Shop or Suite)
 - Understanding of MVC and object-oriented programming
