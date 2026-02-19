@@ -44,8 +44,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SprykerAcademy\\": "src/SprykerAcademy/",
-            "Orm\\": "src/Orm/"
+            "SprykerAcademy\\": "src/SprykerAcademy/"
         }
     },
     "autoload-dev": {
