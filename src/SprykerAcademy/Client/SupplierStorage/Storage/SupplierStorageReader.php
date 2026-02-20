@@ -61,7 +61,9 @@ class SupplierStorageReader
             return null;
         }
 
-        return json_decode($supplierStorageData, true);
+        // Note: StorageClient->get() already json_decodes the data automatically
+        // See: StorageRedisWrapper::get() line 115
+        return $supplierStorageData;
     }
 
     /**
@@ -141,7 +143,9 @@ class SupplierStorageReader
     }
 
     /**
-     * Gets and decodes data from Redis by key.
+     * Gets data from Redis by key.
+     *
+     * Note: StorageClient->get() already json_decodes the data automatically.
      *
      * @param string $key
      *
@@ -155,6 +159,6 @@ class SupplierStorageReader
             return null;
         }
 
-        return json_decode($data, true);
+        return $data;
     }
 }
