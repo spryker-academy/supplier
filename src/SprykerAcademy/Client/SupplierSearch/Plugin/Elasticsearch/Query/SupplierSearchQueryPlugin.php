@@ -23,7 +23,7 @@ class SupplierSearchQueryPlugin extends AbstractPlugin implements QueryInterface
         get => $field ??= $this->createSearchQuery();
     }
 
-    protected ?SearchContextTransfer $searchContextTransfer = null {
+    protected ?SearchContextTransfer $searchContextTransfer {
         get => $field ??= new SearchContextTransfer()
             ->setSourceIdentifier(static::SOURCE_IDENTIFIER);
     }
