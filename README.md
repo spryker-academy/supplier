@@ -232,8 +232,15 @@ $config[KernelConstants::CORE_NAMESPACES] = [
 
 ### 2. Run Code Generation
 
-**⚠️ IMPORTANT:** This package does NOT include generated Propel entity classes (Orm namespace).
-You MUST generate them by running `propel:install` first!
+**⚠️ CRITICAL STEP - READ THIS:**
+
+This package does NOT include generated Propel entity classes (Orm namespace).
+The modules reference classes like `Orm\Zed\SupplierStorage\Persistence\PyzSupplierStorage`
+that do NOT exist until you generate them.
+
+**Without running `propel:install` first, you will get "Class not found" errors!**
+
+See [PROPEL_SCHEMAS.md](PROPEL_SCHEMAS.md) for details on what gets generated.
 
 ```bash
 # 1. FIRST: Generate Propel entity classes (required!)
