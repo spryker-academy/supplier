@@ -24,10 +24,9 @@ class SupplierStorageMapper
         PyzSupplierStorage $supplierStorageEntity,
         SupplierStorageTransfer $supplierStorageTransfer,
     ): SupplierStorageTransfer {
-        $supplierStorageTransfer->fromArray($supplierStorageEntity->toArray(), true);
-        $supplierStorageTransfer->setData(
-            $supplierStorageEntity->getData(),
-        );
+        $supplierStorageTransfer->setIdSupplierStorage($supplierStorageEntity->getIdSupplierStorage());
+        $supplierStorageTransfer->setFkSupplier($supplierStorageEntity->getFkSupplier());
+        $supplierStorageTransfer->setData($supplierStorageEntity->getData());
 
         return $supplierStorageTransfer;
     }
