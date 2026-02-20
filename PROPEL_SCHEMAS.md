@@ -103,6 +103,28 @@ When you run `vendor/bin/console propel:install`, Spryker will:
 | `pyz_supplier_search` | pyz_supplier_search.schema.xml | Store Elasticsearch sync data |
 | `pyz_supplier_storage` | pyz_supplier_storage.schema.xml | Store Redis sync data |
 
+## 🔧 Synchronization Behavior
+
+The `pyz_supplier_search` and `pyz_supplier_storage` schemas use the **synchronization behavior** which requires specific parameters:
+
+### Required Parameters:
+- **resource**: The resource name (e.g., "supplier")
+- **key_suffix_column**: The column used to build storage/search keys (e.g., "fk_supplier")
+- **queue_group**: The queue group name (e.g., "sync.storage.supplier" or "sync.search.supplier")
+
+### Example (SupplierStorage):
+```xml
+<behavior name="synchronization">
+    <parameter name="resource" value="supplier"/>
+    <parameter name="key_suffix_column" value="fk_supplier"/>
+    <parameter name="queue_group" value="sync.storage.supplier"/>
+</behavior>
+```
+
+Without these parameters, you'll get: `PyzSupplierStorage misses "resource" synchronization parameter`
+
+---
+
 ## ❌ Common Errors
 
 ### Error: Class 'Orm\Zed\SupplierStorage\Persistence\PyzSupplierStorage' not found
