@@ -4,6 +4,7 @@ namespace SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep;
 
 use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
 use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
+use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierDataImport\Business\DataSet\SupplierDataSetInterface;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\PublishAwareStep;
@@ -30,6 +31,7 @@ class SupplierWriterStep extends PublishAwareStep implements DataImportStepInter
         if ($supplierEntity->isNew() || $supplierEntity->isModified()) {
             $supplierEntity->save();
             $this->addPublishEvents(SupplierSearchConfig::SUPPLIER_PUBLISH, $supplierEntity->getIdSupplier());
+            $this->addPublishEvents(SupplierStorageConfig::SUPPLIER_PUBLISH, $supplierEntity->getIdSupplier());
         }
     }
 }
