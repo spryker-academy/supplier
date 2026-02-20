@@ -43,8 +43,9 @@ class SupplierSearchWritePublisherPlugin extends AbstractPlugin implements Publi
     public function getSubscribedEvents(): array
     {
         return [
-            // TODO-2: Return event names for supplier publish/create/update.
-            // Hint-1: Use constants from SupplierSearchConfig.
+            SupplierSearchConfig::SUPPLIER_PUBLISH,
+            SupplierSearchConfig::ENTITY_PYZ_SUPPLIER_CREATE,
+            SupplierSearchConfig::ENTITY_PYZ_SUPPLIER_UPDATE,
         ];
     }
 }

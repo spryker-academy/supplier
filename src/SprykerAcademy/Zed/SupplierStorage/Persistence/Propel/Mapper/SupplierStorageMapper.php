@@ -26,7 +26,7 @@ class SupplierStorageMapper
     ): SupplierStorageTransfer {
         $supplierStorageTransfer->fromArray($supplierStorageEntity->toArray(), true);
         $supplierStorageTransfer->setData(
-            json_decode($supplierStorageEntity->getData(), true),
+            $supplierStorageEntity->getData(),
         );
 
         return $supplierStorageTransfer;
@@ -44,7 +44,7 @@ class SupplierStorageMapper
     ): PyzSupplierStorage {
         $supplierStorageEntity->fromArray($supplierStorageTransfer->toArray());
         $supplierStorageEntity->setData(
-            json_encode($supplierStorageTransfer->getData()),
+            $supplierStorageTransfer->getData(),
         );
 
         return $supplierStorageEntity;
