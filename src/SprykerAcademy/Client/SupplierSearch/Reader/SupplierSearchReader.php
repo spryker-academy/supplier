@@ -13,16 +13,19 @@ use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierById
 class SupplierSearchReader implements SupplierSearchReaderInterface
 {
     /**
-     * @param \Spryker\Client\Search\SearchClientInterface $searchClient
-     * @param \Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface $supplierSearchQueryPlugin
+     * Spryker Factory Pattern: Instantiated by SupplierSearchFactory with dependencies.
+     * Default values prevent Symfony autowiring errors (Reader shouldn't be a service).
+     *
+     * @param \Spryker\Client\Search\SearchClientInterface|null $searchClient
+     * @param \Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface|null $supplierSearchQueryPlugin
      * @param array<\Spryker\Client\SearchExtension\Dependency\Plugin\QueryExpanderPluginInterface> $queryExpanderPlugins
      * @param array<\Spryker\Client\SearchExtension\Dependency\Plugin\ResultFormatterPluginInterface> $resultFormatterPlugins
      */
     public function __construct(
-        protected SearchClientInterface $searchClient,
-        protected QueryInterface $supplierSearchQueryPlugin,
-        protected array $queryExpanderPlugins,
-        protected array $resultFormatterPlugins,
+        protected ?SearchClientInterface $searchClient = null,
+        protected ?QueryInterface $supplierSearchQueryPlugin = null,
+        protected array $queryExpanderPlugins = [],
+        protected array $resultFormatterPlugins = [],
     ) {
     }
 
@@ -50,7 +53,7 @@ class SupplierSearchReader implements SupplierSearchReaderInterface
 
     public function findSupplierById(int $idSupplier): SupplierTransfer
     {
-        $queryPlugin = new SupplierByIdSearchQueryPlugin($idSupplier);
+        $queryPlugin = (new SupplierByIdSearchQueryPlugin())->setIdSupplier($idSupplier);
 
         $result = $this->searchClient->search(
             $queryPlugin,
