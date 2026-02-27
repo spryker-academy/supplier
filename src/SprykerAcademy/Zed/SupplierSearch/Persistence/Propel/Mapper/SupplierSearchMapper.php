@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
- */
-
-declare(strict_types = 1);
-
-namespace SprykerAcademy\Zed\SupplierSearch\Persistence\Propel\Mapper;
+namespace Pyz\Zed\SupplierSearch\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\SupplierSearchTransfer;
 use Orm\Zed\SupplierSearch\Persistence\PyzSupplierSearch;
@@ -17,6 +10,8 @@ class SupplierSearchMapper
     /**
      * @param \Generated\Shared\Transfer\SupplierSearchTransfer $supplierSearchTransfer
      * @param \Orm\Zed\SupplierSearch\Persistence\PyzSupplierSearch $supplierSearchEntity
+     *
+     * @return \Orm\Zed\SupplierSearch\Persistence\PyzSupplierSearch
      */
     public function mapSupplierSearchTransferToSupplierSearchEntity(
         SupplierSearchTransfer $supplierSearchTransfer,
@@ -28,6 +23,8 @@ class SupplierSearchMapper
     /**
      * @param \Orm\Zed\SupplierSearch\Persistence\PyzSupplierSearch $supplierSearchEntity
      * @param \Generated\Shared\Transfer\SupplierSearchTransfer $supplierSearchTransfer
+     *
+     * @return \Generated\Shared\Transfer\SupplierSearchTransfer
      */
     public function mapSupplierSearchEntityToSupplierSearchTransfer(
         PyzSupplierSearch $supplierSearchEntity,
