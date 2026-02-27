@@ -5,8 +5,6 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace SprykerAcademy\Zed\SupplierDataImport\Business;
 
 use Generated\Shared\Transfer\DataImporterConfigurationTransfer;
@@ -22,22 +20,26 @@ class SupplierDataImportBusinessFactory extends DataImportBusinessFactory
 {
     /**
      * @param \Generated\Shared\Transfer\DataImporterConfigurationTransfer|null $dataImporterConfigurationTransfer
+     *
+     * @return \Spryker\Zed\DataImport\Business\Model\DataImporterInterface
      */
     public function getSupplierDataImport(?DataImporterConfigurationTransfer $dataImporterConfigurationTransfer = null): DataImporterInterface
     {
         $dataImporter = $this->getCsvDataImporterFromConfig($dataImporterConfigurationTransfer);
 
         $dataSetStepBroker = $this->createTransactionAwareDataSetStepBroker();
-        $dataSetStepBroker->addStep($this->createDescriptionToLowercaseStep());
-        $dataSetStepBroker->addStep($this->createSupplierWriterStep());
 
-        $dataImporter->addDataSetStepBroker($dataSetStepBroker);
+        // TODO: Add the DescriptionToLowercaseStep to the $dataSetStepBroker
+        // TODO: Add the SupplierWriterStep to the $dataSetStepBroker
+        // TODO: Add the $dataSetStepBroker to the $dataImporter
 
         return $dataImporter;
     }
 
     /**
      * @param \Generated\Shared\Transfer\DataImporterConfigurationTransfer|null $dataImporterConfigurationTransfer
+     *
+     * @return \Spryker\Zed\DataImport\Business\Model\DataImporterInterface
      */
     public function getSupplierLocationDataImport(?DataImporterConfigurationTransfer $dataImporterConfigurationTransfer = null): DataImporterInterface
     {
@@ -51,30 +53,45 @@ class SupplierDataImportBusinessFactory extends DataImportBusinessFactory
         return $dataImporter;
     }
 
+    /**
+     * @return \SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep\DescriptionToLowercaseStep
+     */
     public function createDescriptionToLowercaseStep(): DescriptionToLowercaseStep
     {
         return new DescriptionToLowercaseStep();
     }
 
+    /**
+     * @return \SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep\SupplierWriterStep
+     */
     public function createSupplierWriterStep(): SupplierWriterStep
     {
         return new SupplierWriterStep();
     }
 
+    /**
+     * @return \SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep\SupplierLocationWriterStep
+     */
     public function createSupplierLocationWriterStep(): SupplierLocationWriterStep
     {
         return new SupplierLocationWriterStep(
-            $this->getSupplierQuery(),
-            $this->getSupplierLocationQuery(),
+            $this->createSupplierQuery(),
+            $this->createSupplierLocationQuery(),
         );
     }
 
-    public function getSupplierQuery(): PyzSupplierQuery
+    /**
+     * @return \Orm\Zed\Supplier\Persistence\PyzSupplierQuery
+     */
+    public function createSupplierQuery(): PyzSupplierQuery
     {
         return PyzSupplierQuery::create();
     }
 
-    public function getSupplierLocationQuery(): PyzSupplierLocationQuery
+    /**
+     * @return \Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocationQuery
+     */
+    public function createSupplierLocationQuery(): PyzSupplierLocationQuery
     {
         return PyzSupplierLocationQuery::create();
     }

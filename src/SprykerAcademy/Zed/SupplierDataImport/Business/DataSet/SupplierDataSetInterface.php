@@ -5,13 +5,11 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace SprykerAcademy\Zed\SupplierDataImport\Business\DataSet;
 
 interface SupplierDataSetInterface
 {
-    public const string COLUMN_NAME = 'name';
+    public const string COLUMN_NAME = 'supplier_name';
 
     public const string COLUMN_DESCRIPTION = 'description';
 
