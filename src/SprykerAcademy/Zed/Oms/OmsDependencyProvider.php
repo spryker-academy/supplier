@@ -26,7 +26,8 @@ class OmsDependencyProvider extends PyzOmsDependencyProvider
         $container = parent::extendCommandPlugins($container);
 
         $container->extend(self::COMMAND_PLUGINS, function (CommandCollectionInterface $commandCollection) {
-            $commandCollection->add(new PayCommandPlugin(), 'Demo/Pay');
+            // TODO-1: Add the PayCommandPlugin to the command collection
+            // Hint-1: Use the same exact same string, including the slash.
 
             return $commandCollection;
         });
@@ -44,7 +45,8 @@ class OmsDependencyProvider extends PyzOmsDependencyProvider
         $container = parent::extendConditionPlugins($container);
 
         $container->extend(self::CONDITION_PLUGINS, function (ConditionCollectionInterface $conditionCollection) {
-            $conditionCollection->add(new IsAuthorizedConditionPlugin(), 'Demo/IsAuthorized');
+            // TODO-2: Add the IsAuthorizedConditionPlugin to the condition collection
+            // Hint-1: Use the same exact same string, including the slash.
 
             return $conditionCollection;
         });

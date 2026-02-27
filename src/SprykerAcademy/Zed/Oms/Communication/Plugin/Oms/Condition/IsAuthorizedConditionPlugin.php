@@ -12,13 +12,6 @@ use Spryker\Zed\Oms\Communication\Plugin\Oms\Condition\AbstractCondition;
 
 class IsAuthorizedConditionPlugin extends AbstractCondition
 {
-    /**
-     * @param \Orm\Zed\Sales\Persistence\SpySalesOrderItem $orderItem
-     *
-     * @return bool
-     */
-    public function check(SpySalesOrderItem $orderItem): bool
-    {
-        return true;
-    }
+    // TODO-1: Implement the `check()` method and return `true`
+    // Hint-1: You will find the method signature inside the interface
 }
