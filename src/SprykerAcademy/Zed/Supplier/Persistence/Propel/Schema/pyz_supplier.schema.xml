@@ -5,7 +5,7 @@
         <column name="id_supplier" required="true" type="INTEGER" primaryKey="true" autoIncrement="true"/>
         <column name="name" required="true" type="VARCHAR"/>
         <column name="description" required="true" type="LONGVARCHAR"/>
-        <column name="status" required="true" type="INTEGER" defaultValue="1"/>
+        <column name="status" required="true" type="VARCHAR"/>
         <column name="email" required="true" type="VARCHAR"/>
         <column name="phone" required="true" type="VARCHAR"/>
 
@@ -13,10 +13,6 @@
             <unique-column name="name"/>
         </unique>
         <id-method-parameter value="pyz_supplier_pk_seq"/>
-
-        <behavior name="event">
-            <parameter name="pyz_supplier_all" column="*"/>
-        </behavior>
     </table>
 
     <table name="pyz_merchant_to_supplier" idMethod="native" allowPkInsert="true" phpName="PyzMerchantToSupplier">
