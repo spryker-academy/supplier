@@ -20,30 +20,18 @@ class SupplierByIdSearchQueryPlugin extends AbstractPlugin implements QueryInter
 
     protected const string RESOURCE_TYPE = SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE;
 
-    protected int $idSupplier;
-
     protected Query $query {
         get => $field ??= $this->createSearchQuery();
     }
 
-    protected ?SearchContextTransfer $searchContextTransfer {
+    protected ?SearchContextTransfer $searchContextTransfer = null {
         get => $field ??= new SearchContextTransfer()
             ->setSourceIdentifier(static::SOURCE_IDENTIFIER);
     }
 
-    /**
-     * Sets the supplier ID. Must be called before getSearchQuery().
-     * This pattern allows the plugin to be instantiated without constructor dependencies.
-     *
-     * @param int $idSupplier
-     *
-     * @return $this
-     */
-    public function setIdSupplier(int $idSupplier): self
-    {
-        $this->idSupplier = $idSupplier;
-
-        return $this;
+    public function __construct(
+        protected int $idSupplier,
+    ) {
     }
 
     protected function createSearchQuery(): Query
