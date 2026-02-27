@@ -24,25 +24,14 @@ class SupplierStorageFactory extends AbstractFactory
      */
     public function createSupplierStorageReader(): SupplierStorageReader
     {
-        return new SupplierStorageReader(
-            $this->getStorageClient(),
-            $this->getSynchronizationService(),
-        );
+        // TODO-3: Provide dependencies to SupplierStorageReader.
+        // Hint: getStorageClient() and getSynchronizationService()
+        return new SupplierStorageReader();
     }
 
-    /**
-     * @return \Spryker\Client\Storage\StorageClientInterface
-     */
-    public function getStorageClient(): StorageClientInterface
-    {
-        return $this->getProvidedDependency(SupplierStorageDependencyProvider::CLIENT_STORAGE);
-    }
+    // TODO-1: Create getStorageClient() method.
+    // Hint: Use $this->getProvidedDependency() with STORAGE_CLIENT constant
 
-    /**
-     * @return \Spryker\Service\Synchronization\SynchronizationServiceInterface
-     */
-    public function getSynchronizationService(): SynchronizationServiceInterface
-    {
-        return $this->getProvidedDependency(SupplierStorageDependencyProvider::SERVICE_SYNCHRONIZATION);
-    }
+    // TODO-2: Create getSynchronizationService() method.
+    // Hint: Use $this->getProvidedDependency() with SYNCHRONIZATION_SERVICE constant
 }

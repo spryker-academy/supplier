@@ -16,8 +16,6 @@ use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\PublishAwareStep;
 use Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface;
-use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
-use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierDataImport\Business\DataSet\SupplierDataSetInterface;
 
 class SupplierWriterStep extends PublishAwareStep implements DataImportStepInterface
@@ -33,27 +31,30 @@ class SupplierWriterStep extends PublishAwareStep implements DataImportStepInter
     public function execute(DataSetInterface $dataSet): void
     {
         $name = $dataSet[SupplierDataSetInterface::COLUMN_NAME];
+        $description = $dataSet[SupplierDataSetInterface::COLUMN_DESCRIPTION];
+        $status = $this->normalizeStatus($dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? null);
+        $email = $dataSet[SupplierDataSetInterface::COLUMN_EMAIL] ?? null;
+        $phone = $dataSet[SupplierDataSetInterface::COLUMN_PHONE] ?? null;
+        $merchantIds = $dataSet[SupplierDataSetInterface::COLUMN_MERCHANT_IDS] ?? '';
 
         $supplierEntity = PyzSupplierQuery::create()
             ->filterByName($name)
             ->findOneOrCreate();
 
-        $supplierEntity
-            ->setDescription($dataSet[SupplierDataSetInterface::COLUMN_DESCRIPTION])
-            ->setStatus($this->normalizeStatus($dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? null))
-            ->setEmail($dataSet[SupplierDataSetInterface::COLUMN_EMAIL] ?? null)
-            ->setPhone($dataSet[SupplierDataSetInterface::COLUMN_PHONE] ?? null);
+        $supplierEntity->setDescription($description);
+        $supplierEntity->setStatus($status);
+        $supplierEntity->setEmail($email);
+        $supplierEntity->setPhone($phone);
 
         if ($supplierEntity->isNew() || $supplierEntity->isModified()) {
             $supplierEntity->save();
-            $this->addPublishEvents(SupplierSearchConfig::SUPPLIER_PUBLISH, $supplierEntity->getIdSupplier());
-            $this->addPublishEvents(SupplierStorageConfig::SUPPLIER_PUBLISH, $supplierEntity->getIdSupplier());
+            // TODO-1: Use the `addPublishEvents` method to trigger publish events for both Search and Storage.
+            // Hint-1: Call it twice - once for SupplierSearchConfig::SUPPLIER_PUBLISH and once for SupplierStorageConfig::SUPPLIER_PUBLISH
+            // Hint-2: The second parameter is the supplier's ID from the entity `$supplierEntity`.
+            // Example: $this->addPublishEvents(SupplierSearchConfig::SUPPLIER_PUBLISH, $supplierEntity->getIdSupplier());
         }
 
-        $this->handleMerchantRelations(
-            $supplierEntity->getIdSupplier(),
-            (string)($dataSet[SupplierDataSetInterface::COLUMN_MERCHANT_IDS] ?? ''),
-        );
+        $this->handleMerchantRelations($supplierEntity->getIdSupplier(), $merchantIds);
     }
 
     /**
@@ -86,46 +87,28 @@ class SupplierWriterStep extends PublishAwareStep implements DataImportStepInter
      */
     protected function handleMerchantRelations(int $idSupplier, string $merchantIds): void
     {
-        $merchantIdList = $this->extractMerchantIds($merchantIds);
+        $merchantIdList = array_filter(array_map('intval', array_map('trim', explode(',', $merchantIds))));
 
         if ($merchantIdList === []) {
             return;
         }
 
+        // 1. Find existing relations for this supplier in one query
         $existingMerchantIds = PyzMerchantToSupplierQuery::create()
             ->filterByFkSupplier($idSupplier)
-            ->filterByFkMerchant_In($merchantIdList)
             ->select([PyzMerchantToSupplierTableMap::COL_FK_MERCHANT])
             ->find()
             ->toArray();
 
+        // 2. Filter out IDs that already have a relation
         $newMerchantIds = array_diff($merchantIdList, $existingMerchantIds);
 
-        if ($newMerchantIds === []) {
-            return;
-        }
-
+        // 3. Create only the missing relations
         foreach ($newMerchantIds as $idMerchant) {
-            (new PyzMerchantToSupplier())
-                ->setFkSupplier($idSupplier)
-                ->setFkMerchant((int)$idMerchant)
-                ->save();
+            $relationEntity = new PyzMerchantToSupplier();
+            $relationEntity->setFkSupplier($idSupplier);
+            $relationEntity->setFkMerchant($idMerchant);
+            $relationEntity->save();
         }
-    }
-
-    /**
-     * @param string $merchantIds
-     *
-     * @return list<int>
-     */
-    protected function extractMerchantIds(string $merchantIds): array
-    {
-        $merchantIds = array_filter(array_map('trim', explode(',', $merchantIds)));
-
-        if ($merchantIds === []) {
-            return [];
-        }
-
-        return array_values(array_unique(array_map('intval', $merchantIds)));
     }
 }

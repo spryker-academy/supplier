@@ -32,7 +32,8 @@ class SupplierStorageWritePublisherPlugin extends AbstractPlugin implements Publ
      */
     public function handleBulk(array $eventEntityTransfers, $eventName): void
     {
-        $this->getFacade()->writeCollectionBySupplierEvents($eventEntityTransfers);
+        // TODO: Call the facade method to write supplier storage collection.
+        // Hint: Use $this->getFacade()->writeCollectionBySupplierEvents($eventEntityTransfers);
     }
 
     /**

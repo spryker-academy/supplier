@@ -29,8 +29,7 @@ class SupplierStorageFacade extends AbstractFacade implements SupplierStorageFac
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void
     {
-        $this->getFactory()
-            ->createSupplierStorageWriter()
-            ->writeCollectionBySupplierEvents($eventTransfers);
+        // TODO-1: Use the SupplierStorageWriter logic `writeCollectionBySupplierEvents`.
+        // Hint-1: Get the writer from factory and call the method.
     }
 }

@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierSearch\Business\Writer;
 
@@ -17,8 +17,16 @@ use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface;
 
-readonly class SupplierSearchWriter
+class SupplierSearchWriter
 {
+    protected EventBehaviorFacadeInterface $eventBehaviorFacade;
+
+    protected SupplierFacadeInterface $supplierFacade;
+
+    protected SupplierSearchRepositoryInterface $supplierSearchRepository;
+
+    protected SupplierSearchEntityManagerInterface $supplierSearchEntityManager;
+
     /**
      * @param \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface $eventBehaviorFacade
      * @param \SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface $supplierFacade
@@ -26,11 +34,15 @@ readonly class SupplierSearchWriter
      * @param \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface $supplierSearchEntityManager
      */
     public function __construct(
-        protected EventBehaviorFacadeInterface $eventBehaviorFacade,
-        protected SupplierFacadeInterface $supplierFacade,
-        protected SupplierSearchRepositoryInterface $supplierSearchRepository,
-        protected SupplierSearchEntityManagerInterface $supplierSearchEntityManager,
+        EventBehaviorFacadeInterface $eventBehaviorFacade,
+        SupplierFacadeInterface $supplierFacade,
+        SupplierSearchRepositoryInterface $supplierSearchRepository,
+        SupplierSearchEntityManagerInterface $supplierSearchEntityManager,
     ) {
+        $this->eventBehaviorFacade = $eventBehaviorFacade;
+        $this->supplierFacade = $supplierFacade;
+        $this->supplierSearchRepository = $supplierSearchRepository;
+        $this->supplierSearchEntityManager = $supplierSearchEntityManager;
     }
 
     /**
@@ -38,7 +50,7 @@ readonly class SupplierSearchWriter
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void
     {
-        $supplierIds = array_values(array_unique($this->eventBehaviorFacade->getEventTransferIds($eventTransfers)));
+        $supplierIds = $this->eventBehaviorFacade->getEventTransferIds($eventTransfers);
 
         $this->writeCollectionBySupplierIds($supplierIds);
     }
@@ -48,7 +60,7 @@ readonly class SupplierSearchWriter
      */
     protected function writeCollectionBySupplierIds(array $supplierIds): void
     {
-        if ($supplierIds === []) {
+        if (!$supplierIds) {
             return;
         }
 
@@ -83,24 +95,17 @@ readonly class SupplierSearchWriter
      */
     protected function getSupplierTransfersIndexed(array $supplierIds): array
     {
-        if ($supplierIds === []) {
-            return [];
-        }
+        // TODO-1: Create SupplierCriteriaTransfer and populate it with `$supplierIds`.
+        // Hint-1: Use `setIdsSupplier()`.
+        $supplierCriteriaTransfer = null;
 
-        $supplierCriteriaTransfer = (new SupplierCriteriaTransfer())
-            ->setIdsSupplier($supplierIds);
-        $supplierTransfers = $this->supplierFacade
-            ->getSuppliers($supplierCriteriaTransfer);
+        // TODO-2: Use SupplierFacade to fetch suppliers by ids.
+        // Hint-1: Pass the criteria transfer created above.
+        $supplierTransfers = null;
 
         $supplierTransfersIndexed = [];
         foreach ($supplierTransfers as $supplierTransfer) {
-            $supplierId = $supplierTransfer->getIdSupplier();
-
-            if ($supplierId === null) {
-                continue;
-            }
-
-            $supplierTransfersIndexed[$supplierId] = $supplierTransfer;
+            $supplierTransfersIndexed[$supplierTransfer->getIdSupplier()] = $supplierTransfer;
         }
 
         return $supplierTransfersIndexed;
@@ -113,24 +118,17 @@ readonly class SupplierSearchWriter
      */
     protected function getSupplierSearchTransfersIndexed(array $supplierIds): array
     {
-        if ($supplierIds === []) {
-            return [];
-        }
+        // TODO-3: Create SupplierSearchCriteriaTransfer and populate it with `$supplierIds`.
+        // Hint-1: Use `setFksSupplier()`.
+        $supplierSearchCriteriaTransfer = null;
 
-        $supplierSearchCriteriaTransfer = (new SupplierSearchCriteriaTransfer())
-            ->setFksSupplier($supplierIds);
-        $supplierSearchTransfers = $this->supplierSearchRepository
-            ->getSupplierSearches($supplierSearchCriteriaTransfer);
+        // TODO-4: Use SupplierSearchRepository to load SupplierSearch transfers.
+        // Hint-1: Pass the criteria transfer created above.
+        $supplierSearchTransfers = null;
 
         $supplierSearchTransfersIndexed = [];
         foreach ($supplierSearchTransfers as $supplierSearchTransfer) {
-            $supplierId = $supplierSearchTransfer->getFkSupplier();
-
-            if ($supplierId === null) {
-                continue;
-            }
-
-            $supplierSearchTransfersIndexed[$supplierId] = $supplierSearchTransfer;
+            $supplierSearchTransfersIndexed[$supplierSearchTransfer->getFkSupplier()] = $supplierSearchTransfer;
         }
 
         return $supplierSearchTransfersIndexed;

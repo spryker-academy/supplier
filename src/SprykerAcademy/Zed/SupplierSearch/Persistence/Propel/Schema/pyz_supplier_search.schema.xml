@@ -10,12 +10,7 @@
             <index-column name="fk_supplier"/>
         </index>
 
-        <behavior name="synchronization">
-            <parameter name="resource" value="supplier"/>
-            <parameter name="key_suffix_column" value="fk_supplier"/>
-            <parameter name="queue_group" value="sync.search.supplier"/>
-            <parameter name="params" value='{"type":"page"}'/>
-        </behavior>
+        <!-- TODO: Add the synchronization-behavior -->
 
         <behavior name="timestampable"/>
         <id-method-parameter value="pyz_supplier_search_pk_seq"/>

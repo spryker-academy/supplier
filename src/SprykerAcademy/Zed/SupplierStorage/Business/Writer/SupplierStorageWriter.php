@@ -95,10 +95,13 @@ class SupplierStorageWriter
      */
     protected function getSupplierTransfersIndexed(array $supplierIds): array
     {
-        $supplierCriteriaTransfer = (new SupplierCriteriaTransfer())
-            ->setIdsSupplier($supplierIds);
+        // TODO-1: Create SupplierCriteriaTransfer and populate it with `$supplierIds`.
+        // Hint-1: Use `setIdsSupplier()`.
+        $supplierCriteriaTransfer = null;
 
-        $supplierTransfers = $this->supplierFacade->getSupplierCollection($supplierCriteriaTransfer);
+        // TODO-2: Use SupplierFacade to fetch suppliers by ids.
+        // Hint-1: Pass the criteria transfer created above.
+        $supplierTransfers = null;
 
         $supplierTransfersIndexed = [];
         foreach ($supplierTransfers as $supplierTransfer) {
@@ -115,12 +118,13 @@ class SupplierStorageWriter
      */
     protected function getSupplierStorageTransfersIndexed(array $supplierIds): array
     {
-        $supplierStorageCriteriaTransfer = (new SupplierStorageCriteriaTransfer())
-            ->setFksSupplier($supplierIds);
+        // TODO-3: Create SupplierStorageCriteriaTransfer and populate it with `$supplierIds`.
+        // Hint-1: Use `setFksSupplier()`.
+        $supplierStorageCriteriaTransfer = null;
 
-        $supplierStorageTransfers = $this->supplierStorageRepository->getSupplierStorageCollection(
-            $supplierStorageCriteriaTransfer,
-        );
+        // TODO-4: Use SupplierStorageRepository to load SupplierStorage transfers.
+        // Hint-1: Pass the criteria transfer created above.
+        $supplierStorageTransfers = null;
 
         $supplierStorageTransfersIndexed = [];
         foreach ($supplierStorageTransfers as $supplierStorageTransfer) {

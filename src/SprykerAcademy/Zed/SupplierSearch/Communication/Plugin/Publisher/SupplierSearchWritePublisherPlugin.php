@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher;
 
@@ -26,10 +26,11 @@ class SupplierSearchWritePublisherPlugin extends AbstractPlugin implements Publi
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
      * @param string $eventName
      */
-    #[\Override]
-    public function handleBulk(array $eventEntityTransfers, $eventName): void
+    public function handleBulk(array $eventEntityTransfers, $eventName): void // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     {
-        $this->getFacade()->writeCollectionBySupplierEvents($eventEntityTransfers);
+        // TODO-1: Use module facade to write collection by supplier events.
+        // Hint-1: Use `getFacade()` to access SupplierSearchFacade.
+        // Hint-2: Pass `$eventEntityTransfers` to the write method.
     }
 
     /**
@@ -42,9 +43,8 @@ class SupplierSearchWritePublisherPlugin extends AbstractPlugin implements Publi
     public function getSubscribedEvents(): array
     {
         return [
-            SupplierSearchConfig::SUPPLIER_PUBLISH,
-            SupplierSearchConfig::ENTITY_PYZ_SUPPLIER_CREATE,
-            SupplierSearchConfig::ENTITY_PYZ_SUPPLIER_UPDATE,
+            // TODO-2: Return event names for supplier publish/create/update.
+            // Hint-1: Use constants from SupplierSearchConfig.
         ];
     }
 }
