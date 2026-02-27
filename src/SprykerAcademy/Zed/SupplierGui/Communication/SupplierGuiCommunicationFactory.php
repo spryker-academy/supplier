@@ -1,46 +1,50 @@
 <?php
 
-/**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
- */
-
-declare(strict_types = 1);
-
-namespace SprykerAcademy\Zed\SupplierGui\Communication;
+namespace Pyz\Zed\SupplierGui\Communication;
 
 use Generated\Shared\Transfer\SupplierTransfer;
 use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
+use Pyz\Zed\Supplier\Business\SupplierFacadeInterface;
+use Pyz\Zed\SupplierGui\SupplierGuiDependencyProvider;
+use Pyz\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
+use Pyz\Zed\SupplierGui\Communication\Table\SupplierTable;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
-use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
-use SprykerAcademy\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
-use SprykerAcademy\Zed\SupplierGui\Communication\Table\SupplierTable;
-use SprykerAcademy\Zed\SupplierGui\SupplierGuiDependencyProvider;
 use Symfony\Component\Form\FormInterface;
 
 class SupplierGuiCommunicationFactory extends AbstractCommunicationFactory
 {
-    public function getSupplierQuery(): PyzSupplierQuery
+    /**
+     * @return \Orm\Zed\Supplier\Persistence\PyzSupplierQuery
+     */
+    public function getSupplierPropelQuery(): PyzSupplierQuery
     {
-        return $this->getProvidedDependency(SupplierGuiDependencyProvider::PROPEL_QUERY_SUPPLIER);
-    }
-
-    public function createSupplierTable(): SupplierTable
-    {
-        return new SupplierTable($this->getSupplierQuery());
+        return $this->getProvidedDependency(SupplierGuiDependencyProvider::PROPEL_QUERY_ANTELOPE);
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SupplierTransfer|null $supplierTransfer
-     * @param array $options
+     * @return \Pyz\Zed\SupplierGui\Communication\Table\SupplierTable
      */
-    public function createSupplierCreateForm(?SupplierTransfer $supplierTransfer = null, array $options = []): FormInterface
+    public function createSupplierTable(): SupplierTable
+    {
+        return new SupplierTable($this->getSupplierPropelQuery());
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
+     * @param array $options
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    public function createSupplierCreateForm(SupplierTransfer $supplierTransfer, array $options = []): FormInterface
     {
         return $this->getFormFactory()->create(SupplierCreateForm::class, $supplierTransfer, $options);
     }
 
+    /**
+     * @return \Pyz\Zed\Supplier\Business\SupplierFacadeInterface
+     */
     public function getSupplierFacade(): SupplierFacadeInterface
     {
-        return $this->getProvidedDependency(SupplierGuiDependencyProvider::FACADE_SUPPLIER);
+        return $this->getProvidedDependency(SupplierGuiDependencyProvider::FACADE_ANTELOPE);
     }
 }

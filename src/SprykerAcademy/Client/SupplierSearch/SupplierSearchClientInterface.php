@@ -1,37 +1,20 @@
 <?php
 
-declare(strict_types=1);
+namespace Pyz\Client\SupplierSearch;
 
-namespace SprykerAcademy\Client\SupplierSearch;
-
-use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 
 interface SupplierSearchClientInterface
 {
     /**
      * Specification:
-     * - Searches suppliers in Elasticsearch.
-     * - Returns a SupplierCollectionTransfer with matching suppliers.
+     * - Searches for an supplier by a given name and returns the first match
      *
      * @api
      *
-     * @param array<mixed> $requestParameters
+     * @param string $name
      *
-     * @return \Generated\Shared\Transfer\SupplierCollectionTransfer
+     * @return \Generated\Shared\Transfer\SupplierTransfer|null
      */
-    public function searchSuppliers(array $requestParameters = []): SupplierCollectionTransfer;
-
-    /**
-     * Specification:
-     * - Finds a single supplier by ID from Elasticsearch.
-     * - Returns an empty transfer when not found.
-     *
-     * @api
-     *
-     * @param int $idSupplier
-     *
-     * @return \Generated\Shared\Transfer\SupplierTransfer
-     */
-    public function findSupplierById(int $idSupplier): SupplierTransfer;
+    public function getSupplierByName(string $name): ?SupplierTransfer;
 }
