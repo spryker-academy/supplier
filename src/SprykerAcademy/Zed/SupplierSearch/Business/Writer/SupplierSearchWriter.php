@@ -58,6 +58,11 @@ readonly class SupplierSearchWriter
         );
 
         foreach ($supplierTransfersIndexed as $supplierId => $supplierTransfer) {
+            // TODO-1: Structure the search data properly for Elasticsearch.
+            // Hint-1: Create an array with keys: 'type', 'id_supplier', 'name', 'search-result-data', 'full-text', 'full-text-boosted', 'suggestion-terms', 'completion-terms'.
+            // Hint-2: Use constants from SupplierSearchConfig instead of magic strings.
+            // Hint-3: Example: SupplierSearchConfig::KEY_TYPE => SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE
+            // Hint-4: The 'search-result-data' key should contain $supplierTransfer->toArray()
             $searchData = $supplierTransfer->toArray();
 
             $supplierSearchTransfer = $supplierSearchTransfersIndexed[$supplierId] ?? new SupplierSearchTransfer();

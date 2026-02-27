@@ -12,73 +12,36 @@ use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\Su
 
 class SupplierSearchDependencyProvider extends AbstractDependencyProvider
 {
-    public const string CLIENT_SEARCH = 'CLIENT_SEARCH';
-    public const string PLUGIN_SUPPLIER_SEARCH_QUERY = 'PLUGIN_SUPPLIER_SEARCH_QUERY';
-    public const string PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER = 'PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER';
-    public const string PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER = 'PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER';
+    public const CLIENT_SEARCH = 'CLIENT_SEARCH';
+    public const PLUGIN_SUPPLIER_SEARCH_QUERY = 'PLUGIN_SUPPLIER_SEARCH_QUERY';
+    public const PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER = 'PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER';
+    public const PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER = 'PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER';
 
+    /**
+     * @param \Spryker\Client\Kernel\Container $container
+     *
+     * @return \Spryker\Client\Kernel\Container
+     */
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
-        $container = $this->addSearchClient($container);
-        $container = $this->addSupplierSearchQueryPlugin($container);
-        $container = $this->addSupplierSearchResultFormatterPlugins($container);
-        $container = $this->addSupplierSearchQueryExpanderPlugins($container);
+
+        // TODO-1: Provide the Search client.
+        // Hint-1: Use $container->set() with CLIENT_SEARCH as key
+        // Hint-2: Return a closure: fn(Container $c) => $c->getLocator()->search()->client()
+
+        // TODO-2: Provide the SupplierSearchQueryPlugin.
+        // Hint-1: Use $container->set() with PLUGIN_SUPPLIER_SEARCH_QUERY as key
+        // Hint-2: Return a closure that creates a new SupplierSearchQueryPlugin: fn(): QueryInterface => new SupplierSearchQueryPlugin()
+
+        // TODO-3: Provide the result formatter plugins array.
+        // Hint-1: Use $container->set() with PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER as key
+        // Hint-2: Return a closure with an array containing new SupplierSearchResultFormatterPlugin()
+
+        // TODO-4: Provide the query expander plugins array (empty for now).
+        // Hint-1: Use $container->set() with PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER as key
+        // Hint-2: Return a closure with an empty array: fn(): array => []
 
         return $container;
-    }
-
-    protected function addSearchClient(Container $container): Container
-    {
-        $container->set(static::CLIENT_SEARCH, function (Container $container) {
-            return $container->getLocator()->search()->client();
-        });
-
-        return $container;
-    }
-
-    protected function addSupplierSearchQueryPlugin(Container $container): Container
-    {
-        $container->set(static::PLUGIN_SUPPLIER_SEARCH_QUERY, function (): QueryInterface {
-            return new SupplierSearchQueryPlugin();
-        });
-
-        return $container;
-    }
-
-    protected function addSupplierSearchResultFormatterPlugins(Container $container): Container
-    {
-        $container->set(static::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER, function (): array {
-            return $this->getSupplierSearchResultFormatterPlugins();
-        });
-
-        return $container;
-    }
-
-    /**
-     * @return array<\Spryker\Client\SearchExtension\Dependency\Plugin\ResultFormatterPluginInterface>
-     */
-    protected function getSupplierSearchResultFormatterPlugins(): array
-    {
-        return [
-            new SupplierSearchResultFormatterPlugin(),
-        ];
-    }
-
-    protected function addSupplierSearchQueryExpanderPlugins(Container $container): Container
-    {
-        $container->set(static::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER, function (): array {
-            return $this->getSupplierSearchQueryExpanderPlugins();
-        });
-
-        return $container;
-    }
-
-    /**
-     * @return array<\Spryker\Client\SearchExtension\Dependency\Plugin\QueryExpanderPluginInterface>
-     */
-    protected function getSupplierSearchQueryExpanderPlugins(): array
-    {
-        return [];
     }
 }

@@ -27,9 +27,9 @@ class SupplierStorageClient extends AbstractClient implements SupplierStorageCli
      */
     public function findSupplierStorageData(int $idSupplier): ?array
     {
-        return $this->getFactory()
-            ->createSupplierStorageReader()
-            ->findSupplierStorageData($idSupplier);
+        // TODO-1: Use SupplierStorageReader to find supplier by ID.
+        // Hint: Get the reader from factory.
+        return null;
     }
 
     /**
@@ -41,8 +41,8 @@ class SupplierStorageClient extends AbstractClient implements SupplierStorageCli
      */
     public function getAllSuppliers(): array
     {
-        return $this->getFactory()
-            ->createSupplierStorageReader()
-            ->getAllSuppliers();
+        // TODO-2: Use SupplierStorageReader to get all suppliers.
+        // Hint: Get the reader from factory.
+        return [];
     }
 }

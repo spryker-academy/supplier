@@ -24,9 +24,10 @@ class SupplierStorageMapper
         PyzSupplierStorage $supplierStorageEntity,
         SupplierStorageTransfer $supplierStorageTransfer,
     ): SupplierStorageTransfer {
-        $supplierStorageTransfer->setIdSupplierStorage($supplierStorageEntity->getIdSupplierStorage());
-        $supplierStorageTransfer->setFkSupplier($supplierStorageEntity->getFkSupplier());
-        $supplierStorageTransfer->setData($supplierStorageEntity->getData());
+        // TODO: Map entity to transfer.
+        // Hint: Set idSupplierStorage using getIdSupplierStorage().
+        // Hint: Set fkSupplier using getFkSupplier().
+        // Hint: Set data field using getData() directly (synchronization behavior handles JSON automatically).
 
         return $supplierStorageTransfer;
     }
@@ -41,12 +42,10 @@ class SupplierStorageMapper
         SupplierStorageTransfer $supplierStorageTransfer,
         PyzSupplierStorage $supplierStorageEntity,
     ): PyzSupplierStorage {
-        $supplierStorageEntity->setFkSupplier($supplierStorageTransfer->getFkSupplier());
-        $supplierStorageEntity->setData($supplierStorageTransfer->getData());
-
-        if ($supplierStorageTransfer->getIdSupplierStorage() !== null) {
-            $supplierStorageEntity->setIdSupplierStorage($supplierStorageTransfer->getIdSupplierStorage());
-        }
+        // TODO: Map transfer to entity.
+        // Hint: Set fkSupplier using getFkSupplier().
+        // Hint: Set data field using getData() directly (synchronization behavior handles JSON automatically).
+        // Hint: Set idSupplierStorage if not null (for updates).
 
         return $supplierStorageEntity;
     }

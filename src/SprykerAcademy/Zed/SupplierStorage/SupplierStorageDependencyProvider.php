@@ -26,37 +26,17 @@ class SupplierStorageDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container = parent::provideBusinessLayerDependencies($container);
 
-        $container = $this->addEventBehaviorFacade($container);
-        $container = $this->addSupplierFacade($container);
+        // TODO-3: Make the EventBehaviorFacade and SupplierFacade available to the business layer.
+        // Hint-1: Use addEventBehaviorFacade() and addSupplierFacade() methods.
 
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addEventBehaviorFacade(Container $container): Container
-    {
-        $container->set(static::FACADE_EVENT_BEHAVIOR, function (Container $container) {
-            return $container->getLocator()->eventBehavior()->facade();
-        });
+    // TODO-1: Create the addEventBehaviorFacade method.
+    // Hint-1: Provide EventBehaviorFacade using the FACADE_EVENT_BEHAVIOR constant.
+    // Hint-2: Use $this->getProvidedDependency() to get the facade.
 
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addSupplierFacade(Container $container): Container
-    {
-        $container->set(static::FACADE_SUPPLIER, function (Container $container) {
-            return $container->getLocator()->supplier()->facade();
-        });
-
-        return $container;
-    }
+    // TODO-2: Create the addSupplierFacade method.
+    // Hint-1: Provide SupplierFacade using the FACADE_SUPPLIER constant.
+    // Hint-2: Use $this->getProvidedDependency() to get the facade.
 }

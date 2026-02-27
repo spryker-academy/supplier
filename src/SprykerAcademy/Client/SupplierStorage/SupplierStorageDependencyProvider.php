@@ -26,37 +26,15 @@ class SupplierStorageDependencyProvider extends AbstractDependencyProvider
     {
         $container = parent::provideServiceLayerDependencies($container);
 
-        $container = $this->addStorageClient($container);
-        $container = $this->addSynchronizationService($container);
+        // TODO-2: Add storage client and synchronization service.
+        // Hint: Use addStorageClient() and addSynchronizationService()
 
         return $container;
     }
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
-    protected function addStorageClient(Container $container): Container
-    {
-        $container->set(static::CLIENT_STORAGE, function (Container $container) {
-            return $container->getLocator()->storage()->client();
-        });
+    // TODO-1: Create addStorageClient() method.
+    // Hint: Provide StorageClient using CLIENT_STORAGE constant
 
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
-    protected function addSynchronizationService(Container $container): Container
-    {
-        $container->set(static::SERVICE_SYNCHRONIZATION, function (Container $container) {
-            return $container->getLocator()->synchronization()->service();
-        });
-
-        return $container;
-    }
+    // TODO-1: Create addSynchronizationService() method.
+    // Hint: Provide SynchronizationService using SERVICE_SYNCHRONIZATION constant
 }
