@@ -1,50 +1,36 @@
 <?php
 
-declare(strict_types=1);
+namespace Pyz\Client\SupplierSearch;
 
-namespace SprykerAcademy\Client\SupplierSearch;
-
+use Pyz\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin;
 use Spryker\Client\Kernel\AbstractFactory;
 use Spryker\Client\Search\SearchClientInterface;
-use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
-use SprykerAcademy\Client\SupplierSearch\Reader\SupplierSearchReader;
-use SprykerAcademy\Client\SupplierSearch\Reader\SupplierSearchReaderInterface;
 
 class SupplierSearchFactory extends AbstractFactory
 {
-    public function createSupplierSearchReader(): SupplierSearchReaderInterface
-    {
-        return new SupplierSearchReader(
-            $this->getSearchClient(),
-            $this->getSupplierSearchQueryPlugin(),
-            $this->getSupplierSearchQueryExpanderPlugins(),
-            $this->getSupplierSearchResultFormatterPlugins(),
-        );
-    }
-
-    public function getSearchClient(): SearchClientInterface
-    {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::CLIENT_SEARCH);
-    }
-
-    public function getSupplierSearchQueryPlugin(): QueryInterface
-    {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY);
-    }
-
     /**
-     * @return array<\Spryker\Client\SearchExtension\Dependency\Plugin\QueryExpanderPluginInterface>
+     * @param string $name
+     *
+     * @return \Pyz\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin
      */
-    public function getSupplierSearchQueryExpanderPlugins(): array
+    public function createSupplierQueryPlugin(string $name): SupplierSearchQueryPlugin
     {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER);
+        return new SupplierSearchQueryPlugin($name);
     }
 
     /**
      * @return array<\Spryker\Client\SearchExtension\Dependency\Plugin\ResultFormatterPluginInterface>
      */
-    public function getSupplierSearchResultFormatterPlugins(): array
+    public function getSearchQueryFormatters(): array
     {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER);
+        return $this->getProvidedDependency(SupplierSearchDependencyProvider::SUPPLIER_SEARCH_RESULT_FORMATTER_PLUGINS);
+    }
+
+    /**
+     * @return \Spryker\Client\Search\SearchClientInterface
+     */
+    public function getSearchClient(): SearchClientInterface
+    {
+        return $this->getProvidedDependency(SupplierSearchDependencyProvider::CLIENT_SEARCH);
     }
 }

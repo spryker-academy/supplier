@@ -1,28 +1,21 @@
 <?php
 
-/**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
- */
+namespace Pyz\Zed\SupplierSearch\Business;
 
-declare(strict_types = 1);
-
-namespace SprykerAcademy\Zed\SupplierSearch\Business;
-
+use Pyz\Zed\Supplier\Business\SupplierFacadeInterface;
+use Pyz\Zed\SupplierSearch\SupplierSearchDependencyProvider;
+use Pyz\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
-use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
-use SprykerAcademy\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter;
-use SprykerAcademy\Zed\SupplierSearch\SupplierSearchDependencyProvider;
 
 /**
- * @method \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface getRepository()
- * @method \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface getEntityManager()
+ * @method \Pyz\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface getRepository()
+ * @method \Pyz\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface getEntityManager()
  */
 class SupplierSearchBusinessFactory extends AbstractBusinessFactory
 {
     /**
-     * @return \SprykerAcademy\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter
+     * @return \Pyz\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter
      */
     public function createSupplierSearchWriter(): SupplierSearchWriter
     {
@@ -43,10 +36,10 @@ class SupplierSearchBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface
+     * @return \Pyz\Zed\Supplier\Business\SupplierFacadeInterface
      */
     public function getSupplierFacade(): SupplierFacadeInterface
     {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::FACADE_SUPPLIER);
+        return $this->getProvidedDependency(SupplierSearchDependencyProvider::FACADE_ANTELOPE);
     }
 }
