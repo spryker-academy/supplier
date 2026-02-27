@@ -11,9 +11,8 @@ namespace SprykerAcademy\Zed\Supplier\Persistence;
 
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
-use Propel\Runtime\Collection\ObjectCollection;
-use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 use SprykerAcademy\Zed\Supplier\Persistence\Propel\Mapper\SupplierMapper;
+use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
  * @method \SprykerAcademy\Zed\Supplier\Persistence\SupplierPersistenceFactory getFactory()
@@ -38,23 +37,22 @@ class SupplierRepository extends AbstractRepository implements SupplierRepositor
 
         $supplierEntities = $supplierQuery->find();
 
+        $supplierTransfers = [];
         $supplierMapper = $this->getFactory()->createSupplierMapper();
 
-        return $this->mapSupplierEntitiesToTransfers($supplierEntities, $supplierMapper);
+        return $this->getSupplierTransfers($supplierEntities, $supplierMapper, $supplierTransfers);
     }
 
     /**
-     * @param \Propel\Runtime\Collection\ObjectCollection<int, \Orm\Zed\Supplier\Persistence\PyzSupplier> $supplierEntities
+     * @param mixed $supplierEntities
      * @param \SprykerAcademy\Zed\Supplier\Persistence\Propel\Mapper\SupplierMapper $supplierMapper
-     *
-     * @return list<\Generated\Shared\Transfer\SupplierTransfer>
+     * @param array $supplierTransfers
      */
-    protected function mapSupplierEntitiesToTransfers(
-        ObjectCollection $supplierEntities,
+    public function getSupplierTransfers(
+        mixed $supplierEntities,
         SupplierMapper $supplierMapper,
+        array $supplierTransfers,
     ): array {
-        $supplierTransfers = [];
-
         foreach ($supplierEntities as $supplierEntity) {
             $supplierTransfers[] = $supplierMapper->mapSupplierEntityToSupplierTransfer(
                 $supplierEntity,
