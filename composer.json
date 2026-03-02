@@ -1,0 +1,82 @@
+{
+    "name": "spryker-academy/supplier",
+    "description": "Spryker Academy Supplier Training Module Suite - Master intermediate and advanced Spryker concepts",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Spryker Academy",
+            "email": "academy@spryker.com"
+        }
+    ],
+    "keywords": [
+        "spryker",
+        "training",
+        "supplier",
+        "crud",
+        "data-import",
+        "elasticsearch",
+        "redis",
+        "api",
+        "oms"
+    ],
+    "require": {
+        "php": ">=8.4",
+        "spryker/kernel": "^3.0.0",
+        "spryker/symfony": "^3.0.0",
+        "spryker/gui": "^3.0.0 || ^4.0.0",
+        "spryker/propel-orm": "^1.0.0",
+        "spryker/data-import": "^1.0.0",
+        "spryker/search": "^8.0.0",
+        "spryker/search-elasticsearch": "^1.0.0",
+        "spryker/storage": "^3.0.0",
+        "spryker/synchronization": "^1.0.0",
+        "spryker/publisher": "^1.0.0",
+        "spryker/publisher-extension": "^1.0.0",
+        "spryker/event-behavior": "^1.0.0",
+        "spryker/api-platform": "^0.5.0 || ^1.0.0",
+        "spryker/oms": "^11.0.0",
+        "spryker/oms-extension": "^1.0.0"
+    },
+    "require-dev": {
+        "spryker/code-sniffer": "*",
+        "spryker/testify": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SprykerAcademy\\": "src/SprykerAcademy/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SprykerAcademyTest\\": "tests/SprykerAcademyTest/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "10.0.x-dev",
+            "dev-ilt/202512.0/basics/supplier-table-schema/skeleton": "4.0-dev",
+            "dev-ilt/202512.0/basics/supplier-table-schema/complete": "4.0.x-dev",
+            "dev-ilt/202512.0/intermediate/back-office/skeleton": "6.0-dev",
+            "dev-ilt/202512.0/intermediate/back-office/complete": "6.0.x-dev",
+            "dev-ilt/202512.0/intermediate/data-import/skeleton": "7.0-dev",
+            "dev-ilt/202512.0/intermediate/data-import/complete": "7.0.x-dev",
+            "dev-ilt/202512.0/intermediate/publish-synchronize/skeleton": "8.0-dev",
+            "dev-ilt/202512.0/intermediate/publish-synchronize/complete": "8.0.x-dev",
+            "dev-ilt/202512.0/intermediate/search/skeleton": "9.0-dev",
+            "dev-ilt/202512.0/intermediate/search/complete": "9.0.x-dev",
+            "dev-ilt/202512.0/intermediate/glue-storefront/skeleton": "10.0-dev",
+            "dev-ilt/202512.0/intermediate/glue-storefront/complete": "10.0.x-dev",
+            "dev-ilt/202512.0/intermediate/oms/skeleton": "11.0-dev",
+            "dev-ilt/202512.0/intermediate/oms/complete": "11.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
