@@ -1,0 +1,14 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% block content %}
+
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Suppliers' } %}
+        {% block widget_content %}
+            {# TODO: Add a link/button to /supplier-gui/create with class "btn btn-primary m-b-sm" #}
+
+            {# TODO: Render the supplierTable variable using the raw filter #}
+            {# Hint: {{ variableName | raw }} prevents HTML escaping #}
+        {% endblock %}
+    {% endembed %}
+
+{% endblock %}
