@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=../../../../../vendor/spryker/api-platform/resources/schemas/api-resource-schema-v1.json
+
+resource:
+    name: Customers
+    shortName: Customer
+    description: "Customer resource for backend API"
+
+    provider: "SprykerAcademy\\Glue\\Customer\\Api\\Backend\\Provider\\CustomerBackendProvider"
+    processor: "SprykerAcademy\\Glue\\Customer\\Api\\Backend\\Processor\\CustomerBackendProcessor"
+
+    paginationEnabled: true
+    paginationItemsPerPage: 10
+
+    operations:
+        -   type: Post
+        -   type: Get
+        -   type: GetCollection
+        -   type: Patch
+        -   type: Delete
+
+    properties:
+        idCustomer:
+            type: integer
+            description: "The unique identifier of the customer."
+            writable: false
+
+        email:
+            type: string
+            description: "The email address of a user or contact."
+            openapiContext:
+                example: "test@spryker.com"
+
+        firstName:
+            type: string
+            description: "The first name of a person."
+            openapiContext:
+                example: "John"
+
+        lastName:
+            type: string
+            description: "The last name of a user or customer."
+            openapiContext:
+                example: "Doe"
+
+        customerReference:
+            type: string
+            description: "A unique reference for a customer."
+            writable: false
+            identifier: true

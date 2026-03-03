@@ -1,0 +1,28 @@
+post:
+    email:
+        - NotBlank
+        - Email
+
+    firstName:
+        - NotBlank
+        -   Length:
+                max: 100
+
+    lastName:
+        - NotBlank
+        -   Length:
+                max: 100
+
+patch:
+    email:
+        -   Optional:
+                constraints:
+                    - NotBlank
+                    - Email
+
+    firstName:
+        -   Optional:
+                constraints:
+                    - NotBlank
+                    -   Length:
+                            max: 100
