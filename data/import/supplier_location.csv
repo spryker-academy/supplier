@@ -1,0 +1,7 @@
+supplier_name,city,country,address,zip_code,is_default
+Acme Supplies,New York,USA,123 Broadway Ave,10001,1
+Acme Supplies,Los Angeles,USA,456 Sunset Blvd,90028,0
+Global Trade Partners,Berlin,Germany,789 Alexanderplatz,10178,1
+Global Trade Partners,Munich,Germany,321 Marienplatz,80331,0
+TechSource Inc,San Francisco,USA,555 Market St,94105,1
+Green Earth Supply,London,UK,999 Oxford St,W1D 2HF,1
