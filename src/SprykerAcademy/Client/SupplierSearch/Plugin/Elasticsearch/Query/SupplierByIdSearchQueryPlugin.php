@@ -1,0 +1,77 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query;
+
+use Elastica\Query;
+use Elastica\Query\BoolQuery;
+use Elastica\Query\MatchQuery;
+use Elastica\Query\Term;
+use Generated\Shared\Transfer\SearchContextTransfer;
+use Spryker\Client\Kernel\AbstractPlugin;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
+use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
+use Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface;
+
+class SupplierByIdSearchQueryPlugin extends AbstractPlugin implements QueryInterface, SearchContextAwareQueryInterface
+{
+    protected const string SOURCE_IDENTIFIER = SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER;
+
+    protected const string RESOURCE_TYPE = SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE;
+
+    protected int $idSupplier;
+
+    protected Query $query {
+        get => $field ??= $this->createSearchQuery();
+    }
+
+    protected ?SearchContextTransfer $searchContextTransfer {
+        get => $field ??= new SearchContextTransfer()
+            ->setSourceIdentifier(static::SOURCE_IDENTIFIER);
+    }
+
+    /**
+     * Sets the supplier ID. Must be called before getSearchQuery().
+     * This pattern allows the plugin to be instantiated without constructor dependencies.
+     *
+     * @param int $idSupplier
+     *
+     * @return $this
+     */
+    public function setIdSupplier(int $idSupplier): self
+    {
+        $this->idSupplier = $idSupplier;
+
+        return $this;
+    }
+
+    protected function createSearchQuery(): Query
+    {
+        $query = new Query();
+        $boolQuery = new BoolQuery();
+
+        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, static::RESOURCE_TYPE));
+        $boolQuery->addMust(new Term([SupplierSearchConfig::KEY_ID_SUPPLIER => $this->idSupplier]));
+
+        $query->setQuery($boolQuery);
+        $query->setSize(1);
+
+        return $query;
+    }
+
+    public function getSearchQuery(): Query
+    {
+        return $this->query;
+    }
+
+    public function getSearchContext(): SearchContextTransfer
+    {
+        return $this->searchContextTransfer;
+    }
+
+    public function setSearchContext(SearchContextTransfer $searchContextTransfer): void
+    {
+        $this->searchContextTransfer = $searchContextTransfer;
+    }
+}
