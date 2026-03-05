@@ -15,6 +15,7 @@ use SprykerAcademy\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /**
  * @method \SprykerAcademy\Zed\SupplierGui\Communication\SupplierGuiCommunicationFactory getFactory()
@@ -26,6 +27,8 @@ class EditController extends AbstractController
     public const REQUEST_PARAM_ID_SUPPLIER = 'id-supplier';
 
     protected const MESSAGE_SUPPLIER_UPDATED_SUCCESS = 'Supplier was successfully updated.';
+
+    protected const MESSAGE_SUPPLIER_UPDATE_FAILED = 'Supplier could not be updated.';
 
     protected const STATUS_ACTIVE = 1;
 
@@ -76,7 +79,14 @@ class EditController extends AbstractController
         $supplierTransfer->setStatus(
             $supplierCreateForm->get(SupplierCreateForm::FIELD_IS_ACTIVE)->getData() ? static::STATUS_ACTIVE : static::STATUS_INACTIVE,
         );
-        $this->getFactory()->getSupplierFacade()->updateSupplier($supplierTransfer);
+        try {
+            $this->getFactory()->getSupplierFacade()->updateSupplier($supplierTransfer);
+        } catch (Throwable) {
+            $this->addErrorMessage(static::MESSAGE_SUPPLIER_UPDATE_FAILED);
+
+            return $this->redirectResponse($this->getSupplierOverviewUrl());
+        }
+
         $this->addSuccessMessage(static::MESSAGE_SUPPLIER_UPDATED_SUCCESS);
 
         return $this->redirectResponse($this->getSupplierOverviewUrl());

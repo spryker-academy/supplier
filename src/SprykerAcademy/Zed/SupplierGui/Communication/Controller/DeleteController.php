@@ -14,6 +14,7 @@ use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /**
  * @method \SprykerAcademy\Zed\SupplierGui\Communication\SupplierGuiCommunicationFactory getFactory()
@@ -25,6 +26,8 @@ class DeleteController extends AbstractController
     public const REQUEST_PARAM_ID_SUPPLIER = 'id-supplier';
 
     protected const MESSAGE_SUPPLIER_DELETED_SUCCESS = 'Supplier was successfully deleted.';
+
+    protected const MESSAGE_SUPPLIER_DELETE_FAILED = 'Supplier could not be deleted.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -39,9 +42,16 @@ class DeleteController extends AbstractController
             return $this->redirectResponse($this->getSupplierOverviewUrl());
         }
 
-        $this->getFactory()->getSupplierFacade()->deleteSupplier(
-            (new SupplierTransfer())->setIdSupplier($idSupplier),
-        );
+        try {
+            $this->getFactory()->getSupplierFacade()->deleteSupplier(
+                (new SupplierTransfer())->setIdSupplier($idSupplier),
+            );
+        } catch (Throwable) {
+            $this->addErrorMessage(static::MESSAGE_SUPPLIER_DELETE_FAILED);
+
+            return $this->redirectResponse($this->getSupplierOverviewUrl());
+        }
+
         $this->addSuccessMessage(static::MESSAGE_SUPPLIER_DELETED_SUCCESS);
 
         return $this->redirectResponse($this->getSupplierOverviewUrl());
