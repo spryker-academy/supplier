@@ -23,7 +23,11 @@ class CreateController extends AbstractController
 {
     protected const string URL_SUPPLIER_OVERVIEW = '/supplier-gui';
 
+    protected const string URL_SUPPLIER_CREATE = '/supplier-gui/create';
+
     protected const string MESSAGE_SUPPLIER_CREATED_SUCCESS = 'Supplier was successfully created.';
+
+    protected const string MESSAGE_SUPPLIER_CREATE_FAILED = 'Supplier could not be created.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -60,6 +64,10 @@ class CreateController extends AbstractController
         $supplierTransfer = null;
 
         // TODO-4: Persist the supplier using getFactory()->getSupplierFacade()->createSupplier()
+        // Hint-1: Wrap the facade call in a try/catch block to handle database exceptions (e.g. duplicate entries)
+        // Hint-2: Catch \Throwable and use $this->addErrorMessage(static::MESSAGE_SUPPLIER_CREATE_FAILED)
+        // Hint-3: On failure, redirect back to the create page using $this->redirectResponse(static::URL_SUPPLIER_CREATE)
+        // Hint-4: On success, add a success message and redirect to the overview
         $supplierTransfer = null;
 
         $this->addSuccessMessage(static::MESSAGE_SUPPLIER_CREATED_SUCCESS);

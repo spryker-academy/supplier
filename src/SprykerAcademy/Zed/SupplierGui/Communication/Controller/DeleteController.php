@@ -27,6 +27,8 @@ class DeleteController extends AbstractController
 
     protected const string MESSAGE_SUPPLIER_DELETED_SUCCESS = 'Supplier was successfully deleted.';
 
+    protected const string MESSAGE_SUPPLIER_DELETE_FAILED = 'Supplier could not be deleted.';
+
     /**
      * @param \SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface $supplierFacade
      */
@@ -50,6 +52,10 @@ class DeleteController extends AbstractController
         }
 
         // TODO-3: Delete supplier via facade by passing a SupplierTransfer with idSupplier.
+        // Hint-1: Wrap the facade call in a try/catch block to handle database exceptions (e.g. foreign key constraints)
+        // Hint-2: Catch \Throwable and use $this->addErrorMessage(static::MESSAGE_SUPPLIER_DELETE_FAILED)
+        // Hint-3: On failure, redirect back to the overview page
+        // Hint-4: On success, add a success message and redirect to the overview
         $this->supplierFacade->deleteSupplier(
             (new SupplierTransfer())->setIdSupplier($idSupplier),
         );

@@ -28,6 +28,8 @@ class EditController extends AbstractController
 
     protected const string MESSAGE_SUPPLIER_UPDATED_SUCCESS = 'Supplier was successfully updated.';
 
+    protected const string MESSAGE_SUPPLIER_UPDATE_FAILED = 'Supplier could not be updated.';
+
     protected const int STATUS_ACTIVE = 1;
 
     protected const int STATUS_INACTIVE = 0;
@@ -96,6 +98,9 @@ class EditController extends AbstractController
             ) ? static::STATUS_ACTIVE : static::STATUS_INACTIVE,
         );
         // TODO-7: Persist updated supplier and notify user.
+        // Hint-1: Wrap the facade call in a try/catch block to handle database exceptions
+        // Hint-2: Catch \Throwable and use $this->addErrorMessage(static::MESSAGE_SUPPLIER_UPDATE_FAILED)
+        // Hint-3: On failure, redirect back to the overview page
         $this->supplierFacade->updateSupplier($supplierTransfer);
         $this->addSuccessMessage(static::MESSAGE_SUPPLIER_UPDATED_SUCCESS);
 
