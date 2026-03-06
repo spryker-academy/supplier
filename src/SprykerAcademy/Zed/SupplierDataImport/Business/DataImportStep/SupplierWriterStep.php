@@ -16,6 +16,8 @@ use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\PublishAwareStep;
 use Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
+use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierDataImport\Business\DataSet\SupplierDataSetInterface;
 
 class SupplierWriterStep extends PublishAwareStep implements DataImportStepInterface
