@@ -7,9 +7,12 @@
 
 namespace SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep;
 
+use Orm\Zed\Supplier\Persistence\PyzMerchantToSupplierQuery;
+use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
 use Override;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
 use Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface;
+use SprykerAcademy\Zed\SupplierDataImport\Business\DataSet\SupplierDataSetInterface;
 
 readonly class SupplierWriterStep implements DataImportStepInterface
 {
