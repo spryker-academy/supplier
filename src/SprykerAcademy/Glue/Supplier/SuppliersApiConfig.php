@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Glue\SuppliersApi;
+namespace SprykerAcademy\Glue\Supplier;
 
 use Spryker\Glue\Kernel\AbstractBundleConfig;
 

@@ -4,7 +4,7 @@ resource:
     description: Supplier management API for storefront operations
 
     # TODO-1: Add the provider class.
-    # Hint-1: Use `SprykerAcademy\Glue\SuppliersApi\Api\Storefront\Provider\SuppliersStorefrontProvider`.
+    # Hint-1: Use `SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SuppliersStorefrontProvider`.
 
     paginationEnabled: true
     paginationItemsPerPage: 10
