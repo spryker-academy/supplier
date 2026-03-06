@@ -13,6 +13,7 @@ use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchTransfer;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface;
