@@ -30,7 +30,7 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
     /**
      * @param string $name
      */
-    public function __construct(string $name)
+    public function __construct(string $name = '')
     {
         $this->setupDefaultSearchContext();
 
