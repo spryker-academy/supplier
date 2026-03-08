@@ -3,7 +3,7 @@
     <supplier-gui>
         <label>Suppliers</label>
         <title>Suppliers</title>
-        <icon>fa-truck</icon>
+        <icon>local_shipping</icon>
         <bundle>supplier-gui</bundle>
         <controller>index</controller>
         <action>index</action>
