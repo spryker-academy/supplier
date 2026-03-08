@@ -1,0 +1,61 @@
+{% extends template('page-layout-main') %}
+
+{% block title %}{{ 'Supplier Search' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ 'Supplier Search' | trans }}</h1>
+        
+        <div class="row">
+            <div class="col-md-8">
+                {% if supplier is empty %}
+                    <div class="alert alert-warning">
+                        {{ 'No supplier found for "%name%".' | trans({'%name%': name}) }}
+                    </div>
+                {% else %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>{{ supplier.name }}</h2>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th>{{ 'ID' | trans }}</th>
+                                        <td>{{ supplier.idSupplier }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'Name' | trans }}</th>
+                                        <td>{{ supplier.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'Description' | trans }}</th>
+                                        <td>{{ supplier.description | default('N/A') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'Email' | trans }}</th>
+                                        <td>{{ supplier.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'Phone' | trans }}</th>
+                                        <td>{{ supplier.phone | default('N/A') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'Status' | trans }}</th>
+                                        <td>
+                                            {% if supplier.status == 1 %}
+                                                <span class="badge badge-success">{{ 'Active' | trans }}</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">{{ 'Inactive' | trans }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
