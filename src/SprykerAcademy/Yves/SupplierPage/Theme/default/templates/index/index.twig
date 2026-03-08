@@ -1,0 +1,26 @@
+{#
+TODO: Exercise - Supplier List Template
+
+This template displays a table of all suppliers.
+The controller passes a 'suppliers' variable (array of SupplierTransfer).
+
+Steps:
+1. Extend the main page layout: {% extends template('page-layout-main') %}
+2. Set the title in the title block
+3. In the content block:
+   - Check if suppliers is empty using {% if suppliers is empty %}
+   - If empty, show an alert message
+   - If not empty, create a table with columns: ID, Name, Email, Phone, Status, Actions
+   - Loop through suppliers using {% for supplier in suppliers %}
+   - Display each supplier's properties
+   - For status, show a badge: badge-success for active (status == 1), badge-secondary for inactive
+   - Add a "View" link that goes to the detail route with the supplier ID
+
+Hint: Use url() function for route generation: {{ url('supplier-detail', {id: supplier.idSupplier}) }}
+#}
+
+{# TODO: Extend the main layout #}
+
+{# TODO: Set the title #}
+
+{# TODO: Implement the content block with supplier table #}
