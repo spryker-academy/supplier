@@ -20,7 +20,7 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
 
     protected SearchContextTransfer $searchContextTransfer;
 
-    public function __construct(string $name)
+    public function __construct(string $name = '')
     {
         $this->setupDefaultSearchContext();
         $this->name = $name;
