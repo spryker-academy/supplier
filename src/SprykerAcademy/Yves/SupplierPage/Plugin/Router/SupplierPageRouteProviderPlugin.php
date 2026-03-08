@@ -7,14 +7,18 @@ use Spryker\Yves\Router\Route\RouteCollection;
 
 class SupplierPageRouteProviderPlugin extends AbstractRouteProviderPlugin
 {
-    public const SUPPLIER_INDEX = 'supplier-index';
+    public const ROUTE_NAME_SUPPLIER_INDEX = 'supplier-index';
+    public const ROUTE_NAME_SUPPLIER_DETAIL = 'supplier-detail';
 
     /**
-     * @inheritDoc
+     * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
+     *
+     * @return \Spryker\Yves\Router\Route\RouteCollection
      */
     public function addRoutes(RouteCollection $routeCollection): RouteCollection
     {
         $routeCollection = $this->addSupplierIndexRoute($routeCollection);
+        $routeCollection = $this->addSupplierDetailRoute($routeCollection);
 
         return $routeCollection;
     }
@@ -26,9 +30,23 @@ class SupplierPageRouteProviderPlugin extends AbstractRouteProviderPlugin
      */
     private function addSupplierIndexRoute(RouteCollection $routeCollection): RouteCollection
     {
-        $route = $this->buildRoute('/supplier/{name}', 'SupplierPage', 'Index', 'indexAction');
+        $route = $this->buildRoute('/supplier', 'SupplierPage', 'Index', 'indexAction');
         $route = $route->setMethods(['GET']);
-        $routeCollection->add(static::SUPPLIER_INDEX, $route);
+        $routeCollection->add(static::ROUTE_NAME_SUPPLIER_INDEX, $route);
+
+        return $routeCollection;
+    }
+
+    /**
+     * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
+     *
+     * @return \Spryker\Yves\Router\Route\RouteCollection
+     */
+    private function addSupplierDetailRoute(RouteCollection $routeCollection): RouteCollection
+    {
+        $route = $this->buildRoute('/supplier/detail', 'SupplierPage', 'Index', 'detailAction');
+        $route = $route->setMethods(['GET']);
+        $routeCollection->add(static::ROUTE_NAME_SUPPLIER_DETAIL, $route);
 
         return $routeCollection;
     }
