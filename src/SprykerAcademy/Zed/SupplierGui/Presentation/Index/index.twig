@@ -1,12 +1,19 @@
 {% extends '@Gui/Layout/layout.twig' %}
 
+{% block section_title %}{{ 'Suppliers' | trans }}{% endblock %}
+
+{% block action %}
+    {{ createActionButton('/supplier-gui/create', 'Create Supplier' | trans) }}
+{% endblock %}
+
 {% block content %}
 
-    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Suppliers' } %}
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'Suppliers' | trans } %}
+
         {% block widget_content %}
-            <a class="btn btn-primary m-b-sm" href="/supplier-gui/create">Create Supplier</a>
             {{ supplierTable | raw }}
         {% endblock %}
+
     {% endembed %}
 
 {% endblock %}
