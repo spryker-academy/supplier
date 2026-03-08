@@ -17,14 +17,27 @@
         }
     },
     "mappings": {
-        "antelope": {
+        "_doc": {
             "properties": {
-                "color": {
-                    "type": "keyword"
+                "id_supplier": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "text",
                     "analyzer": "default_analyzer"
+                },
+                "description": {
+                    "type": "text",
+                    "analyzer": "default_analyzer"
+                },
+                "status": {
+                    "type": "keyword"
+                },
+                "email": {
+                    "type": "keyword"
+                },
+                "phone": {
+                    "type": "keyword"
                 }
             }
         }
