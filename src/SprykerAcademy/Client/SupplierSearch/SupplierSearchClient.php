@@ -18,17 +18,13 @@ class SupplierSearchClient extends AbstractClient implements SupplierSearchClien
      */
     public function getSupplierByName(string $name): ?SupplierTransfer
     {
-        // TODO-1: Create the search query through the factory
-        // Hint: $this->getFactory()->createSupplierQueryPlugin($name)
+        // TODO-1: Create the search query plugin through the factory
 
-        // TODO-2: Get the result formatters through the factory
-        // Hint: $this->getFactory()->getSearchQueryFormatters()
+        // TODO-2: Get the result formatter plugins from the factory
 
-        // TODO-3: Use the SearchClient to perform the search
-        // Hint: $this->getFactory()->getSearchClient()->search($searchQuery, $resultFormatters)
+        // TODO-3: Use the SearchClient to perform the search with the query and formatters
 
-        // TODO-4: Return the supplier from the search results
-        // Hint: $searchResults[SupplierSearchResultFormatterPlugin::NAME]
+        // TODO-4: Extract and return the supplier from the formatted search results
 
         return null;
     }

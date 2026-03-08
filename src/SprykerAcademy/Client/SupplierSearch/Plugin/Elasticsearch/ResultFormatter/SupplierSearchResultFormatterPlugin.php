@@ -17,10 +17,8 @@ class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFor
 
     protected function formatSearchResult(ResultSet $searchResult, array $requestParameters): ?SupplierTransfer
     {
-        // TODO: Return the first result as a SupplierTransfer
-        // Hint: Iterate $searchResult->getResults(), get the source with $document->getSource(),
-        //       and use (new SupplierTransfer())->fromArray($source) to create the transfer
-        // Hint: Return null if no results
+        // TODO: Convert the first search result to a SupplierTransfer
+        // Hint: Look at how to extract document data from the result set and populate a transfer object
 
         return null;
     }

@@ -21,7 +21,6 @@ class IndexController extends AbstractController
         $name = $request->get('name');
 
         // TODO: Use the SupplierSearchClient to find the supplier by name
-        // Hint: $this->getFactory()->getSupplierSearchClient()->getSupplierByName($name)
         $supplier = null;
 
         return [

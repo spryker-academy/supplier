@@ -15,15 +15,14 @@ class SupplierSearchDependencyProvider extends AbstractDependencyProvider
 
     public function provideServiceLayerDependencies(Container $container): Container
     {
-        // TODO-1: Call addSearchClient() and addSupplierSearchResultFormatterPlugins()
+        // TODO-1: Register the SearchClient and result formatter plugins in the container
 
         return $container;
     }
 
     protected function addSearchClient(Container $container): Container
     {
-        // TODO-2: Provide the SearchClient via the locator
-        // Hint: $container->getLocator()->search()->client()
+        // TODO-2: Provide the SearchClient using the service locator
 
         return $container;
     }
@@ -42,8 +41,8 @@ class SupplierSearchDependencyProvider extends AbstractDependencyProvider
      */
     public function getSupplierSearchResultFormatterPlugins(): array
     {
-        // TODO-3: Return an array containing an instance of SupplierSearchResultFormatterPlugin
+        // TODO-3: Return the result formatter plugin instances
 
-        return [];
+        return /* result formatter plugins */;
     }
 }

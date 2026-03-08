@@ -10,22 +10,20 @@ class SupplierSearchFactory extends AbstractFactory
 {
     public function createSupplierQueryPlugin(string $name): SupplierSearchQueryPlugin
     {
-        // TODO-1: Instantiate and return a SupplierSearchQueryPlugin with the name parameter
+        // TODO-1: Create and return the query plugin with the given name
 
-        return new SupplierSearchQueryPlugin($name);
+        return /* query plugin */;
     }
 
     public function getSearchQueryFormatters(): array
     {
-        // TODO-2: Return the result formatter plugins from the DependencyProvider
-        // Hint: Use getProvidedDependency() with the SUPPLIER_SEARCH_RESULT_FORMATTER_PLUGINS constant
+        // TODO-2: Retrieve the result formatter plugins from the container
 
-        return [];
+        return /* result formatter plugins */;
     }
 
     public function getSearchClient(): SearchClientInterface
     {
-        // TODO-3: Return the SearchClient from the DependencyProvider
-        // Hint: Use getProvidedDependency() with the CLIENT_SEARCH constant
+        // TODO-3: Retrieve the SearchClient from the container
     }
 }

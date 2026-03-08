@@ -15,7 +15,7 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
     protected string $name;
 
     // TODO-1: Set the SOURCE_IDENTIFIER constant value
-    // Hint: Must match the "type" param from the synchronization behavior in pyz_supplier_search.schema.xml
+    // Hint: Check the synchronization behavior configuration in the schema file
     protected const SOURCE_IDENTIFIER = '';
 
     protected SearchContextTransfer $searchContextTransfer;
@@ -31,9 +31,7 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
         $boolQuery = new BoolQuery();
 
         // TODO-2: Build the search query
-        // Hint: Use $boolQuery->addMust() twice:
-        //   1. An Exists filter on 'id_supplier' field (ensures we only get supplier documents)
-        //   2. A MatchQuery on 'name' field with $this->name (the search term)
+        // Hint: Use Elastica Query classes to filter by supplier ID and match the name
 
         return (new Query())->setQuery($boolQuery);
     }
