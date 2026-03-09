@@ -28,7 +28,7 @@ readonly class SupplierWriterStep implements DataImportStepInterface
     {
         $name = $dataSet[SupplierDataSetInterface::COLUMN_NAME];
         $description = $dataSet[SupplierDataSetInterface::COLUMN_DESCRIPTION];
-        $status = $dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? 'active';
+        $status = $dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? 1;
         $email = $dataSet[SupplierDataSetInterface::COLUMN_EMAIL] ?? null;
         $phone = $dataSet[SupplierDataSetInterface::COLUMN_PHONE] ?? null;
         $merchantIds = $dataSet[SupplierDataSetInterface::COLUMN_MERCHANT_IDS] ?? '';
