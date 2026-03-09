@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query;
 
 use Elastica\Query;
-use Elastica\Query\BoolQuery;
-use Elastica\Query\MatchQuery;
 use Elastica\Query\Term;
 use Generated\Shared\Transfer\SearchContextTransfer;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
@@ -36,12 +34,8 @@ class SupplierByIdSearchQueryPlugin implements QueryInterface, SearchContextAwar
 
     protected function createSearchQuery(): Query
     {
-        $boolQuery = new BoolQuery();
-        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE));
-        $boolQuery->addMust(new Term([SupplierSearchConfig::KEY_ID_SUPPLIER => $this->idSupplier]));
-
         $query = new Query();
-        $query->setQuery($boolQuery);
+        $query->setQuery(new Term([SupplierSearchConfig::KEY_ID_SUPPLIER => $this->idSupplier]));
         $query->setSize(1);
 
         return $query;
