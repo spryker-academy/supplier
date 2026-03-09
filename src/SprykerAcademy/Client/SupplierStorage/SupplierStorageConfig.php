@@ -7,10 +7,10 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Zed\SupplierSearch\Persistence\Exception;
+namespace SprykerAcademy\Client\SupplierStorage;
 
-use Exception;
+use Spryker\Client\Kernel\AbstractBundleConfig;
 
-class SupplierSearchNotFoundException extends Exception
+class SupplierStorageConfig extends AbstractBundleConfig
 {
 }
