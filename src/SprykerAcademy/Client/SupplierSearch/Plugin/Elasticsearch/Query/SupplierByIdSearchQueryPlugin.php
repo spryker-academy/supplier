@@ -9,25 +9,15 @@ use Elastica\Query\BoolQuery;
 use Elastica\Query\MatchQuery;
 use Elastica\Query\Term;
 use Generated\Shared\Transfer\SearchContextTransfer;
-use Spryker\Client\Kernel\AbstractPlugin;
-use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
 use Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
-class SupplierByIdSearchQueryPlugin extends AbstractPlugin implements QueryInterface, SearchContextAwareQueryInterface
+class SupplierByIdSearchQueryPlugin implements QueryInterface, SearchContextAwareQueryInterface
 {
-    protected const string SOURCE_IDENTIFIER = SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER;
+    protected SearchContextTransfer $searchContextTransfer;
 
-    protected const string RESOURCE_TYPE = SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE;
-
-    protected Query $query {
-        get => $field ??= $this->createSearchQuery();
-    }
-
-    protected ?SearchContextTransfer $searchContextTransfer = null {
-        get => $field ??= new SearchContextTransfer()
-            ->setSourceIdentifier(static::SOURCE_IDENTIFIER);
-    }
+    protected Query $query;
 
     public function __construct(
         protected int $idSupplier,
@@ -36,12 +26,11 @@ class SupplierByIdSearchQueryPlugin extends AbstractPlugin implements QueryInter
 
     protected function createSearchQuery(): Query
     {
-        $query = new Query();
         $boolQuery = new BoolQuery();
-
-        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, static::RESOURCE_TYPE));
+        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE));
         $boolQuery->addMust(new Term([SupplierSearchConfig::KEY_ID_SUPPLIER => $this->idSupplier]));
 
+        $query = new Query();
         $query->setQuery($boolQuery);
         $query->setSize(1);
 
@@ -50,11 +39,20 @@ class SupplierByIdSearchQueryPlugin extends AbstractPlugin implements QueryInter
 
     public function getSearchQuery(): Query
     {
+        if (!isset($this->query)) {
+            $this->query = $this->createSearchQuery();
+        }
+
         return $this->query;
     }
 
     public function getSearchContext(): SearchContextTransfer
     {
+        if (!isset($this->searchContextTransfer)) {
+            $this->searchContextTransfer = (new SearchContextTransfer())
+                ->setSourceIdentifier(SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER);
+        }
+
         return $this->searchContextTransfer;
     }
 
