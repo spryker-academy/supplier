@@ -8,8 +8,10 @@ use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\Search\SearchClientInterface;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierByIdSearchQueryPlugin;
 
+#[Exclude]
 class SupplierSearchReader implements SupplierSearchReaderInterface
 {
     /**
