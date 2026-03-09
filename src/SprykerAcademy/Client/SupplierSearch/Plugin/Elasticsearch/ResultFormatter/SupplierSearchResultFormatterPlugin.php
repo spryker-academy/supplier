@@ -30,7 +30,12 @@ class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFor
             $source = $document->getSource();
             $data = $source[SupplierSearchConfig::KEY_SEARCH_RESULT_DATA] ?? [];
 
-            $supplierTransfer = new SupplierTransfer()->fromArray($data, true);
+            $supplierTransfer = (new SupplierTransfer())->fromArray($data, true);
+
+            if ($supplierTransfer->getIdSupplier() === null && isset($source[SupplierSearchConfig::KEY_ID_SUPPLIER])) {
+                $supplierTransfer->setIdSupplier($source[SupplierSearchConfig::KEY_ID_SUPPLIER]);
+            }
+
             $supplierCollectionTransfer->addSupplier($supplierTransfer);
         }
 
