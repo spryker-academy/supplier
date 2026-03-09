@@ -5,7 +5,7 @@
         <column name="id_supplier" required="true" type="INTEGER" primaryKey="true" autoIncrement="true"/>
         <column name="name" required="true" type="VARCHAR" size="255"/>
         <column name="description" required="true" type="LONGVARCHAR"/>
-        <column name="status" required="true" type="VARCHAR" size="50" default="active"/>
+        <column name="status" required="true" type="INTEGER" defaultValue="1"/>
         <column name="email" type="VARCHAR" size="255"/>
         <column name="phone" type="VARCHAR" size="50"/>
         <unique name="pyz_supplier-name">
