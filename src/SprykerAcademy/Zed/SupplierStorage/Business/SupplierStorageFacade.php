@@ -7,16 +7,16 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Zed\SupplierSearch\Business;
+namespace SprykerAcademy\Zed\SupplierStorage\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
- * @method \SprykerAcademy\Zed\SupplierSearch\Business\SupplierSearchBusinessFactory getFactory()
- * @method \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface getRepository()
- * @method \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface getEntityManager()
+ * @method \SprykerAcademy\Zed\SupplierStorage\Business\SupplierStorageBusinessFactory getFactory()
+ * @method \SprykerAcademy\Zed\SupplierStorage\Persistence\SupplierStorageRepositoryInterface getRepository()
+ * @method \SprykerAcademy\Zed\SupplierStorage\Persistence\SupplierStorageEntityManagerInterface getEntityManager()
  */
-class SupplierSearchFacade extends AbstractFacade implements SupplierSearchFacadeInterface
+class SupplierStorageFacade extends AbstractFacade implements SupplierStorageFacadeInterface
 {
     /**
      * {@inheritDoc}
@@ -24,11 +24,13 @@ class SupplierSearchFacade extends AbstractFacade implements SupplierSearchFacad
      * @api
      *
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return void
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void
     {
         $this->getFactory()
-            ->createSupplierSearchWriter()
+            ->createSupplierStorageWriter()
             ->writeCollectionBySupplierEvents($eventTransfers);
     }
 }

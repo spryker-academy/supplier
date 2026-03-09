@@ -7,23 +7,25 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Zed\SupplierSearch;
+namespace SprykerAcademy\Zed\SupplierStorage;
 
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
-class SupplierSearchDependencyProvider extends AbstractBundleDependencyProvider
+class SupplierStorageDependencyProvider extends AbstractBundleDependencyProvider
 {
-    public const string FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
-
-    public const string FACADE_SUPPLIER = 'FACADE_SUPPLIER';
+    public const FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
+    public const FACADE_SUPPLIER = 'FACADE_SUPPLIER';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
      */
     public function provideBusinessLayerDependencies(Container $container): Container
     {
         $container = parent::provideBusinessLayerDependencies($container);
+
         $container = $this->addEventBehaviorFacade($container);
         $container = $this->addSupplierFacade($container);
 
@@ -32,20 +34,28 @@ class SupplierSearchDependencyProvider extends AbstractBundleDependencyProvider
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
      */
     protected function addEventBehaviorFacade(Container $container): Container
     {
-        $container->set(static::FACADE_EVENT_BEHAVIOR, static fn (Container $container) => $container->getLocator()->eventBehavior()->facade());
+        $container->set(static::FACADE_EVENT_BEHAVIOR, function (Container $container) {
+            return $container->getLocator()->eventBehavior()->facade();
+        });
 
         return $container;
     }
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
      */
     protected function addSupplierFacade(Container $container): Container
     {
-        $container->set(static::FACADE_SUPPLIER, static fn (Container $container) => $container->getLocator()->supplier()->facade());
+        $container->set(static::FACADE_SUPPLIER, function (Container $container) {
+            return $container->getLocator()->supplier()->facade();
+        });
 
         return $container;
     }

@@ -7,10 +7,10 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Zed\SupplierSearch\Persistence\Exception;
+namespace SprykerAcademy\Zed\SupplierStorage\Persistence\Exception;
 
 use Exception;
 
-class SupplierSearchNotFoundException extends Exception
+class SupplierStorageNotFoundException extends Exception
 {
 }
