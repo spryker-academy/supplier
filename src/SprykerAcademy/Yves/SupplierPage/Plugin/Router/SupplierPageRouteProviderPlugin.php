@@ -38,7 +38,7 @@ class SupplierPageRouteProviderPlugin extends AbstractRouteProviderPlugin
 
     protected function addSupplierDetailRoute(RouteCollection $routeCollection): RouteCollection
     {
-        $route = $this->buildRoute('/supplier/{idSupplier}', 'SupplierPage', 'Index', 'detailAction');
+        $route = $this->buildRoute('/suppliers/{idSupplier}', 'SupplierPage', 'Index', 'detailAction');
         $route = $route->setMethods(['GET']);
         $route = $route->setRequirement('idSupplier', '\d+');
         $routeCollection->add(static::ROUTE_SUPPLIER_DETAIL, $route);
