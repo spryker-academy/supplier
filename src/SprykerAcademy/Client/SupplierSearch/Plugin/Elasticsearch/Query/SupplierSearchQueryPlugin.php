@@ -1,45 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query;
 
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
-use Elastica\Query\Exists;
 use Elastica\Query\MatchQuery;
 use Generated\Shared\Transfer\SearchContextTransfer;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
 use Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
 class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQueryInterface
 {
-    protected string $name;
-
-    // TODO-1: Set the SOURCE_IDENTIFIER constant value
-    // Hint: Check the synchronization behavior configuration in the schema file
-    protected const SOURCE_IDENTIFIER = '';
-
     protected SearchContextTransfer $searchContextTransfer;
 
-    public function __construct(string $name = '')
+    protected Query $query;
+
+    protected function createSearchQuery(): Query
     {
-        $this->setupDefaultSearchContext();
-        $this->name = $name;
+        $boolQuery = new BoolQuery();
+        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE));
+
+        $query = new Query();
+        $query->setQuery($boolQuery);
+
+        return $query;
     }
 
     public function getSearchQuery(): Query
     {
-        $boolQuery = new BoolQuery();
+        if (!isset($this->query)) {
+            $this->query = $this->createSearchQuery();
+        }
 
-        // TODO-2: Build the search query
-        // Hint: Use Elastica Query classes to filter by supplier ID and match the name
-
-        return (new Query())->setQuery($boolQuery);
+        return $this->query;
     }
 
     public function getSearchContext(): SearchContextTransfer
     {
-        if (!$this->hasSearchContext()) {
-            $this->setupDefaultSearchContext();
+        if (!isset($this->searchContextTransfer)) {
+            $this->searchContextTransfer = (new SearchContextTransfer())
+                ->setSourceIdentifier(SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER);
         }
 
         return $this->searchContextTransfer;
@@ -48,17 +51,5 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
     public function setSearchContext(SearchContextTransfer $searchContextTransfer): void
     {
         $this->searchContextTransfer = $searchContextTransfer;
-    }
-
-    protected function setupDefaultSearchContext(): void
-    {
-        $searchContextTransfer = new SearchContextTransfer();
-        $searchContextTransfer->setSourceIdentifier(static::SOURCE_IDENTIFIER);
-        $this->searchContextTransfer = $searchContextTransfer;
-    }
-
-    protected function hasSearchContext(): bool
-    {
-        return (bool)$this->searchContextTransfer;
     }
 }
