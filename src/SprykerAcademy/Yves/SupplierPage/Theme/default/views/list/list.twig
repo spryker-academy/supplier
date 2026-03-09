@@ -1,12 +1,16 @@
 {% extends template('page-layout-main') %}
 
+{% define data = {
+    suppliers: _view.suppliers | default([]),
+} %}
+
 {% block title %}{{ 'Suppliers' | trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
         <h1>{{ 'Suppliers' | trans }}</h1>
 
-        {% if suppliers is empty %}
+        {% if data.suppliers is empty %}
             <div class="alert alert-info">
                 {{ 'No suppliers found.' | trans }}
             </div>
@@ -23,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for supplier in suppliers %}
+                    {% for supplier in data.suppliers %}
                         <tr>
                             <td>{{ supplier.idSupplier }}</td>
                             <td>{{ supplier.name }}</td>
