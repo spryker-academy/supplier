@@ -7,19 +7,20 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Zed\SupplierSearch\Business;
+namespace SprykerAcademy\Zed\SupplierStorage\Business;
 
-interface SupplierSearchFacadeInterface
+interface SupplierStorageFacadeInterface
 {
     /**
      * Specification:
-     * - Retrieves all suppliers using IDs from $eventTransfers.
-     * - Updates entities from `pyz_supplier_search` with actual data from obtained suppliers.
-     * - Sends a copy of data to queue based on module config.
+     * - Extracts supplier IDs from event transfers.
+     * - Writes supplier data to storage.
      *
      * @api
      *
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return void
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void;
 }
