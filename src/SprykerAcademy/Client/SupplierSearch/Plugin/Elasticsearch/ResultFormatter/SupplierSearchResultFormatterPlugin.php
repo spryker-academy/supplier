@@ -8,7 +8,6 @@ use Elastica\ResultSet;
 use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\SearchElasticsearch\Plugin\ResultFormatter\AbstractElasticsearchResultFormatterPlugin;
-use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
 class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFormatterPlugin
 {
@@ -27,15 +26,7 @@ class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFor
         $supplierCollectionTransfer = new SupplierCollectionTransfer();
 
         foreach ($searchResult->getResults() as $document) {
-            $source = $document->getSource();
-            $data = $source[SupplierSearchConfig::KEY_SEARCH_RESULT_DATA] ?? [];
-
-            $supplierTransfer = (new SupplierTransfer())->fromArray($data, true);
-
-            if ($supplierTransfer->getIdSupplier() === null && isset($source[SupplierSearchConfig::KEY_ID_SUPPLIER])) {
-                $supplierTransfer->setIdSupplier($source[SupplierSearchConfig::KEY_ID_SUPPLIER]);
-            }
-
+            $supplierTransfer = (new SupplierTransfer())->fromArray($document->getSource(), true);
             $supplierCollectionTransfer->addSupplier($supplierTransfer);
         }
 
