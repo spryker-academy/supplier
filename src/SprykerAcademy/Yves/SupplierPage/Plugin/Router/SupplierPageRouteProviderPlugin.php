@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SprykerAcademy\Yves\SupplierPage\Plugin\Router;
 
 use Spryker\Yves\Router\Plugin\RouteProvider\AbstractRouteProviderPlugin;
@@ -7,28 +9,39 @@ use Spryker\Yves\Router\Route\RouteCollection;
 
 class SupplierPageRouteProviderPlugin extends AbstractRouteProviderPlugin
 {
-    public const SUPPLIER_INDEX = 'supplier-index';
+    /**
+     * @var string
+     */
+    public const ROUTE_SUPPLIER_LIST = 'supplier-list';
 
     /**
-     * @inheritDoc
+     * @var string
      */
+    public const ROUTE_SUPPLIER_DETAIL = 'supplier-detail';
+
     public function addRoutes(RouteCollection $routeCollection): RouteCollection
     {
-        $routeCollection = $this->addSupplierIndexRoute($routeCollection);
+        $routeCollection = $this->addSupplierListRoute($routeCollection);
+        $routeCollection = $this->addSupplierDetailRoute($routeCollection);
 
         return $routeCollection;
     }
 
-    /**
-     * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
-     *
-     * @return \Spryker\Yves\Router\Route\RouteCollection
-     */
-    private function addSupplierIndexRoute(RouteCollection $routeCollection): RouteCollection
+    protected function addSupplierListRoute(RouteCollection $routeCollection): RouteCollection
     {
-        $route = $this->buildRoute('/supplier/{name}', 'SupplierPage', 'Index', 'indexAction');
+        $route = $this->buildRoute('/suppliers', 'SupplierPage', 'Index', 'listAction');
         $route = $route->setMethods(['GET']);
-        $routeCollection->add(static::SUPPLIER_INDEX, $route);
+        $routeCollection->add(static::ROUTE_SUPPLIER_LIST, $route);
+
+        return $routeCollection;
+    }
+
+    protected function addSupplierDetailRoute(RouteCollection $routeCollection): RouteCollection
+    {
+        $route = $this->buildRoute('/supplier/{idSupplier}', 'SupplierPage', 'Index', 'detailAction');
+        $route = $route->setMethods(['GET']);
+        $route = $route->setRequirement('idSupplier', '\d+');
+        $routeCollection->add(static::ROUTE_SUPPLIER_DETAIL, $route);
 
         return $routeCollection;
     }
