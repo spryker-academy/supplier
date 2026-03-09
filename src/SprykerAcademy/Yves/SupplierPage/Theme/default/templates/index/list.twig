@@ -1,0 +1,50 @@
+{% extends template('page-layout-main') %}
+
+{% block title %}{{ 'Suppliers' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ 'Suppliers' | trans }}</h1>
+
+        {% if suppliers is empty %}
+            <div class="alert alert-info">
+                {{ 'No suppliers found.' | trans }}
+            </div>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ 'ID' | trans }}</th>
+                        <th>{{ 'Name' | trans }}</th>
+                        <th>{{ 'Description' | trans }}</th>
+                        <th>{{ 'Email' | trans }}</th>
+                        <th>{{ 'Status' | trans }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for supplier in suppliers %}
+                        <tr>
+                            <td>{{ supplier.idSupplier }}</td>
+                            <td>{{ supplier.name }}</td>
+                            <td>{{ supplier.description | default('-') }}</td>
+                            <td>{{ supplier.email | default('-') }}</td>
+                            <td>
+                                {% if supplier.status == 1 %}
+                                    <span class="badge badge-success">{{ 'Active' | trans }}</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">{{ 'Inactive' | trans }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url('supplier-detail', { idSupplier: supplier.idSupplier }) }}">
+                                    {{ 'View' | trans }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,48 +1,53 @@
 {% extends template('page-layout-main') %}
 
-{% block title %}{{ 'Suppliers' | trans }}{% endblock %}
+{% block title %}{{ supplier.name | default('Supplier') }}{% endblock %}
 
 {% block content %}
     <div class="container">
-        <h1>{{ 'Suppliers' | trans }}</h1>
-        
-        {% if suppliers is empty %}
-            <div class="alert alert-info">{{ 'No suppliers found.' | trans }}</div>
+        <p><a href="{{ url('supplier-list') }}">&larr; {{ 'Back to list' | trans }}</a></p>
+
+        {% if supplier.idSupplier is empty %}
+            <div class="alert alert-warning">
+                {{ 'Supplier not found.' | trans }}
+            </div>
         {% else %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>{{ 'ID' | trans }}</th>
-                        <th>{{ 'Name' | trans }}</th>
-                        <th>{{ 'Email' | trans }}</th>
-                        <th>{{ 'Phone' | trans }}</th>
-                        <th>{{ 'Status' | trans }}</th>
-                        <th>{{ 'Actions' | trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for supplier in suppliers %}
-                        <tr>
-                            <td>{{ supplier.idSupplier }}</td>
-                            <td>{{ supplier.name }}</td>
-                            <td>{{ supplier.email }}</td>
-                            <td>{{ supplier.phone }}</td>
-                            <td>
-                                {% if supplier.status == 1 %}
-                                    <span class="badge badge-success">{{ 'Active' | trans }}</span>
-                                {% else %}
-                                    <span class="badge badge-secondary">{{ 'Inactive' | trans }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ url('supplier-detail', {id: supplier.idSupplier}) }}" class="btn btn-sm btn-primary">
-                                    {{ 'View' | trans }}
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-header">
+                    <h1>{{ supplier.name }}</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th>{{ 'ID' | trans }}</th>
+                                <td>{{ supplier.idSupplier }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Description' | trans }}</th>
+                                <td>{{ supplier.description | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Email' | trans }}</th>
+                                <td>{{ supplier.email | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Phone' | trans }}</th>
+                                <td>{{ supplier.phone | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Status' | trans }}</th>
+                                <td>
+                                    {% if supplier.status == 1 %}
+                                        <span class="badge badge-success">{{ 'Active' | trans }}</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">{{ 'Inactive' | trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         {% endif %}
     </div>
 {% endblock %}
