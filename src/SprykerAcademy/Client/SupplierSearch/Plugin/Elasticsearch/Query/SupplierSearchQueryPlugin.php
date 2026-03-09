@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query;
 
 use Elastica\Query;
-use Elastica\Query\MatchAll;
+use Elastica\Query\Exists;
 use Generated\Shared\Transfer\SearchContextTransfer;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
 use Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface;
@@ -20,7 +20,7 @@ class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQue
     protected function createSearchQuery(): Query
     {
         $query = new Query();
-        $query->setQuery(new MatchAll());
+        $query->setQuery(new Exists(SupplierSearchConfig::KEY_ID_SUPPLIER));
 
         return $query;
     }
