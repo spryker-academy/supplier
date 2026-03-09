@@ -1,25 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter;
 
 use Elastica\ResultSet;
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\SearchElasticsearch\Plugin\ResultFormatter\AbstractElasticsearchResultFormatterPlugin;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
 class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFormatterPlugin
 {
-    public const NAME = 'supplier';
+    /**
+     * @var string
+     */
+    protected const string NAME = 'SupplierSearchCollection';
 
     public function getName(): string
     {
         return static::NAME;
     }
 
-    protected function formatSearchResult(ResultSet $searchResult, array $requestParameters): ?SupplierTransfer
+    protected function formatSearchResult(ResultSet $searchResult, array $requestParameters): SupplierCollectionTransfer
     {
-        // TODO: Convert the first search result to a SupplierTransfer
-        // Hint: Look at how to extract document data from the result set and populate a transfer object
+        $supplierCollectionTransfer = new SupplierCollectionTransfer();
 
-        return null;
+        foreach ($searchResult->getResults() as $document) {
+            $source = $document->getSource();
+            $data = $source[SupplierSearchConfig::KEY_SEARCH_RESULT_DATA] ?? [];
+
+            $supplierTransfer = (new SupplierTransfer())->fromArray($data, true);
+
+            if ($supplierTransfer->getIdSupplier() === null && isset($source[SupplierSearchConfig::KEY_ID_SUPPLIER])) {
+                $supplierTransfer->setIdSupplier($source[SupplierSearchConfig::KEY_ID_SUPPLIER]);
+            }
+
+            $supplierCollectionTransfer->addSupplier($supplierTransfer);
+        }
+
+        return $supplierCollectionTransfer;
     }
 }
