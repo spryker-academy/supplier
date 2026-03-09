@@ -19,9 +19,19 @@ class SupplierByIdSearchQueryPlugin implements QueryInterface, SearchContextAwar
 
     protected Query $query;
 
-    public function __construct(
-        protected int $idSupplier,
-    ) {
+    protected int $idSupplier;
+
+    /**
+     * @param int $idSupplier
+     *
+     * @return static
+     */
+    public function setIdSupplier(int $idSupplier): static
+    {
+        $this->idSupplier = $idSupplier;
+        unset($this->query);
+
+        return $this;
     }
 
     protected function createSearchQuery(): Query
