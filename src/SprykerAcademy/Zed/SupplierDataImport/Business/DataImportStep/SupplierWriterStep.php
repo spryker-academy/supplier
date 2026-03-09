@@ -23,7 +23,7 @@ class SupplierWriterStep extends PublishAwareStep implements DataImportStepInter
             ->findOneOrCreate();
 
         $supplierEntity->setDescription($dataSet[SupplierDataSetInterface::COLUMN_DESCRIPTION]);
-        $supplierEntity->setStatus($dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? 'active');
+        $supplierEntity->setStatus($dataSet[SupplierDataSetInterface::COLUMN_STATUS] ?? 1);
         $supplierEntity->setEmail($dataSet[SupplierDataSetInterface::COLUMN_EMAIL] ?? null);
         $supplierEntity->setPhone($dataSet[SupplierDataSetInterface::COLUMN_PHONE] ?? null);
 
