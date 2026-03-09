@@ -8,33 +8,22 @@ use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\MatchQuery;
 use Generated\Shared\Transfer\SearchContextTransfer;
-use Spryker\Client\Kernel\AbstractPlugin;
-use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface;
 use Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
-class SupplierSearchQueryPlugin extends AbstractPlugin implements QueryInterface, SearchContextAwareQueryInterface
+class SupplierSearchQueryPlugin implements QueryInterface, SearchContextAwareQueryInterface
 {
-    protected const string SOURCE_IDENTIFIER = SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER;
+    protected SearchContextTransfer $searchContextTransfer;
 
-    protected const string RESOURCE_TYPE = SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE;
-
-    protected Query $query {
-        get => $field ??= $this->createSearchQuery();
-    }
-
-    protected ?SearchContextTransfer $searchContextTransfer {
-        get => $field ??= new SearchContextTransfer()
-            ->setSourceIdentifier(static::SOURCE_IDENTIFIER);
-    }
+    protected Query $query;
 
     protected function createSearchQuery(): Query
     {
-        $query = new Query();
         $boolQuery = new BoolQuery();
+        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE));
 
-        $boolQuery->addMust(new MatchQuery(SupplierSearchConfig::KEY_TYPE, static::RESOURCE_TYPE));
-
+        $query = new Query();
         $query->setQuery($boolQuery);
 
         return $query;
@@ -42,11 +31,20 @@ class SupplierSearchQueryPlugin extends AbstractPlugin implements QueryInterface
 
     public function getSearchQuery(): Query
     {
+        if (!isset($this->query)) {
+            $this->query = $this->createSearchQuery();
+        }
+
         return $this->query;
     }
 
     public function getSearchContext(): SearchContextTransfer
     {
+        if (!isset($this->searchContextTransfer)) {
+            $this->searchContextTransfer = (new SearchContextTransfer())
+                ->setSourceIdentifier(SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER);
+        }
+
         return $this->searchContextTransfer;
     }
 
