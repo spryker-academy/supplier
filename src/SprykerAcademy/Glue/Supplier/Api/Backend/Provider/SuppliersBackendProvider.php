@@ -6,6 +6,7 @@ namespace SprykerAcademy\Glue\Supplier\Api\Backend\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
@@ -46,7 +47,7 @@ class SuppliersBackendProvider implements ProviderInterface
      */
     protected function provideCollection(): array
     {
-        $supplierTransfers = $this->supplierFacade->getSuppliers();
+        $supplierTransfers = $this->supplierFacade->getSuppliers(new SupplierCriteriaTransfer());
         $supplierMapper = new SupplierMapper();
         $resources = [];
 
