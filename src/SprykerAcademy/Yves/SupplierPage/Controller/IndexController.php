@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SprykerAcademy\Yves\SupplierPage\Controller;
 
-use Spryker\Yves\Kernel\Controller\AbstractController;
+use Spryker\Yves\Kernel\View\View;
+use SprykerShop\Yves\ShopApplication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,25 +16,27 @@ class IndexController extends AbstractController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array<string, mixed>
+     * @return \Spryker\Yves\Kernel\View\View
      */
-    public function listAction(Request $request): array
+    public function listAction(Request $request): View
     {
         $supplierCollection = $this->getFactory()
             ->getSupplierSearchClient()
             ->searchSuppliers($request->query->all());
 
-        return [
-            'suppliers' => $supplierCollection->getSuppliers(),
-        ];
+        return $this->view(
+            ['suppliers' => $supplierCollection->getSuppliers()],
+            [],
+            '@SupplierPage/views/list/list.twig',
+        );
     }
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array<string, mixed>
+     * @return \Spryker\Yves\Kernel\View\View
      */
-    public function detailAction(Request $request): array
+    public function detailAction(Request $request): View
     {
         $idSupplier = (int)$request->get('idSupplier');
 
@@ -41,8 +44,10 @@ class IndexController extends AbstractController
             ->getSupplierSearchClient()
             ->findSupplierById($idSupplier);
 
-        return [
-            'supplier' => $supplier,
-        ];
+        return $this->view(
+            ['supplier' => $supplier],
+            [],
+            '@SupplierPage/views/detail/detail.twig',
+        );
     }
 }
