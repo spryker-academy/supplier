@@ -1,26 +1,53 @@
-{#
-TODO: Exercise - Supplier List Template
+{% extends template('page-layout-main') %}
 
-This template displays a table of all suppliers.
-The controller passes a 'suppliers' variable (array of SupplierTransfer).
+{% block title %}{{ supplier.name | default('Supplier') }}{% endblock %}
 
-Steps:
-1. Extend the main page layout: {% extends template('page-layout-main') %}
-2. Set the title in the title block
-3. In the content block:
-   - Check if suppliers is empty using {% if suppliers is empty %}
-   - If empty, show an alert message
-   - If not empty, create a table with columns: ID, Name, Email, Phone, Status, Actions
-   - Loop through suppliers using {% for supplier in suppliers %}
-   - Display each supplier's properties
-   - For status, show a badge: badge-success for active (status == 1), badge-secondary for inactive
-   - Add a "View" link that goes to the detail route with the supplier ID
+{% block content %}
+    <div class="container">
+        <p><a href="{{ url('supplier-list') }}">&larr; {{ 'Back to list' | trans }}</a></p>
 
-Hint: Use url() function for route generation: {{ url('supplier-detail', {id: supplier.idSupplier}) }}
-#}
-
-{# TODO: Extend the main layout #}
-
-{# TODO: Set the title #}
-
-{# TODO: Implement the content block with supplier table #}
+        {% if supplier.idSupplier is empty %}
+            <div class="alert alert-warning">
+                {{ 'Supplier not found.' | trans }}
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-header">
+                    <h1>{{ supplier.name }}</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th>{{ 'ID' | trans }}</th>
+                                <td>{{ supplier.idSupplier }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Description' | trans }}</th>
+                                <td>{{ supplier.description | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Email' | trans }}</th>
+                                <td>{{ supplier.email | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Phone' | trans }}</th>
+                                <td>{{ supplier.phone | default('N/A') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'Status' | trans }}</th>
+                                <td>
+                                    {% if supplier.status == 1 %}
+                                        <span class="badge badge-success">{{ 'Active' | trans }}</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">{{ 'Inactive' | trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
