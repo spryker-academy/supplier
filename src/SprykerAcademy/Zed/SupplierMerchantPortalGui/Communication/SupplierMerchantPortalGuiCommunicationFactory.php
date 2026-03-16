@@ -13,7 +13,9 @@ use Generated\Shared\Transfer\SupplierTransfer;
 use Symfony\Component\Form\FormInterface;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider\SupplierGuiTableConfigurationProvider;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider\SupplierLocationGuiTableConfigurationProvider;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\DataProvider\SupplierGuiTableDataProvider;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\DataProvider\SupplierLocationGuiTableDataProvider;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\DataProvider\SupplierFormDataProvider;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\SupplierForm;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\SupplierMerchantPortalGuiDependencyProvider;
@@ -104,5 +106,23 @@ class SupplierMerchantPortalGuiCommunicationFactory extends AbstractCommunicatio
         return new SupplierFormDataProvider(
             $this->getSupplierFacade(),
         );
+    }
+
+    /**
+     * @return \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider\SupplierLocationGuiTableConfigurationProvider
+     */
+    public function createSupplierLocationGuiTableConfigurationProvider(): SupplierLocationGuiTableConfigurationProvider
+    {
+        return new SupplierLocationGuiTableConfigurationProvider(
+            $this->getGuiTableFactory(),
+        );
+    }
+
+    /**
+     * @return \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\DataProvider\SupplierLocationGuiTableDataProvider
+     */
+    public function createSupplierLocationGuiTableDataProvider(): SupplierLocationGuiTableDataProvider
+    {
+        return new SupplierLocationGuiTableDataProvider();
     }
 }

@@ -61,9 +61,15 @@ class UpdateSupplierController extends AbstractController
             return new JsonResponse($zedUiFormResponseTransfer->toArray());
         }
 
+        $supplierLocationTableConfiguration = $this->getFactory()
+            ->createSupplierLocationGuiTableConfigurationProvider()
+            ->getConfiguration();
+
         return new JsonResponse(
             $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
                 'form' => $supplierForm->createView(),
+                'supplierLocationTableConfiguration' => $supplierLocationTableConfiguration,
+                'idSupplier' => $idSupplier,
             ])->getContent(),
         );
     }
