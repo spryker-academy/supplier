@@ -61,30 +61,12 @@ class SupplierForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add(static::FIELD_NAME, TextType::class, [
-                'label' => 'Name',
-                'required' => true,
-                'constraints' => [new NotBlank()],
-            ])
-            ->add(static::FIELD_DESCRIPTION, TextareaType::class, [
-                'label' => 'Description',
-                'required' => false,
-            ])
-            ->add(static::FIELD_EMAIL, EmailType::class, [
-                'label' => 'Email',
-                'required' => true,
-                'constraints' => [new NotBlank()],
-            ])
-            ->add(static::FIELD_PHONE, TextType::class, [
-                'label' => 'Phone',
-                'required' => false,
-            ])
-            ->add(static::FIELD_IS_ACTIVE, CheckboxType::class, [
-                'label' => 'Active',
-                'required' => false,
-                'property_path' => 'status',
-            ]);
+        // TODO: Add form fields using $builder->add()
+        // Hint: FIELD_NAME => TextType (required, NotBlank constraint)
+        // Hint: FIELD_DESCRIPTION => TextareaType (optional)
+        // Hint: FIELD_EMAIL => EmailType (required, NotBlank constraint)
+        // Hint: FIELD_PHONE => TextType (optional)
+        // Hint: FIELD_IS_ACTIVE => CheckboxType (property_path: 'status')
     }
 
     /**

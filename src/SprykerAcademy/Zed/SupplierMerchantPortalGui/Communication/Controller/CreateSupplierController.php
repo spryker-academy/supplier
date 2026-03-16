@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Controller;
 
-use Generated\Shared\Transfer\SupplierTransfer;
-use Orm\Zed\Supplier\Persistence\PyzMerchantToSupplier;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,55 +25,26 @@ class CreateSupplierController extends AbstractController
      */
     public function indexAction(Request $request): JsonResponse
     {
+        // TODO: Implement create supplier form handling
+        // 1. Get SupplierFormDataProvider from factory, call getData() for empty transfer
+        // 2. Create form via factory: $this->getFactory()->createSupplierForm($supplierTransfer, $options)
+        // 3. Handle request: $supplierForm->handleRequest($request)
+        // 4. If submitted and valid:
+        //    - Create supplier via facade
+        //    - Link supplier to current merchant (PyzMerchantToSupplier)
+        //    - Return JsonResponse with ZedUI actions: addSuccessNotification, addActionCloseDrawer, addActionRefreshTable
+        // 5. Otherwise: render the form template
+
         $supplierFormDataProvider = $this->getFactory()->createSupplierFormDataProvider();
-        $supplierTransfer = $supplierFormDataProvider->getData();
-
-        $supplierForm = $this->getFactory()->createSupplierForm($supplierTransfer, $supplierFormDataProvider->getOptions());
-        $supplierForm->handleRequest($request);
-
-        if ($supplierForm->isSubmitted() && $supplierForm->isValid()) {
-            /** @var \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer */
-            $supplierTransfer = $supplierForm->getData();
-
-            $supplierTransfer = $this->getFactory()
-                ->getSupplierFacade()
-                ->createSupplier($supplierTransfer);
-
-            $this->linkSupplierToCurrentMerchant($supplierTransfer);
-
-            $zedUiFormResponseTransfer = $this->getFactory()
-                ->getZedUiFactory()
-                ->createZedUiFormResponseBuilder()
-                ->addSuccessNotification(static::MESSAGE_SUPPLIER_CREATED)
-                ->addActionCloseDrawer()
-                ->addActionRefreshTable()
-                ->createResponse();
-
-            return new JsonResponse($zedUiFormResponseTransfer->toArray());
-        }
+        $supplierForm = $this->getFactory()->createSupplierForm(
+            $supplierFormDataProvider->getData(),
+            $supplierFormDataProvider->getOptions(),
+        );
 
         return new JsonResponse(
             $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
                 'form' => $supplierForm->createView(),
             ])->getContent(),
         );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
-     *
-     * @return void
-     */
-    protected function linkSupplierToCurrentMerchant(SupplierTransfer $supplierTransfer): void
-    {
-        $merchantTransfer = $this->getFactory()
-            ->getMerchantUserFacade()
-            ->getCurrentMerchantUser()
-            ->getMerchantOrFail();
-
-        $merchantToSupplier = new PyzMerchantToSupplier();
-        $merchantToSupplier->setFkMerchant($merchantTransfer->getIdMerchantOrFail());
-        $merchantToSupplier->setFkSupplier($supplierTransfer->getIdSupplierOrFail());
-        $merchantToSupplier->save();
     }
 }

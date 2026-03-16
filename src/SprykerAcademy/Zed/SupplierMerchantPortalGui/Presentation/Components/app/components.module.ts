@@ -13,8 +13,8 @@ import { EditSupplierModule } from './edit-supplier/edit-supplier.module';
         WebComponentsModule.withComponents([
             SupplierListComponent,
             ButtonLinkComponent,
-            EditSupplierComponent,
-            CardComponent,
+            // TODO: Register EditSupplierComponent and CardComponent as web components
+            // Hint: Add EditSupplierComponent, CardComponent to the array
         ]),
         SupplierListModule,
         ButtonLinkModule,
