@@ -9,9 +9,13 @@ use Spryker\Shared\GuiTable\Http\GuiTableDataRequestExecutorInterface;
 use Spryker\Shared\ZedUi\ZedUiFactoryInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use Spryker\Zed\MerchantUser\Business\MerchantUserFacadeInterface;
+use Generated\Shared\Transfer\SupplierTransfer;
+use Symfony\Component\Form\FormInterface;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider\SupplierGuiTableConfigurationProvider;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\DataProvider\SupplierGuiTableDataProvider;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\DataProvider\SupplierFormDataProvider;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\SupplierForm;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\SupplierMerchantPortalGuiDependencyProvider;
 
 /**
@@ -79,5 +83,26 @@ class SupplierMerchantPortalGuiCommunicationFactory extends AbstractCommunicatio
     public function getSupplierFacade(): SupplierFacadeInterface
     {
         return $this->getProvidedDependency(SupplierMerchantPortalGuiDependencyProvider::FACADE_SUPPLIER);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierTransfer $data
+     * @param array<string, mixed> $options
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    public function createSupplierForm(SupplierTransfer $data, array $options = []): FormInterface
+    {
+        return $this->getFormFactory()->create(SupplierForm::class, $data, $options);
+    }
+
+    /**
+     * @return \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\DataProvider\SupplierFormDataProvider
+     */
+    public function createSupplierFormDataProvider(): SupplierFormDataProvider
+    {
+        return new SupplierFormDataProvider(
+            $this->getSupplierFacade(),
+        );
     }
 }
