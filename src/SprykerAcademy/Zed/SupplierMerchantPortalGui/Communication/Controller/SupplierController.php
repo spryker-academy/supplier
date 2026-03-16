@@ -19,11 +19,10 @@ class SupplierController extends AbstractController
      */
     public function indexAction(): array
     {
-        return $this->viewResponse([
-            'supplierTableConfiguration' => $this->getFactory()
-                ->createSupplierGuiTableConfigurationProvider()
-                ->getConfiguration(),
-        ]);
+        // TODO: Return viewResponse with supplierTableConfiguration
+        // Hint: $this->getFactory()->createSupplierGuiTableConfigurationProvider()->getConfiguration()
+
+        return $this->viewResponse([]);
     }
 
     /**
@@ -33,10 +32,13 @@ class SupplierController extends AbstractController
      */
     public function tableDataAction(Request $request): Response
     {
-        return $this->getFactory()->getGuiTableHttpDataRequestExecutor()->execute(
-            $request,
-            $this->getFactory()->createSupplierGuiTableDataProvider(),
-            $this->getFactory()->createSupplierGuiTableConfigurationProvider()->getConfiguration(),
-        );
+        // TODO: Execute GuiTable data request
+        // Hint: $this->getFactory()->getGuiTableHttpDataRequestExecutor()->execute(
+        //     $request,
+        //     $this->getFactory()->createSupplierGuiTableDataProvider(),
+        //     $this->getFactory()->createSupplierGuiTableConfigurationProvider()->getConfiguration(),
+        // )
+
+        return new Response('', Response::HTTP_NOT_IMPLEMENTED);
     }
 }

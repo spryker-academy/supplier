@@ -7,8 +7,9 @@ import { SupplierListModule } from './supplier-list/supplier-list.module';
 
 @NgModule({
     imports: [
+        // TODO: Register SupplierListComponent as a web component using WebComponentsModule.withComponents([...])
+        // Hint: WebComponentsModule.withComponents([SupplierListComponent, ButtonLinkComponent])
         WebComponentsModule.withComponents([
-            SupplierListComponent,
             ButtonLinkComponent,
         ]),
         SupplierListModule,

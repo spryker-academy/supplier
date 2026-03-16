@@ -27,13 +27,11 @@ class SupplierGuiTableDataProvider extends AbstractGuiTableDataProvider
      */
     protected function createCriteria(GuiTableDataRequestTransfer $guiTableDataRequestTransfer): AbstractTransfer
     {
-        return (new SupplierMerchantPortalTableCriteriaTransfer())
-            ->setMerchantReference(
-                $this->merchantUserFacade
-                    ->getCurrentMerchantUser()
-                    ->getMerchantOrFail()
-                    ->getMerchantReference(),
-            );
+        // TODO: Create SupplierMerchantPortalTableCriteriaTransfer with merchantReference
+        // Hint: Get the current merchant reference from:
+        //   $this->merchantUserFacade->getCurrentMerchantUser()->getMerchantOrFail()->getMerchantReference()
+
+        return new SupplierMerchantPortalTableCriteriaTransfer();
     }
 
     /**
@@ -43,7 +41,9 @@ class SupplierGuiTableDataProvider extends AbstractGuiTableDataProvider
      */
     protected function fetchData(AbstractTransfer $criteriaTransfer): GuiTableDataResponseTransfer
     {
-        /** @var \Generated\Shared\Transfer\SupplierMerchantPortalTableCriteriaTransfer $criteriaTransfer */
-        return $this->repository->getSupplierTableData($criteriaTransfer);
+        // TODO: Delegate to repository to fetch supplier table data
+        // Hint: return $this->repository->getSupplierTableData($criteriaTransfer);
+
+        return new GuiTableDataResponseTransfer();
     }
 }

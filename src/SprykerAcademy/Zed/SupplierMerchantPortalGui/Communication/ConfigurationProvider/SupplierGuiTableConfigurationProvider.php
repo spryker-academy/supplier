@@ -62,81 +62,19 @@ class SupplierGuiTableConfigurationProvider
     {
         $guiTableConfigurationBuilder = $this->guiTableFactory->createConfigurationBuilder();
 
-        $guiTableConfigurationBuilder = $this->addColumns($guiTableConfigurationBuilder);
-        $guiTableConfigurationBuilder = $this->addFilters($guiTableConfigurationBuilder);
-        $guiTableConfigurationBuilder = $this->addRowActions($guiTableConfigurationBuilder);
+        // TODO: Add columns using $guiTableConfigurationBuilder->addColumnText(), addColumnChip(), etc.
+        // Hint: Use COL_KEY_* constants as column IDs
+        // Hint: For status, use addColumnChip() with color map: 1 => green/Active, 0 => gray/Inactive
 
-        $guiTableConfigurationBuilder
-            ->setDataSourceUrl(static::DATA_URL)
-            ->setDefaultPageSize(25)
-            ->isSearchEnabled(true)
-            ->isColumnConfiguratorEnabled(true);
+        // TODO: Add filters using $guiTableConfigurationBuilder->addFilterSelect()
+        // Hint: Filter by status with options 1 => Active, 0 => Inactive
+
+        // TODO: Add row actions using $guiTableConfigurationBuilder->addRowActionDrawerAjaxForm()
+        // Hint: Use ROW_ACTION_URL_UPDATE constant
+
+        // TODO: Set data source URL, page size, enable search
+        // Hint: $guiTableConfigurationBuilder->setDataSourceUrl(static::DATA_URL)->setDefaultPageSize(25)->isSearchEnabled(true)
 
         return $guiTableConfigurationBuilder->createConfiguration();
-    }
-
-    /**
-     * @param \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder
-     *
-     * @return \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface
-     */
-    protected function addColumns(
-        GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder,
-    ): GuiTableConfigurationBuilderInterface {
-        $guiTableConfigurationBuilder
-            ->addColumnText(static::COL_KEY_NAME, 'Name', true, true)
-            ->addColumnText(static::COL_KEY_DESCRIPTION, 'Description', true, false)
-            ->addColumnChip(static::COL_KEY_STATUS, 'Status', true, true, 'gray', [
-                1 => [
-                    'title' => 'Active',
-                    'color' => 'green',
-                ],
-                0 => [
-                    'title' => 'Inactive',
-                    'color' => 'gray',
-                ],
-            ])
-            ->addColumnText(static::COL_KEY_EMAIL, 'Email', true, true)
-            ->addColumnText(static::COL_KEY_PHONE, 'Phone', true, false);
-
-        return $guiTableConfigurationBuilder;
-    }
-
-    /**
-     * @param \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder
-     *
-     * @return \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface
-     */
-    protected function addFilters(
-        GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder,
-    ): GuiTableConfigurationBuilderInterface {
-        $guiTableConfigurationBuilder->addFilterSelect(
-            'status',
-            'Status',
-            false,
-            [
-                1 => 'Active',
-                0 => 'Inactive',
-            ],
-        );
-
-        return $guiTableConfigurationBuilder;
-    }
-
-    /**
-     * @param \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder
-     *
-     * @return \Spryker\Shared\GuiTable\Configuration\Builder\GuiTableConfigurationBuilderInterface
-     */
-    protected function addRowActions(
-        GuiTableConfigurationBuilderInterface $guiTableConfigurationBuilder,
-    ): GuiTableConfigurationBuilderInterface {
-        $guiTableConfigurationBuilder->addRowActionDrawerAjaxForm(
-            'edit',
-            'Edit',
-            static::ROW_ACTION_URL_UPDATE,
-        );
-
-        return $guiTableConfigurationBuilder;
     }
 }
