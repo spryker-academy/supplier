@@ -19,23 +19,10 @@ class SupplierLocationTransformer implements DataTransformerInterface
      */
     public function transform(mixed $value): array
     {
-        if ($value === null) {
-            return [];
-        }
+        // TODO: Convert SupplierLocationTransfer[] to array of arrays
+        // Each array should have: idSupplierLocation, city, country, address, zipCode, isDefault
 
-        $data = [];
-        foreach ($value as $locationTransfer) {
-            $data[] = [
-                'idSupplierLocation' => $locationTransfer->getIdSupplierLocation(),
-                'city' => $locationTransfer->getCity(),
-                'country' => $locationTransfer->getCountry(),
-                'address' => $locationTransfer->getAddress(),
-                'zipCode' => $locationTransfer->getZipCode(),
-                'isDefault' => $locationTransfer->getIsDefault(),
-            ];
-        }
-
-        return $data;
+        return [];
     }
 
     /**
@@ -47,27 +34,9 @@ class SupplierLocationTransformer implements DataTransformerInterface
      */
     public function reverseTransform(mixed $value): ArrayObject
     {
-        $locationTransfers = new ArrayObject();
+        // TODO: Convert submitted array data to SupplierLocationTransfer[]
+        // Create a SupplierLocationTransfer for each row with: city, country, address, zipCode, isDefault
 
-        if ($value === null || !is_array($value)) {
-            return $locationTransfers;
-        }
-
-        foreach ($value as $locationData) {
-            $locationTransfer = (new SupplierLocationTransfer())
-                ->setCity($locationData['city'] ?? null)
-                ->setCountry($locationData['country'] ?? null)
-                ->setAddress($locationData['address'] ?? null)
-                ->setZipCode($locationData['zipCode'] ?? null)
-                ->setIsDefault((bool)($locationData['isDefault'] ?? false));
-
-            if (!empty($locationData['idSupplierLocation'])) {
-                $locationTransfer->setIdSupplierLocation((int)$locationData['idSupplierLocation']);
-            }
-
-            $locationTransfers->append($locationTransfer);
-        }
-
-        return $locationTransfers;
+        return new ArrayObject();
     }
 }

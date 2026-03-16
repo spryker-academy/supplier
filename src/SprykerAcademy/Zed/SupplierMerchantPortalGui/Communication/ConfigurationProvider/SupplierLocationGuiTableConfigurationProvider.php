@@ -54,25 +54,15 @@ class SupplierLocationGuiTableConfigurationProvider
     {
         $guiTableConfigurationBuilder = $this->guiTableFactory->createConfigurationBuilder();
 
-        $guiTableConfigurationBuilder
-            ->addEditableColumnInput(static::COL_KEY_CITY, 'City', 'text')
-            ->addEditableColumnInput(static::COL_KEY_COUNTRY, 'Country', 'text')
-            ->addEditableColumnInput(static::COL_KEY_ADDRESS, 'Address', 'text')
-            ->addEditableColumnInput(static::COL_KEY_ZIP_CODE, 'Zip Code', 'text')
-            ->addEditableColumnInput(static::COL_KEY_IS_DEFAULT, 'Default', 'checkbox');
+        // TODO: Add editable columns using $guiTableConfigurationBuilder->addEditableColumnInput()
+        // Hint: COL_KEY_CITY => 'City', type 'text'
+        // Hint: COL_KEY_COUNTRY => 'Country', type 'text'
+        // Hint: COL_KEY_ADDRESS => 'Address', type 'text'
+        // Hint: COL_KEY_ZIP_CODE => 'Zip Code', type 'text'
+        // Hint: COL_KEY_IS_DEFAULT => 'Default', type 'checkbox'
 
-        $guiTableConfigurationBuilder->enableAddingNewRows(
-            static::FORM_INPUT_NAME,
-            $initialData,
-            [
-                GuiTableEditableButtonTransfer::TITLE => 'Add Location',
-                GuiTableEditableButtonTransfer::VARIANT => 'outline',
-            ],
-            [
-                GuiTableEditableButtonTransfer::TITLE => 'Cancel',
-                GuiTableEditableButtonTransfer::VARIANT => 'outline',
-            ],
-        );
+        // TODO: Enable adding new rows using $guiTableConfigurationBuilder->enableAddingNewRows()
+        // Hint: Pass FORM_INPUT_NAME, $initialData, and button configs for Add/Cancel
 
         return $guiTableConfigurationBuilder->createConfiguration();
     }

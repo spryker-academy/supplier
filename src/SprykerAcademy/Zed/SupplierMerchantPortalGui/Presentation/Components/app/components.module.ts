@@ -17,7 +17,8 @@ import { SupplierLocationsTableModule } from './supplier-locations-table/supplie
             ButtonLinkComponent,
             EditSupplierComponent,
             CardComponent,
-            SupplierLocationsTableComponent,
+            // TODO: Register SupplierLocationsTableComponent as a web component
+            // Hint: Add SupplierLocationsTableComponent to the array above
         ]),
         SupplierListModule,
         ButtonLinkModule,
