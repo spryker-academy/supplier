@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config>
+    <supplier-merchant-portal-gui>
+        <label>Suppliers</label>
+        <title>Suppliers</title>
+        <icon>handshake</icon>
+        <bundle>supplier-merchant-portal-gui</bundle>
+        <controller>supplier</controller>
+        <action>index</action>
+    </supplier-merchant-portal-gui>
+</config>
