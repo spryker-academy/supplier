@@ -20,7 +20,7 @@ This comprehensive training module covers real-world Spryker development through
 ## 🎯 Prerequisites
 
 - PHP 8.4 or higher
-- Completed HelloWorld training module (recommended)
+- Completed Contact Request training module (recommended)
 - Spryker project (B2B/B2C Demo Shop or Suite)
 - Understanding of MVC and object-oriented programming
 - Docker environment
@@ -343,7 +343,7 @@ vendor/bin/console cache:empty-all
 ## 📚 Prerequisites
 
 **Recommended Order:**
-1. Complete HelloWorld training module first
+1. Complete Contact Request training module first
 2. Understand Transfer objects and Propel ORM
 3. Familiar with Spryker architecture (Zed, Client, Yves)
 
