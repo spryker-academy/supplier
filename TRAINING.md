@@ -518,7 +518,7 @@ composer require spryker-academy/supplier:5.0.0-skeleton
 ## 📚 Prerequisites
 
 Before starting the Supplier module, you should have completed:
-- **HelloWorld Module** (Modules 1-4)
+- **Contact Request Module** (Modules 1-4)
 - Understanding of Spryker architecture
 - Familiarity with Propel ORM
 - Basic knowledge of message queues
@@ -550,7 +550,7 @@ Before starting the Supplier module, you should have completed:
 
 ## 🎓 Learning Path
 
-1. **Complete HelloWorld first** - Modules 1-4 are prerequisites
+1. **Complete Contact Request first** - Modules 1-4 are prerequisites
 2. **Start with Schema** - Install v4.0-skeleton
 3. **Progress sequentially** - Each module builds on the previous
 4. **Test thoroughly** - Verify each component before moving forward
