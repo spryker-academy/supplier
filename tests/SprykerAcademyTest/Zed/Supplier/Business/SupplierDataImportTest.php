@@ -92,22 +92,25 @@ class SupplierDataImportTest extends Unit
             ->findOne();
         $this->assertNotNull($supplierEntity);
 
+        $triggeredEvents = [];
         $eventFacadeMock = $this->createMock(EventFacadeInterface::class);
-        $eventFacadeMock->expects($this->once())
-            ->method('triggerBulk')
-            ->with(
-                SupplierSearchConfig::SUPPLIER_PUBLISH,
-                $this->callback(function (array $eventEntityTransfers) use ($supplierEntity): bool {
-                    $this->assertCount(1, $eventEntityTransfers);
-                    $this->assertInstanceOf(EventEntityTransfer::class, $eventEntityTransfers[0]);
-                    $this->assertSame($supplierEntity->getIdSupplier(), $eventEntityTransfers[0]->getId());
-
-                    return true;
-                }),
-            );
+        $eventFacadeMock->method('triggerBulk')
+            ->willReturnCallback(function (string $eventName, array $eventEntityTransfers) use (&$triggeredEvents): void {
+                $triggeredEvents[$eventName] = $eventEntityTransfers;
+            });
         $this->setDataImporterPublisherEventFacade($eventFacadeMock);
 
         DataImporterPublisher::triggerEvents();
+
+        $this->assertArrayHasKey(
+            SupplierSearchConfig::SUPPLIER_PUBLISH,
+            $triggeredEvents,
+            'The import must trigger the supplier publish event (addPublishEvents() in the writer step).',
+        );
+        $eventEntityTransfers = $triggeredEvents[SupplierSearchConfig::SUPPLIER_PUBLISH];
+        $this->assertCount(1, $eventEntityTransfers);
+        $this->assertInstanceOf(EventEntityTransfer::class, $eventEntityTransfers[0]);
+        $this->assertSame($supplierEntity->getIdSupplier(), $eventEntityTransfers[0]->getId());
     }
 
     protected function createSupplierDataSet(): DataSet
