@@ -54,6 +54,14 @@ class SupplierLocationGuiTableConfigurationProvider
     {
         $guiTableConfigurationBuilder = $this->guiTableFactory->createConfigurationBuilder();
 
+        // Provided: a GuiTable needs at least one regular column. The editable inputs you add below are rendered on top of these columns.
+        $guiTableConfigurationBuilder
+            ->addColumnText(static::COL_KEY_CITY, 'City', false, false)
+            ->addColumnText(static::COL_KEY_COUNTRY, 'Country', false, false)
+            ->addColumnText(static::COL_KEY_ADDRESS, 'Address', false, false)
+            ->addColumnText(static::COL_KEY_ZIP_CODE, 'Zip Code', false, false)
+            ->addColumnText(static::COL_KEY_IS_DEFAULT, 'Default', false, false);
+
         // TODO: Add editable columns using $guiTableConfigurationBuilder->addEditableColumnInput()
         // Hint: COL_KEY_CITY => 'City', type 'text'
         // Hint: COL_KEY_COUNTRY => 'Country', type 'text'
