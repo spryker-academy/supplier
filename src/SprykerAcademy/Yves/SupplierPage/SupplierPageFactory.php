@@ -1,14 +1,14 @@
 <?php
 
-namespace Pyz\Yves\SupplierPage;
+namespace SprykerAcademy\Yves\SupplierPage;
 
-use Pyz\Client\SupplierSearch\SupplierSearchClientInterface;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
 use Spryker\Yves\Kernel\AbstractFactory;
 
 class SupplierPageFactory extends AbstractFactory
 {
     /**
-     * @return \Pyz\Client\SupplierSearch\SupplierSearchClientInterface
+     * @return \SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface
      */
     public function getSupplierSearchClient(): SupplierSearchClientInterface
     {

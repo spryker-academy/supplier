@@ -1,40 +1,29 @@
 <?php
 
-namespace Pyz\Client\SupplierSearch;
+declare(strict_types=1);
 
+namespace SprykerAcademy\Client\SupplierSearch;
+
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
-use Pyz\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
- * @method \Pyz\Client\SupplierSearch\SupplierSearchFactory getFactory()
+ * @method \SprykerAcademy\Client\SupplierSearch\SupplierSearchFactory getFactory()
  */
 class SupplierSearchClient extends AbstractClient implements SupplierSearchClientInterface
 {
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param string $name
-     *
-     * @return \Generated\Shared\Transfer\SupplierTransfer|null
-     */
-    public function getSupplierByName(string $name): ?SupplierTransfer
+    public function searchSuppliers(array $requestParameters = []): SupplierCollectionTransfer
     {
-        $searchQuery = $this->getFactory()
-            ->createSupplierQueryPlugin($name);
+        return $this->getFactory()
+            ->createSupplierSearchReader()
+            ->searchSuppliers($requestParameters);
+    }
 
-        $resultFormatters = $this->getFactory()
-            ->getSearchQueryFormatters();
-
-        $searchResults = $this->getFactory()
-            ->getSearchClient()
-            ->search(
-                $searchQuery,
-                $resultFormatters,
-            );
-
-        return $searchResults[SupplierSearchResultFormatterPlugin::NAME];
+    public function findSupplierById(int $idSupplier): SupplierTransfer
+    {
+        return $this->getFactory()
+            ->createSupplierSearchReader()
+            ->findSupplierById($idSupplier);
     }
 }
