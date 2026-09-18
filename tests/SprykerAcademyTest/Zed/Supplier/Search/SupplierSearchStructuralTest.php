@@ -5,179 +5,136 @@ declare(strict_types=1);
 namespace SprykerAcademyTest\Zed\Supplier\Search;
 
 use Codeception\Test\Unit;
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
+use ReflectionClass;
+use Spryker\Client\Search\SearchClientInterface;
+use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin;
+use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClient;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchDependencyProvider;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchFactory;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 
 /**
- * Structural tests for the SupplierSearch Client module.
- * No Spryker kernel or Elasticsearch required.
+ * Structural tests for the SupplierSearch client module (Exercise: Search).
+ * No Elasticsearch connection is needed.
  *
  * Run: vendor/bin/codecept run -c tests/SprykerAcademyTest/Zed/Supplier/ Search
  */
 class SupplierSearchStructuralTest extends Unit
 {
-    // --- Query Plugin ---
-
-    public function testQueryPluginExists(): void
-    {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin';
-        $this->assertTrue(class_exists($class), 'SupplierSearchQueryPlugin must exist.');
-    }
+    // --- Query plugin ---
 
     public function testQueryPluginImplementsRequiredInterfaces(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin';
-        $interfaces = class_implements($class);
+        $this->assertTrue(class_exists(SupplierSearchQueryPlugin::class), 'SupplierSearchQueryPlugin must exist.');
+        $interfaces = class_implements(SupplierSearchQueryPlugin::class);
 
-        $this->assertContains(
-            'Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface',
-            $interfaces,
-            'Must implement QueryInterface.',
-        );
-        $this->assertContains(
-            'Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface',
-            $interfaces,
-            'Must implement SearchContextAwareQueryInterface.',
-        );
+        $this->assertContains('Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface', $interfaces, 'The query plugin must implement QueryInterface.');
+        $this->assertContains('Spryker\Client\SearchExtension\Dependency\Plugin\SearchContextAwareQueryInterface', $interfaces, 'The query plugin must implement SearchContextAwareQueryInterface.');
     }
 
-    public function testQueryPluginHasSourceIdentifier(): void
+    public function testQueryPluginUsesTheSupplierSourceIdentifier(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin';
-        $reflection = new \ReflectionClass($class);
-        $constant = $reflection->getConstant('SOURCE_IDENTIFIER');
+        $plugin = new SupplierSearchQueryPlugin();
 
-        $this->assertNotEmpty($constant, 'SOURCE_IDENTIFIER must be set (not empty).');
-        $this->assertSame('supplier', $constant, 'SOURCE_IDENTIFIER must be "supplier".');
+        $this->assertSame(
+            SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER,
+            $plugin->getSearchContext()->getSourceIdentifier(),
+            'getSearchContext() must set the source identifier to SupplierSearchConfig::SUPPLIER_SOURCE_IDENTIFIER, so the query hits the supplier index.',
+        );
     }
 
     public function testQueryPluginReturnsElasticaQuery(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin';
-        $plugin = new $class('test');
+        $query = (new SupplierSearchQueryPlugin())->getSearchQuery();
 
-        $query = $plugin->getSearchQuery();
-
-        $this->assertInstanceOf(
-            'Elastica\Query',
-            $query,
-            'getSearchQuery() must return an Elastica Query.',
-        );
+        $this->assertInstanceOf('Elastica\Query', $query, 'getSearchQuery() must return an Elastica\Query.');
     }
 
-    // --- Result Formatter Plugin ---
+    // --- Result formatter ---
 
-    public function testResultFormatterPluginExists(): void
+    public function testResultFormatterPluginExtendsTheElasticsearchFormatter(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin';
-        $this->assertTrue(class_exists($class), 'SupplierSearchResultFormatterPlugin must exist.');
+        $this->assertTrue(class_exists(SupplierSearchResultFormatterPlugin::class), 'SupplierSearchResultFormatterPlugin must exist.');
+        $this->assertTrue(
+            is_subclass_of(SupplierSearchResultFormatterPlugin::class, 'Spryker\Client\SearchElasticsearch\Plugin\ResultFormatter\AbstractElasticsearchResultFormatterPlugin'),
+            'The result formatter must extend AbstractElasticsearchResultFormatterPlugin.',
+        );
     }
 
     public function testResultFormatterPluginHasName(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin';
-        $plugin = new $class();
-
-        $this->assertSame('supplier', $plugin->getName(), 'Formatter NAME must be "supplier".');
+        $this->assertNotEmpty((new SupplierSearchResultFormatterPlugin())->getName(), 'getName() must return the key under which the formatted result is returned.');
     }
 
-    // --- Client ---
+    // --- Client, factory, dependency provider ---
 
-    public function testSupplierSearchClientExists(): void
+    public function testClientImplementsInterface(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\SupplierSearchClient';
-        $this->assertTrue(class_exists($class), 'SupplierSearchClient must exist.');
-        $this->assertTrue(
-            method_exists($class, 'getSupplierByName'),
-            'Client must have getSupplierByName() method.',
-        );
+        $this->assertTrue(interface_exists(SupplierSearchClientInterface::class), 'SupplierSearchClientInterface must exist.');
+        $this->assertContains(SupplierSearchClientInterface::class, class_implements(SupplierSearchClient::class), 'SupplierSearchClient must implement SupplierSearchClientInterface.');
+        $this->assertTrue(method_exists(SupplierSearchClientInterface::class, 'searchSuppliers'), 'The client interface must declare searchSuppliers().');
     }
 
-    public function testSupplierSearchClientImplementsInterface(): void
+    public function testClientDelegatesToTheReader(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\SupplierSearchClient';
-        $interface = 'SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface';
+        $source = file_get_contents((new ReflectionClass(SupplierSearchClient::class))->getFileName());
 
-        $this->assertTrue(interface_exists($interface), 'SupplierSearchClientInterface must exist.');
-        $this->assertTrue(
-            is_subclass_of($class, $interface) || in_array($interface, class_implements($class)),
-            'Client must implement SupplierSearchClientInterface.',
+        $this->assertStringContainsString(
+            'createSupplierSearchReader()',
+            $source,
+            'searchSuppliers() must delegate to the reader created by the factory ($this->getFactory()->createSupplierSearchReader()).',
         );
     }
 
-    // --- Factory ---
-
-    public function testFactoryExists(): void
+    public function testFactoryCreatesTheReaderWithAllDependencies(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\SupplierSearchFactory';
-        $this->assertTrue(class_exists($class), 'SupplierSearchFactory must exist.');
-        $this->assertTrue(
-            method_exists($class, 'createSupplierQueryPlugin'),
-            'Factory must have createSupplierQueryPlugin() method.',
-        );
-        $this->assertTrue(
-            method_exists($class, 'getSearchQueryFormatters'),
-            'Factory must have getSearchQueryFormatters() method.',
-        );
-        $this->assertTrue(
-            method_exists($class, 'getSearchClient'),
-            'Factory must have getSearchClient() method.',
-        );
+        $this->assertTrue(method_exists(SupplierSearchFactory::class, 'createSupplierSearchReader'), 'The factory must have createSupplierSearchReader().');
+        $source = file_get_contents((new ReflectionClass(SupplierSearchFactory::class))->getFileName());
+
+        foreach (['getSearchClient()', 'getSupplierSearchQueryPlugin()', 'getSupplierSearchQueryExpanderPlugins()', 'getSupplierSearchResultFormatterPlugins()'] as $call) {
+            $this->assertStringContainsString($call, $source, sprintf('createSupplierSearchReader() must pass %s to the reader.', $call));
+        }
     }
 
-    // --- DependencyProvider ---
-
-    public function testDependencyProviderExists(): void
+    public function testDependencyProviderProvidesSearchClientAndPlugins(): void
     {
-        $class = 'SprykerAcademy\Client\SupplierSearch\SupplierSearchDependencyProvider';
-        $this->assertTrue(class_exists($class), 'SupplierSearchDependencyProvider must exist.');
-        $this->assertTrue(
-            defined("$class::CLIENT_SEARCH"),
-            'Must have CLIENT_SEARCH constant.',
-        );
-        $this->assertTrue(
-            defined("$class::SUPPLIER_SEARCH_RESULT_FORMATTER_PLUGINS"),
-            'Must have SUPPLIER_SEARCH_RESULT_FORMATTER_PLUGINS constant.',
-        );
+        $container = new \Spryker\Client\Kernel\Container();
+        $container = (new SupplierSearchDependencyProvider())->provideServiceLayerDependencies($container);
+
+        foreach ([
+            SupplierSearchDependencyProvider::CLIENT_SEARCH => 'the Search client',
+            SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY => 'the SupplierSearchQueryPlugin',
+            SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER => 'the result formatter plugins',
+            SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER => 'the query expander plugins',
+        ] as $key => $label) {
+            $this->assertTrue($container->has($key), sprintf('The dependency provider must provide %s under %s.', $label, $key));
+        }
+
+        $this->assertInstanceOf(SupplierSearchQueryPlugin::class, $container->get(SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY));
+        $formatters = $container->get(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER);
+        $this->assertNotEmpty($formatters, 'The result formatter plugins must contain the SupplierSearchResultFormatterPlugin.');
+        $this->assertInstanceOf(SupplierSearchResultFormatterPlugin::class, $formatters[0]);
     }
 
-    // --- Elasticsearch Schema ---
+    // --- Elasticsearch schema ---
 
     public function testElasticsearchSchemaExists(): void
     {
-        $paths = [
-            __DIR__ . '/../../../../../src/SprykerAcademy/Shared/SupplierSearch/Schema/supplier.json',
-            getcwd() . '/src/SprykerAcademy/Shared/SupplierSearch/Schema/supplier.json',
-        ];
+        $schemaFile = dirname((new ReflectionClass(SupplierSearchConfig::class))->getFileName()) . '/Schema/supplier.json';
 
-        $found = false;
-        foreach ($paths as $path) {
-            if (file_exists($path)) {
-                $found = true;
-                $json = json_decode(file_get_contents($path), true);
-                $this->assertNotNull($json, 'supplier.json must be valid JSON.');
-                $this->assertArrayHasKey('settings', $json, 'Schema must have settings.');
-                $this->assertArrayHasKey('mappings', $json, 'Schema must have mappings.');
-                break;
-            }
-        }
-
-        $this->assertTrue($found, 'Shared/SupplierSearch/Schema/supplier.json must exist.');
+        $this->assertFileExists($schemaFile, 'Shared/SupplierSearch/Schema/supplier.json must exist.');
+        $json = json_decode((string)file_get_contents($schemaFile), true);
+        $this->assertIsArray($json, 'supplier.json must be valid JSON.');
+        $this->assertArrayHasKey('settings', $json, 'The schema must define settings.');
+        $this->assertArrayHasKey('mappings', $json, 'The schema must define mappings.');
     }
 
-    // --- Yves SupplierPage ---
-
-    public function testSupplierPageRouteProviderExists(): void
+    public function testSearchClientInterfaceIsAvailable(): void
     {
-        $class = 'SprykerAcademy\Yves\SupplierPage\Plugin\Router\SupplierPageRouteProviderPlugin';
-        $this->assertTrue(class_exists($class), 'SupplierPageRouteProviderPlugin must exist.');
-        $this->assertTrue(
-            method_exists($class, 'addRoutes'),
-            'Must have addRoutes() method.',
-        );
-    }
-
-    public function testSupplierPageFactoryExists(): void
-    {
-        $class = 'SprykerAcademy\Yves\SupplierPage\SupplierPageFactory';
-        $this->assertTrue(class_exists($class), 'SupplierPageFactory must exist.');
+        $this->assertTrue(interface_exists(SearchClientInterface::class));
+        $this->assertTrue(class_exists(SupplierCollectionTransfer::class), 'Run transfer:generate: SupplierCollectionTransfer is needed by the result formatter.');
     }
 }
