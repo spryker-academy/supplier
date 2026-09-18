@@ -12,30 +12,6 @@ coverage:
     whitelist: { include: ['../../../../src/*'] }
 
 suites:
-    DataImport:
-        path: DataImport
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
-    BackOffice:
-        path: BackOffice
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
-    PublishSync:
-        path: PublishSync
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
-    Search:
-        path: Search
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
     GlueApi:
         path: GlueApi
         actor: SupplierBusinessTester
