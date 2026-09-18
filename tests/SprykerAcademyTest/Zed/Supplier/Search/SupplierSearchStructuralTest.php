@@ -78,7 +78,7 @@ class SupplierSearchStructuralTest extends Unit
 
     public function testClientDelegatesToTheReader(): void
     {
-        $source = file_get_contents((new ReflectionClass(SupplierSearchClient::class))->getFileName());
+        $source = php_strip_whitespace((new ReflectionClass(SupplierSearchClient::class))->getFileName()); // comments (hints) removed
 
         $this->assertStringContainsString(
             'createSupplierSearchReader()',
@@ -90,7 +90,7 @@ class SupplierSearchStructuralTest extends Unit
     public function testFactoryCreatesTheReaderWithAllDependencies(): void
     {
         $this->assertTrue(method_exists(SupplierSearchFactory::class, 'createSupplierSearchReader'), 'The factory must have createSupplierSearchReader().');
-        $source = file_get_contents((new ReflectionClass(SupplierSearchFactory::class))->getFileName());
+        $source = php_strip_whitespace((new ReflectionClass(SupplierSearchFactory::class))->getFileName()); // comments (hints) removed
 
         foreach (['getSearchClient()', 'getSupplierSearchQueryPlugin()', 'getSupplierSearchQueryExpanderPlugins()', 'getSupplierSearchResultFormatterPlugins()'] as $call) {
             $this->assertStringContainsString($call, $source, sprintf('createSupplierSearchReader() must pass %s to the reader.', $call));
