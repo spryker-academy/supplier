@@ -6,6 +6,7 @@ namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form;
 
 use Generated\Shared\Transfer\SupplierTransfer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -66,7 +67,9 @@ class SupplierForm extends AbstractType
         // Hint: FIELD_DESCRIPTION => TextareaType (optional)
         // Hint: FIELD_EMAIL => EmailType (required, NotBlank constraint)
         // Hint: FIELD_PHONE => TextType (optional)
-        // Hint: FIELD_IS_ACTIVE => CheckboxType (property_path: 'status')
+        // Hint: FIELD_IS_ACTIVE => CheckboxType (property_path: 'status', not required)
+        // Hint: SupplierTransfer::status is an int while a checkbox needs a boolean, so add a model transformer to that field:
+        //       $builder->get(static::FIELD_IS_ACTIVE)->addModelTransformer(new CallbackTransformer(fn (?int $s): bool => (bool)$s, fn (?bool $a): int => $a ? 1 : 0));
     }
 
     /**
