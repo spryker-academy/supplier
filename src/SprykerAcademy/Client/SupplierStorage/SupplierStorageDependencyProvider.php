@@ -16,6 +16,7 @@ class SupplierStorageDependencyProvider extends AbstractDependencyProvider
 {
     public const CLIENT_STORAGE = 'CLIENT_STORAGE';
     public const SERVICE_SYNCHRONIZATION = 'SERVICE_SYNCHRONIZATION';
+    public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container
@@ -28,6 +29,7 @@ class SupplierStorageDependencyProvider extends AbstractDependencyProvider
 
         $container = $this->addStorageClient($container);
         $container = $this->addSynchronizationService($container);
+        $container = $this->addUtilEncodingService($container);
 
         return $container;
     }
@@ -55,6 +57,20 @@ class SupplierStorageDependencyProvider extends AbstractDependencyProvider
     {
         $container->set(static::SERVICE_SYNCHRONIZATION, function (Container $container) {
             return $container->getLocator()->synchronization()->service();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Client\Kernel\Container $container
+     *
+     * @return \Spryker\Client\Kernel\Container
+     */
+    protected function addUtilEncodingService(Container $container): Container
+    {
+        $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
+            return $container->getLocator()->utilEncoding()->service();
         });
 
         return $container;

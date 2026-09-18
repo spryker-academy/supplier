@@ -12,12 +12,6 @@ coverage:
     whitelist: { include: ['../../../../src/*'] }
 
 suites:
-    Search:
-        path: Search
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
     Business:
         path: Business
         actor: SupplierBusinessTester

@@ -1,0 +1,34 @@
+resource:
+    name: SuppliersStorage
+    shortName: SupplierStorage
+    description: Supplier data from Redis storage for high-performance read operations
+
+    provider: SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SuppliersStorageStorefrontProvider
+
+    paginationEnabled: true
+    paginationItemsPerPage: 10
+
+    operations:
+        - type: Get
+        - type: GetCollection
+
+    properties:
+        idSupplier:
+            type: int
+            description: The unique supplier identifier
+            identifier: true
+        name:
+            type: string
+            description: Supplier name
+        description:
+            type: string
+            description: Supplier description
+        status:
+            type: int
+            description: Supplier status where 1 is active and 0 is inactive
+        email:
+            type: string
+            description: Supplier email
+        phone:
+            type: string
+            description: Supplier phone

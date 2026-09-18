@@ -12,6 +12,7 @@ namespace SprykerAcademy\Client\SupplierStorage;
 use Spryker\Client\Kernel\AbstractFactory;
 use Spryker\Client\Storage\StorageClientInterface;
 use Spryker\Service\Synchronization\SynchronizationServiceInterface;
+use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 use SprykerAcademy\Client\SupplierStorage\Storage\SupplierStorageReader;
 
 /**
@@ -27,6 +28,7 @@ class SupplierStorageFactory extends AbstractFactory
         return new SupplierStorageReader(
             $this->getStorageClient(),
             $this->getSynchronizationService(),
+            $this->getUtilEncodingService(),
         );
     }
 
@@ -44,5 +46,13 @@ class SupplierStorageFactory extends AbstractFactory
     public function getSynchronizationService(): SynchronizationServiceInterface
     {
         return $this->getProvidedDependency(SupplierStorageDependencyProvider::SERVICE_SYNCHRONIZATION);
+    }
+
+    /**
+     * @return \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface
+     */
+    public function getUtilEncodingService(): UtilEncodingServiceInterface
+    {
+        return $this->getProvidedDependency(SupplierStorageDependencyProvider::SERVICE_UTIL_ENCODING);
     }
 }
