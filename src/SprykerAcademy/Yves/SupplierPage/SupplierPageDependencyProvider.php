@@ -1,8 +1,8 @@
 <?php
 
-namespace Pyz\Yves\SupplierPage;
+namespace SprykerAcademy\Yves\SupplierPage;
 
-use Pyz\Client\SupplierSearch\SupplierSearchClientInterface;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
 use Spryker\Yves\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Yves\Kernel\Container;
 
