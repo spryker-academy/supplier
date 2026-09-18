@@ -12,14 +12,14 @@ class SupplierSearchFactory extends AbstractFactory
     {
         // TODO-1: Create and return the query plugin with the given name
 
-        return /* query plugin */;
+        throw new \RuntimeException('TODO-1: return the query plugin'); // replace this line
     }
 
     public function getSearchQueryFormatters(): array
     {
         // TODO-2: Retrieve the result formatter plugins from the container
 
-        return /* result formatter plugins */;
+        return []; // TODO-2: replace with the plugins from the container
     }
 
     public function getSearchClient(): SearchClientInterface

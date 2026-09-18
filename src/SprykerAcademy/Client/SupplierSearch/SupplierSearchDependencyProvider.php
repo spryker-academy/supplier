@@ -43,6 +43,6 @@ class SupplierSearchDependencyProvider extends AbstractDependencyProvider
     {
         // TODO-3: Return the result formatter plugin instances
 
-        return /* result formatter plugins */;
+        return []; // TODO-3: replace with the plugin instances
     }
 }
