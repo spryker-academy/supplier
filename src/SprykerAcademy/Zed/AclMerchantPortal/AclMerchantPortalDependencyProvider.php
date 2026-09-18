@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Zed\AclMerchantPortal;
 
 use Pyz\Zed\AclMerchantPortal\AclMerchantPortalDependencyProvider as PyzAclMerchantPortalDependencyProvider;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Plugin\AclMerchantPortal\SupplierMerchantPortalGuiMerchantAclEntityRuleExpanderPlugin;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Plugin\AclMerchantPortal\SupplierMerchantPortalGuiMerchantAclRuleExpanderPlugin;
 
 class AclMerchantPortalDependencyProvider extends PyzAclMerchantPortalDependencyProvider
@@ -16,6 +17,16 @@ class AclMerchantPortalDependencyProvider extends PyzAclMerchantPortalDependency
     {
         return array_merge(parent::getMerchantAclRuleExpanderPlugins(), [
             new SupplierMerchantPortalGuiMerchantAclRuleExpanderPlugin(),
+        ]);
+    }
+
+    /**
+     * @return list<\Spryker\Zed\AclMerchantPortalExtension\Dependency\Plugin\MerchantAclEntityRuleExpanderPluginInterface>
+     */
+    protected function getMerchantAclEntityRuleExpanderPlugins(): array
+    {
+        return array_merge(parent::getMerchantAclEntityRuleExpanderPlugins(), [
+            new SupplierMerchantPortalGuiMerchantAclEntityRuleExpanderPlugin(),
         ]);
     }
 }
