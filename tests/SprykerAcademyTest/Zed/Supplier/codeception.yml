@@ -18,12 +18,6 @@ suites:
         modules:
             enabled:
                 - Asserts
-    BackOffice:
-        path: BackOffice
-        actor: SupplierBusinessTester
-        modules:
-            enabled:
-                - Asserts
     Business:
         path: Business
         actor: SupplierBusinessTester
