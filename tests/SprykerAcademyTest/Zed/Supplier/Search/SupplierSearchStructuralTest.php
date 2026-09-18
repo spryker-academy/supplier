@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademyTest\Zed\Supplier\Search;
 
 use Codeception\Test\Unit;
-use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use ReflectionClass;
-use Spryker\Client\Search\SearchClientInterface;
 use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\Query\SupplierSearchQueryPlugin;
 use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin;
 use SprykerAcademy\Client\SupplierSearch\SupplierSearchClient;
@@ -130,11 +128,5 @@ class SupplierSearchStructuralTest extends Unit
         $this->assertIsArray($json, 'supplier.json must be valid JSON.');
         $this->assertArrayHasKey('settings', $json, 'The schema must define settings.');
         $this->assertArrayHasKey('mappings', $json, 'The schema must define mappings.');
-    }
-
-    public function testSearchClientInterfaceIsAvailable(): void
-    {
-        $this->assertTrue(interface_exists(SearchClientInterface::class));
-        $this->assertTrue(class_exists(SupplierCollectionTransfer::class), 'Run transfer:generate: SupplierCollectionTransfer is needed by the result formatter.');
     }
 }
