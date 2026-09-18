@@ -18,6 +18,12 @@ suites:
         modules:
             enabled:
                 - Asserts
+    PublishSync:
+        path: PublishSync
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
     Business:
         path: Business
         actor: SupplierBusinessTester

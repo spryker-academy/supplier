@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SprykerAcademy\Client\SupplierSearch;
 
-use Generated\Shared\Transfer\SupplierTransfer;
-use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\SupplierSearchResultFormatterPlugin;
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
@@ -15,17 +16,16 @@ class SupplierSearchClient extends AbstractClient implements SupplierSearchClien
      * {@inheritDoc}
      *
      * @api
+     *
+     * @param array<string, mixed> $requestParameters
+     *
+     * @return \Generated\Shared\Transfer\SupplierCollectionTransfer
      */
-    public function getSupplierByName(string $name): ?SupplierTransfer
+    public function searchSuppliers(array $requestParameters = []): SupplierCollectionTransfer
     {
-        // TODO-1: Create the search query plugin through the factory
+        // TODO-1: Delegate to the SupplierSearchReader to search suppliers.
+        // Hint-1: Use $this->getFactory()->createSupplierSearchReader()->searchSuppliers($requestParameters)
 
-        // TODO-2: Get the result formatter plugins from the factory
-
-        // TODO-3: Use the SearchClient to perform the search with the query and formatters
-
-        // TODO-4: Extract and return the supplier from the formatted search results
-
-        return null;
+        return new SupplierCollectionTransfer();
     }
 }

@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
+
 namespace SprykerAcademy\Zed\SupplierSearch\Business;
 
-use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
-use SprykerAcademy\Zed\SupplierSearch\SupplierSearchDependencyProvider;
-use SprykerAcademy\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
+use SprykerAcademy\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter;
+use SprykerAcademy\Zed\SupplierSearch\SupplierSearchDependencyProvider;
 
 /**
  * @method \SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface getRepository()
@@ -40,6 +47,6 @@ class SupplierSearchBusinessFactory extends AbstractBusinessFactory
      */
     public function getSupplierFacade(): SupplierFacadeInterface
     {
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::FACADE_ANTELOPE);
+        return $this->getProvidedDependency(SupplierSearchDependencyProvider::FACADE_SUPPLIER);
     }
 }
