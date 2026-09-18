@@ -77,6 +77,10 @@ class SupplierDataImportTest extends Unit
 
     public function testImportSupplierTriggersSupplierPublishEventWhenPublishing(): void
     {
+        if (!class_exists(SupplierSearchConfig::class)) {
+            $this->markTestSkipped('Publish events are part of the Publish & Synchronize exercise (intermediate/publish-synchronize).');
+        }
+
         $dataSet = $this->createSupplierDataSet();
         $supplierWriterStep = new SupplierWriterStep();
 
