@@ -12,10 +12,10 @@ use SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter\Su
 
 class SupplierSearchDependencyProvider extends AbstractDependencyProvider
 {
-    public const CLIENT_SEARCH = 'CLIENT_SEARCH';
-    public const PLUGIN_SUPPLIER_SEARCH_QUERY = 'PLUGIN_SUPPLIER_SEARCH_QUERY';
-    public const PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER = 'PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER';
-    public const PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER = 'PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER';
+    public const string CLIENT_SEARCH = 'CLIENT_SEARCH';
+    public const string PLUGIN_SUPPLIER_SEARCH_QUERY = 'PLUGIN_SUPPLIER_SEARCH_QUERY';
+    public const string PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER = 'PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER';
+    public const string PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER = 'PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container
