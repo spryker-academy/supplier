@@ -22,19 +22,19 @@ class SupplierMerchantPortalGuiMerchantAclEntityRuleExpanderPlugin extends Abstr
      *
      * @var string
      */
-    protected const SCOPE_GLOBAL = 'global';
+    protected const string SCOPE_GLOBAL = 'global';
 
     /**
      * @uses \Spryker\Shared\AclEntity\AclEntityConstants::OPERATION_MASK_CRUD
      *
      * @var int
      */
-    protected const OPERATION_MASK_CRUD = 0b1111;
+    protected const int OPERATION_MASK_CRUD = 0b1111;
 
     /**
      * @var array<string>
      */
-    protected const SUPPLIER_ENTITIES = [
+    protected const array SUPPLIER_ENTITIES = [
         'Orm\Zed\Supplier\Persistence\PyzSupplier',
         'Orm\Zed\Supplier\Persistence\PyzMerchantToSupplier',
         'Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocation',

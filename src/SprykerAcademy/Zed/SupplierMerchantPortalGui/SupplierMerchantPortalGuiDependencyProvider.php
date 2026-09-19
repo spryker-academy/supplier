@@ -14,43 +14,43 @@ class SupplierMerchantPortalGuiDependencyProvider extends AbstractBundleDependen
     /**
      * @var string
      */
-    public const FACADE_MERCHANT_USER = 'FACADE_MERCHANT_USER';
+    public const string FACADE_MERCHANT_USER = 'FACADE_MERCHANT_USER';
 
     /**
      * @var string
      */
-    public const FACADE_SUPPLIER = 'FACADE_SUPPLIER';
+    public const string FACADE_SUPPLIER = 'FACADE_SUPPLIER';
 
     /**
      * @uses \Spryker\Zed\GuiTable\Communication\Plugin\Application\GuiTableApplicationPlugin::SERVICE_GUI_TABLE_HTTP_DATA_REQUEST_EXECUTOR
      *
      * @var string
      */
-    public const SERVICE_GUI_TABLE_HTTP_DATA_REQUEST_EXECUTOR = 'gui_table_http_data_request_executor';
+    public const string SERVICE_GUI_TABLE_HTTP_DATA_REQUEST_EXECUTOR = 'gui_table_http_data_request_executor';
 
     /**
      * @uses \Spryker\Zed\GuiTable\Communication\Plugin\Application\GuiTableApplicationPlugin::SERVICE_GUI_TABLE_FACTORY
      *
      * @var string
      */
-    public const SERVICE_GUI_TABLE_FACTORY = 'gui_table_factory';
+    public const string SERVICE_GUI_TABLE_FACTORY = 'gui_table_factory';
 
     /**
      * @uses \Spryker\Zed\ZedUi\Communication\Plugin\Application\ZedUiApplicationPlugin::SERVICE_ZED_UI_FACTORY
      *
      * @var string
      */
-    public const SERVICE_ZED_UI_FACTORY = 'SERVICE_ZED_UI_FACTORY';
+    public const string SERVICE_ZED_UI_FACTORY = 'SERVICE_ZED_UI_FACTORY';
 
     /**
      * @var string
      */
-    public const PROPEL_QUERY_SUPPLIER = 'PROPEL_QUERY_SUPPLIER';
+    public const string PROPEL_QUERY_SUPPLIER = 'PROPEL_QUERY_SUPPLIER';
 
     /**
      * @var string
      */
-    public const PROPEL_QUERY_MERCHANT_TO_SUPPLIER = 'PROPEL_QUERY_MERCHANT_TO_SUPPLIER';
+    public const string PROPEL_QUERY_MERCHANT_TO_SUPPLIER = 'PROPEL_QUERY_MERCHANT_TO_SUPPLIER';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
