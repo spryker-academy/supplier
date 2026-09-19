@@ -13,42 +13,42 @@ class SupplierGuiTableConfigurationProvider
     /**
      * @var string
      */
-    public const COL_KEY_ID_SUPPLIER = 'idSupplier';
+    public const string COL_KEY_ID_SUPPLIER = 'idSupplier';
 
     /**
      * @var string
      */
-    public const COL_KEY_NAME = 'name';
+    public const string COL_KEY_NAME = 'name';
 
     /**
      * @var string
      */
-    public const COL_KEY_DESCRIPTION = 'description';
+    public const string COL_KEY_DESCRIPTION = 'description';
 
     /**
      * @var string
      */
-    public const COL_KEY_STATUS = 'status';
+    public const string COL_KEY_STATUS = 'status';
 
     /**
      * @var string
      */
-    public const COL_KEY_EMAIL = 'email';
+    public const string COL_KEY_EMAIL = 'email';
 
     /**
      * @var string
      */
-    public const COL_KEY_PHONE = 'phone';
+    public const string COL_KEY_PHONE = 'phone';
 
     /**
      * @var string
      */
-    protected const DATA_URL = '/supplier-merchant-portal-gui/supplier/table-data';
+    protected const string DATA_URL = '/supplier-merchant-portal-gui/supplier/table-data';
 
     /**
      * @var string
      */
-    protected const ROW_ACTION_URL_UPDATE = '/supplier-merchant-portal-gui/update-supplier?id-supplier=${row.idSupplier}';
+    protected const string ROW_ACTION_URL_UPDATE = '/supplier-merchant-portal-gui/update-supplier?id-supplier=${row.idSupplier}';
 
     public function __construct(
         protected GuiTableFactoryInterface $guiTableFactory,
