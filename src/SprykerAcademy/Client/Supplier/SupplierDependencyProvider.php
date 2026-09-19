@@ -14,8 +14,8 @@ use Spryker\Client\Kernel\Container;
 
 class SupplierDependencyProvider extends AbstractDependencyProvider
 {
-    public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
-    public const CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
+    public const string CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
+    public const string CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container

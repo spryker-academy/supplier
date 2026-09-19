@@ -13,5 +13,5 @@ class SuppliersApiConfig extends AbstractBundleConfig
      *
      * @var string
      */
-    public const RESOURCE_SUPPLIERS = 'suppliers';
+    public const string RESOURCE_SUPPLIERS = 'suppliers';
 }
