@@ -20,7 +20,7 @@ class SupplierStorageReader
     /**
      * @var string
      */
-    protected const RESOURCE_NAME = 'supplier';
+    protected const string RESOURCE_NAME = 'supplier';
 
     /**
      * @var \Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface|null

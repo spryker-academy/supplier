@@ -9,7 +9,7 @@ use Spryker\Client\Kernel\Container;
 
 class SupplierLocationDependencyProvider extends AbstractDependencyProvider
 {
-    public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
+    public const string CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
 
     public function provideServiceLayerDependencies(Container $container): Container
     {
