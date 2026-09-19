@@ -12,12 +12,12 @@ class SupplierPageRouteProviderPlugin extends AbstractRouteProviderPlugin
     /**
      * @var string
      */
-    public const ROUTE_SUPPLIER_LIST = 'supplier-list';
+    public const string ROUTE_SUPPLIER_LIST = 'supplier-list';
 
     /**
      * @var string
      */
-    public const ROUTE_SUPPLIER_DETAIL = 'supplier-detail';
+    public const string ROUTE_SUPPLIER_DETAIL = 'supplier-detail';
 
     public function addRoutes(RouteCollection $routeCollection): RouteCollection
     {

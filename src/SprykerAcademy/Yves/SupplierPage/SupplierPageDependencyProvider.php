@@ -18,7 +18,7 @@ use Spryker\Yves\Kernel\Container;
 class SupplierPageDependencyProvider extends AbstractBundleDependencyProvider
 {
     // TODO: Add constant for the client dependency name
-    // public const CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
+    // public const string CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
