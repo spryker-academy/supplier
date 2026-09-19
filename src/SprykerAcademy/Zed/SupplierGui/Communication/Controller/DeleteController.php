@@ -21,13 +21,13 @@ use Throwable;
  */
 class DeleteController extends AbstractController
 {
-    protected const URL_SUPPLIER_OVERVIEW = '/supplier-gui';
+    protected const string URL_SUPPLIER_OVERVIEW = '/supplier-gui';
 
-    public const REQUEST_PARAM_ID_SUPPLIER = 'id-supplier';
+    public const string REQUEST_PARAM_ID_SUPPLIER = 'id-supplier';
 
-    protected const MESSAGE_SUPPLIER_DELETED_SUCCESS = 'Supplier was successfully deleted.';
+    protected const string MESSAGE_SUPPLIER_DELETED_SUCCESS = 'Supplier was successfully deleted.';
 
-    protected const MESSAGE_SUPPLIER_DELETE_FAILED = 'Supplier could not be deleted.';
+    protected const string MESSAGE_SUPPLIER_DELETE_FAILED = 'Supplier could not be deleted.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
