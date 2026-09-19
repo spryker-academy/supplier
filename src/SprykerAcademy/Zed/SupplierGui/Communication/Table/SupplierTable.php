@@ -20,23 +20,23 @@ use SprykerAcademy\Zed\SupplierGui\Communication\Controller\EditController;
 
 class SupplierTable extends AbstractTable
 {
-    public const COL_ID_SUPPLIER = PyzSupplierTableMap::COL_ID_SUPPLIER;
+    public const string COL_ID_SUPPLIER = PyzSupplierTableMap::COL_ID_SUPPLIER;
 
-    public const COL_NAME = PyzSupplierTableMap::COL_NAME;
+    public const string COL_NAME = PyzSupplierTableMap::COL_NAME;
 
-    public const COL_DESCRIPTION = PyzSupplierTableMap::COL_DESCRIPTION;
+    public const string COL_DESCRIPTION = PyzSupplierTableMap::COL_DESCRIPTION;
 
-    public const COL_STATUS = PyzSupplierTableMap::COL_STATUS;
+    public const string COL_STATUS = PyzSupplierTableMap::COL_STATUS;
 
-    public const COL_EMAIL = PyzSupplierTableMap::COL_EMAIL;
+    public const string COL_EMAIL = PyzSupplierTableMap::COL_EMAIL;
 
-    public const COL_PHONE = PyzSupplierTableMap::COL_PHONE;
+    public const string COL_PHONE = PyzSupplierTableMap::COL_PHONE;
 
-    protected const COL_ACTIONS = 'actions';
+    protected const string COL_ACTIONS = 'actions';
 
-    protected const URL_SUPPLIER_EDIT = '/supplier-gui/edit';
+    protected const string URL_SUPPLIER_EDIT = '/supplier-gui/edit';
 
-    protected const URL_SUPPLIER_DELETE = '/supplier-gui/delete';
+    protected const string URL_SUPPLIER_DELETE = '/supplier-gui/delete';
 
     /**
      * @param \Orm\Zed\Supplier\Persistence\PyzSupplierQuery $supplierQuery
