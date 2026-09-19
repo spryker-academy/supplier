@@ -18,14 +18,14 @@ class SupplierMerchantPortalGuiMerchantAclRuleExpanderPlugin extends AbstractPlu
      *
      * @var string
      */
-    protected const RULE_VALIDATOR_WILDCARD = '*';
+    protected const string RULE_VALIDATOR_WILDCARD = '*';
 
     /**
      * @uses \Spryker\Shared\Acl\AclConstants::ALLOW
      *
      * @var string
      */
-    protected const RULE_TYPE_ALLOW = 'allow';
+    protected const string RULE_TYPE_ALLOW = 'allow';
 
     /**
      * @param list<\Generated\Shared\Transfer\RuleTransfer> $ruleTransfers

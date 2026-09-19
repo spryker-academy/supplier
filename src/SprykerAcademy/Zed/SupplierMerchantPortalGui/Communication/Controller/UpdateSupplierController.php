@@ -17,12 +17,12 @@ class UpdateSupplierController extends AbstractController
     /**
      * @var string
      */
-    protected const PARAM_ID_SUPPLIER = 'id-supplier';
+    protected const string PARAM_ID_SUPPLIER = 'id-supplier';
 
     /**
      * @var string
      */
-    protected const MESSAGE_SUPPLIER_UPDATED = 'Supplier updated successfully.';
+    protected const string MESSAGE_SUPPLIER_UPDATED = 'Supplier updated successfully.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request

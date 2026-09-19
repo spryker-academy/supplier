@@ -14,8 +14,8 @@ use Spryker\Zed\Kernel\Container;
 
 class SupplierStorageDependencyProvider extends AbstractBundleDependencyProvider
 {
-    public const FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
-    public const FACADE_SUPPLIER = 'FACADE_SUPPLIER';
+    public const string FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
+    public const string FACADE_SUPPLIER = 'FACADE_SUPPLIER';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container

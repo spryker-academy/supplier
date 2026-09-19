@@ -14,8 +14,8 @@ use Spryker\Client\Kernel\Container;
 
 class SupplierStorageDependencyProvider extends AbstractDependencyProvider
 {
-    public const CLIENT_STORAGE = 'CLIENT_STORAGE';
-    public const SERVICE_SYNCHRONIZATION = 'SERVICE_SYNCHRONIZATION';
+    public const string CLIENT_STORAGE = 'CLIENT_STORAGE';
+    public const string SERVICE_SYNCHRONIZATION = 'SERVICE_SYNCHRONIZATION';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container
