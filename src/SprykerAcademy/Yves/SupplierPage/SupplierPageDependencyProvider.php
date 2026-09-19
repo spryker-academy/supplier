@@ -11,7 +11,7 @@ class SupplierPageDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
+    public const string CLIENT_SUPPLIER_SEARCH = 'CLIENT_SUPPLIER_SEARCH';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
