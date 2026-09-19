@@ -19,7 +19,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const SUPPLIER_PUBLISH_STORAGE_QUEUE = 'publish.storage.supplier';
+    public const string SUPPLIER_PUBLISH_STORAGE_QUEUE = 'publish.storage.supplier';
 
     /**
      * Specification:
@@ -29,7 +29,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const SUPPLIER_SYNC_STORAGE_QUEUE = 'sync.storage.supplier';
+    public const string SUPPLIER_SYNC_STORAGE_QUEUE = 'sync.storage.supplier';
 
     /**
      * Specification:
@@ -39,7 +39,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const SUPPLIER_RESOURCE_NAME = 'supplier';
+    public const string SUPPLIER_RESOURCE_NAME = 'supplier';
 
     /**
      * Specification:
@@ -49,7 +49,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const SUPPLIER_PUBLISH = 'SupplierStorage.supplier.publish';
+    public const string SUPPLIER_PUBLISH = 'SupplierStorage.supplier.publish';
 
     /**
      * Specification:
@@ -59,7 +59,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const ENTITY_PYZ_SUPPLIER_CREATE = 'Entity.pyz_supplier.create';
+    public const string ENTITY_PYZ_SUPPLIER_CREATE = 'Entity.pyz_supplier.create';
 
     /**
      * Specification:
@@ -69,7 +69,7 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const ENTITY_PYZ_SUPPLIER_UPDATE = 'Entity.pyz_supplier.update';
+    public const string ENTITY_PYZ_SUPPLIER_UPDATE = 'Entity.pyz_supplier.update';
 
     /**
      * Specification:
@@ -79,5 +79,5 @@ interface SupplierStorageConfig
      *
      * @var string
      */
-    public const ENTITY_PYZ_SUPPLIER_DELETE = 'Entity.pyz_supplier.delete';
+    public const string ENTITY_PYZ_SUPPLIER_DELETE = 'Entity.pyz_supplier.delete';
 }
