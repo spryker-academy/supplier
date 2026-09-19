@@ -13,32 +13,32 @@ class SupplierLocationGuiTableConfigurationProvider
     /**
      * @var string
      */
-    public const COL_KEY_CITY = 'city';
+    public const string COL_KEY_CITY = 'city';
 
     /**
      * @var string
      */
-    public const COL_KEY_COUNTRY = 'country';
+    public const string COL_KEY_COUNTRY = 'country';
 
     /**
      * @var string
      */
-    public const COL_KEY_ADDRESS = 'address';
+    public const string COL_KEY_ADDRESS = 'address';
 
     /**
      * @var string
      */
-    public const COL_KEY_ZIP_CODE = 'zipCode';
+    public const string COL_KEY_ZIP_CODE = 'zipCode';
 
     /**
      * @var string
      */
-    public const COL_KEY_IS_DEFAULT = 'isDefault';
+    public const string COL_KEY_IS_DEFAULT = 'isDefault';
 
     /**
      * @var string
      */
-    protected const FORM_INPUT_NAME = 'supplierForm[locations]';
+    protected const string FORM_INPUT_NAME = 'supplierForm[locations]';
 
     public function __construct(
         protected GuiTableFactoryInterface $guiTableFactory,

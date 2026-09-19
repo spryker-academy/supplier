@@ -21,7 +21,7 @@ class SupplierConfig extends AbstractSharedConfig
      *
      * @var string
      */
-    public const ENTITY_SPY_SUPPLIER_CREATE = 'Entity.pyz_supplier.create';
+    public const string ENTITY_SPY_SUPPLIER_CREATE = 'Entity.pyz_supplier.create';
 
     /**
      * Specification:
@@ -31,7 +31,7 @@ class SupplierConfig extends AbstractSharedConfig
      *
      * @var string
      */
-    public const ENTITY_SPY_SUPPLIER_UPDATE = 'Entity.pyz_supplier.update';
+    public const string ENTITY_SPY_SUPPLIER_UPDATE = 'Entity.pyz_supplier.update';
 
     /**
      * Specification:
@@ -41,7 +41,7 @@ class SupplierConfig extends AbstractSharedConfig
      *
      * @var string
      */
-    public const ENTITY_SPY_SUPPLIER_DELETE = 'Entity.pyz_supplier.delete';
+    public const string ENTITY_SPY_SUPPLIER_DELETE = 'Entity.pyz_supplier.delete';
 
     /**
      * Specification:
@@ -51,5 +51,5 @@ class SupplierConfig extends AbstractSharedConfig
      *
      * @var string
      */
-    public const SUPPLIER_SYNC_STORAGE_QUEUE = 'sync.storage.supplier';
+    public const string SUPPLIER_SYNC_STORAGE_QUEUE = 'sync.storage.supplier';
 }
