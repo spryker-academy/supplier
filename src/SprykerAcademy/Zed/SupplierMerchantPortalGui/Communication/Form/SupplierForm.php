@@ -20,27 +20,27 @@ class SupplierForm extends AbstractType
     /**
      * @var string
      */
-    public const FIELD_NAME = 'name';
+    public const string FIELD_NAME = 'name';
 
     /**
      * @var string
      */
-    public const FIELD_DESCRIPTION = 'description';
+    public const string FIELD_DESCRIPTION = 'description';
 
     /**
      * @var string
      */
-    public const FIELD_EMAIL = 'email';
+    public const string FIELD_EMAIL = 'email';
 
     /**
      * @var string
      */
-    public const FIELD_PHONE = 'phone';
+    public const string FIELD_PHONE = 'phone';
 
     /**
      * @var string
      */
-    public const FIELD_IS_ACTIVE = 'isActive';
+    public const string FIELD_IS_ACTIVE = 'isActive';
 
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver

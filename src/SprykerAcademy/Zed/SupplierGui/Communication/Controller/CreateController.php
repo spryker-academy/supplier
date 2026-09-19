@@ -25,19 +25,19 @@ use Throwable;
  */
 class CreateController extends AbstractController
 {
-    protected const URL_SUPPLIER_OVERVIEW = '/supplier-gui';
+    protected const string URL_SUPPLIER_OVERVIEW = '/supplier-gui';
 
-    protected const URL_SUPPLIER_CREATE = '/supplier-gui/create';
+    protected const string URL_SUPPLIER_CREATE = '/supplier-gui/create';
 
-    protected const MESSAGE_SUPPLIER_CREATED_SUCCESS = 'Supplier was successfully created.';
+    protected const string MESSAGE_SUPPLIER_CREATED_SUCCESS = 'Supplier was successfully created.';
 
-    protected const MESSAGE_SUPPLIER_EXISTS = 'Supplier with this name already exists.';
+    protected const string MESSAGE_SUPPLIER_EXISTS = 'Supplier with this name already exists.';
 
-    protected const MESSAGE_SUPPLIER_CREATE_FAILED = 'Supplier could not be created.';
+    protected const string MESSAGE_SUPPLIER_CREATE_FAILED = 'Supplier could not be created.';
 
-    protected const STATUS_ACTIVE = 1;
+    protected const int STATUS_ACTIVE = 1;
 
-    protected const STATUS_INACTIVE = 0;
+    protected const int STATUS_INACTIVE = 0;
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request

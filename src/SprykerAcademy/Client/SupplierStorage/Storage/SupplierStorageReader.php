@@ -19,7 +19,7 @@ class SupplierStorageReader
     /**
      * @var string
      */
-    protected const RESOURCE_NAME = 'supplier';
+    protected const string RESOURCE_NAME = 'supplier';
 
     /**
      * Cached storage key builder for performance optimization.

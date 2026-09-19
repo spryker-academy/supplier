@@ -16,7 +16,7 @@ class CreateSupplierController extends AbstractController
     /**
      * @var string
      */
-    protected const MESSAGE_SUPPLIER_CREATED = 'Supplier created successfully.';
+    protected const string MESSAGE_SUPPLIER_CREATED = 'Supplier created successfully.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
