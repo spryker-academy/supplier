@@ -7,7 +7,7 @@ namespace SprykerAcademy\Glue\Supplier\Api\Storefront\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Generated\Shared\Transfer\SupplierTransfer;
-use SprykerAcademy\Client\Supplier\SupplierClientInterface;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
 use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
 
 /**
@@ -15,9 +15,9 @@ use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
  */
 class SuppliersStorefrontProvider implements ProviderInterface
 {
-    // TODO-1: Inject the SupplierClientInterface via constructor.
-    // Hint-1: The Storefront API uses the Client layer to access data (not the Facade).
-    // Hint-2: API Platform auto-wires constructor dependencies, so just type-hint the interface.
+    // TODO-1: Inject the SupplierSearchClientInterface via the constructor.
+    // Hint-1: The search exercise exposes supplier lookup through SupplierSearchClient.
+    // Hint-2: API Platform auto-wires constructor dependencies, so type-hint the interface.
     public function __construct()
     {
     }
@@ -30,8 +30,8 @@ class SuppliersStorefrontProvider implements ProviderInterface
 
         if ($idSupplier === null) {
             // TODO-3: Return a supplier collection.
-            // Hint-1: Use $this->supplierClient->getSuppliers() to load all suppliers.
-            // Hint-2: Loop through the collection and map each SupplierTransfer to a resource using SupplierMapper.
+            // Hint-1: Use $this->supplierSearchClient->searchSuppliers() to load all suppliers.
+            // Hint-2: Loop through SupplierCollectionTransfer::getSuppliers() and map each SupplierTransfer.
             return [];
         }
 
@@ -40,7 +40,7 @@ class SuppliersStorefrontProvider implements ProviderInterface
         }
 
         // TODO-4: Load the supplier by identifier.
-        // Hint-1: Use $this->supplierClient->findSupplierById((int)$idSupplier).
+        // Hint-1: Use $this->supplierSearchClient->findSupplierById((int)$idSupplier).
         $supplierTransfer = null;
 
         if (!$supplierTransfer instanceof SupplierTransfer || $supplierTransfer->getIdSupplier() === null) {
