@@ -8,7 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Generated\Api\Storefront\SuppliersStorefrontResource;
 use Generated\Shared\Transfer\SupplierTransfer;
-use SprykerAcademy\Client\Supplier\SupplierClientInterface;
+use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
 use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
 
 /**
@@ -17,7 +17,7 @@ use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
 class SuppliersStorefrontProvider implements ProviderInterface
 {
     public function __construct(
-        protected SupplierClientInterface $supplierClient,
+        protected SupplierSearchClientInterface $supplierSearchClient,
 
     ) {
     }
@@ -34,7 +34,7 @@ class SuppliersStorefrontProvider implements ProviderInterface
             return null;
         }
 
-        $supplierTransfer = $this->supplierClient->findSupplierById((int)$idSupplier);
+        $supplierTransfer = $this->supplierSearchClient->findSupplierById((int)$idSupplier);
 
         if ($supplierTransfer->getIdSupplier() === null) {
             return null;
@@ -48,7 +48,7 @@ class SuppliersStorefrontProvider implements ProviderInterface
      */
     protected function provideCollection(): array
     {
-        $supplierCollectionTransfer = $this->supplierClient->getSuppliers();
+        $supplierCollectionTransfer = $this->supplierSearchClient->searchSuppliers();
         $resources = [];
         $supplierMapper = new SupplierMapper();
         foreach ($supplierCollectionTransfer->getSuppliers() as $supplierTransfer) {
