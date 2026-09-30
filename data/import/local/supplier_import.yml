@@ -1,0 +1,21 @@
+# Import configuration of the supplier exercises.
+#
+#   docker/sdk console data:import --config=data/import/local/supplier_import.yml
+#
+# runs every action below in order; add an importer name to run a single one:
+#
+#   docker/sdk console data:import supplier --config=data/import/local/supplier_import.yml
+#
+# data_entity is the import type of a DataImportPlugin (SupplierDataImportConfig::IMPORT_TYPE_*),
+# source is the CSV file, relative to the project root. Locations refer to suppliers by name,
+# so suppliers come first.
+version: 0
+
+actions:
+  # TODO: Add one action per importer, suppliers first:
+  #   - data_entity must be the value of SupplierDataImportConfig::IMPORT_TYPE_SUPPLIER,
+  #     source must point to data/import/supplier.csv
+  #   - data_entity must be the value of SupplierDataImportConfig::IMPORT_TYPE_SUPPLIER_LOCATION,
+  #     source must point to data/import/supplier_location.csv
+  # Look at data/import/local/full_EU.yml for the format.
+  []
