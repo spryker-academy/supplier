@@ -64,7 +64,9 @@ class SupplierDataImportTest extends Unit
 
         $descriptionToLowercaseStep->execute($dataSet);
         $supplierWriterStep->execute($dataSet);
-        $supplierWriterStep->afterExecute();
+        if (method_exists($supplierWriterStep, 'afterExecute')) {
+            $supplierWriterStep->afterExecute(); // PublishAwareStep, from the Publish & Synchronize exercise on
+        }
 
         $supplierEntity = PyzSupplierQuery::create()
             ->filterByName(static::SUPPLIER_NAME)
@@ -77,11 +79,17 @@ class SupplierDataImportTest extends Unit
 
     public function testImportSupplierTriggersSupplierPublishEventWhenPublishing(): void
     {
+        if (!class_exists(SupplierSearchConfig::class)) {
+            $this->markTestSkipped('Publish events are part of the Publish & Synchronize exercise (intermediate/publish-synchronize).');
+        }
+
         $dataSet = $this->createSupplierDataSet();
         $supplierWriterStep = new SupplierWriterStep();
 
         $supplierWriterStep->execute($dataSet);
-        $supplierWriterStep->afterExecute();
+        if (method_exists($supplierWriterStep, 'afterExecute')) {
+            $supplierWriterStep->afterExecute(); // PublishAwareStep, from the Publish & Synchronize exercise on
+        }
 
         $supplierEntity = PyzSupplierQuery::create()
             ->filterByName(static::SUPPLIER_NAME)
