@@ -5,12 +5,11 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace SprykerAcademy\Zed\SupplierDataImport\Business\DataImportStep;
 
 use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
 use Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocationQuery;
+use Override;
 use Spryker\Zed\DataImport\Business\Exception\EntityNotFoundException;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
 use Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface;
@@ -29,14 +28,16 @@ class SupplierLocationWriterStep implements DataImportStepInterface
      */
     public function __construct(
         protected PyzSupplierQuery $supplierQuery,
-        protected PyzSupplierLocationQuery $supplierLocationQuery,
+        protected PyzSupplierLocationQuery $supplierLocationQuery
     ) {
     }
 
     /**
      * @param \Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface $dataSet
+     *
+     * @return void
      */
-    #[\Override]
+    #[Override]
     public function execute(DataSetInterface $dataSet): void
     {
         $supplierName = $dataSet[SupplierLocationDataSetInterface::COLUMN_SUPPLIER_NAME];
@@ -58,17 +59,17 @@ class SupplierLocationWriterStep implements DataImportStepInterface
         $supplierLocationEntity->setZipCode($zipCode);
         $supplierLocationEntity->setIsDefault($isDefault);
 
-        if (!$supplierLocationEntity->isNew() && !$supplierLocationEntity->isModified()) {
-            return;
+        if ($supplierLocationEntity->isNew() || $supplierLocationEntity->isModified()) {
+            $supplierLocationEntity->save();
         }
-
-        $supplierLocationEntity->save();
     }
 
     /**
      * @param string $supplierName
      *
      * @throws \Spryker\Zed\DataImport\Business\Exception\EntityNotFoundException
+     *
+     * @return int
      */
     protected function getSupplierId(string $supplierName): int
     {

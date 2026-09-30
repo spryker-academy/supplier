@@ -79,6 +79,7 @@ class EditController extends AbstractController
         $supplierTransfer->setStatus(
             $supplierCreateForm->get(SupplierCreateForm::FIELD_IS_ACTIVE)->getData() ? static::STATUS_ACTIVE : static::STATUS_INACTIVE,
         );
+
         try {
             $this->getFactory()->getSupplierFacade()->updateSupplier($supplierTransfer);
         } catch (Throwable) {
