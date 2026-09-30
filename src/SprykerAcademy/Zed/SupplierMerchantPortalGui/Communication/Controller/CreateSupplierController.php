@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Controller;
 
@@ -11,35 +16,33 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * Serves the "Add Supplier" drawer. The drawer's ajax form expects JSON: `form` holds the rendered
+ * form, and after a successful submit the ZedUi actions tell it to notify, close and refresh.
+ *
  * @method \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\SupplierMerchantPortalGuiCommunicationFactory getFactory()
  */
 class CreateSupplierController extends AbstractController
 {
-    /**
-     * @var string
-     */
     protected const string MESSAGE_SUPPLIER_CREATED = 'Supplier created successfully.';
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * The table-id of <web-mp-supplier-list> in Presentation/Supplier/index.twig.
      */
+    protected const string ID_TABLE_SUPPLIER_LIST = 'web-mp-supplier-list';
+
     public function indexAction(Request $request): JsonResponse
     {
         $supplierFormDataProvider = $this->getFactory()->createSupplierFormDataProvider();
-        $supplierTransfer = $supplierFormDataProvider->getData();
-
-        $supplierForm = $this->getFactory()->createSupplierForm($supplierTransfer, $supplierFormDataProvider->getOptions());
+        $supplierForm = $this->getFactory()->createSupplierForm(
+            $supplierFormDataProvider->getData(),
+            $supplierFormDataProvider->getOptions(),
+        );
         $supplierForm->handleRequest($request);
 
         if ($supplierForm->isSubmitted() && $supplierForm->isValid()) {
-            /** @var \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer */
-            $supplierTransfer = $supplierForm->getData();
-
             $supplierTransfer = $this->getFactory()
                 ->getSupplierFacade()
-                ->createSupplier($supplierTransfer);
+                ->createSupplier($supplierForm->getData());
 
             $this->linkSupplierToCurrentMerchant($supplierTransfer);
 
@@ -48,23 +51,21 @@ class CreateSupplierController extends AbstractController
                 ->createZedUiFormResponseBuilder()
                 ->addSuccessNotification(static::MESSAGE_SUPPLIER_CREATED)
                 ->addActionCloseDrawer()
-                ->addActionRefreshTable()
+                ->addActionRefreshTable(static::ID_TABLE_SUPPLIER_LIST)
                 ->createResponse();
 
-            return new JsonResponse($zedUiFormResponseTransfer->toArray());
+            return new JsonResponse($zedUiFormResponseTransfer->toArray(true, true));
         }
 
-        return new JsonResponse(
-            $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
+        return new JsonResponse([
+            'form' => $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
                 'form' => $supplierForm->createView(),
             ])->getContent(),
-        );
+        ]);
     }
 
     /**
-     * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
-     *
-     * @return void
+     * A supplier the merchant creates belongs to that merchant: link it through pyz_merchant_to_supplier.
      */
     protected function linkSupplierToCurrentMerchant(SupplierTransfer $supplierTransfer): void
     {
@@ -73,9 +74,9 @@ class CreateSupplierController extends AbstractController
             ->getCurrentMerchantUser()
             ->getMerchantOrFail();
 
-        $merchantToSupplier = new PyzMerchantToSupplier();
-        $merchantToSupplier->setFkMerchant($merchantTransfer->getIdMerchantOrFail());
-        $merchantToSupplier->setFkSupplier($supplierTransfer->getIdSupplierOrFail());
-        $merchantToSupplier->save();
+        (new PyzMerchantToSupplier())
+            ->setFkMerchant($merchantTransfer->getIdMerchantOrFail())
+            ->setFkSupplier($supplierTransfer->getIdSupplierOrFail())
+            ->save();
     }
 }

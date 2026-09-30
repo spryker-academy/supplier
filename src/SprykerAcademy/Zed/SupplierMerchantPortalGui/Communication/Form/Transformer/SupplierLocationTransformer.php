@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\Transformer;
 
@@ -8,34 +13,38 @@ use ArrayObject;
 use Generated\Shared\Transfer\SupplierLocationTransfer;
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * The editable locations table writes the rows the merchant adds into the hidden form field
+ * supplierForm[locations], as a JSON array of objects keyed by the column ids
+ * (city, country, address, zipCode, isDefault).
+ *
+ * @implements \Symfony\Component\Form\DataTransformerInterface<\ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>, string>
+ */
 class SupplierLocationTransformer implements DataTransformerInterface
 {
     /**
-     * Transforms SupplierLocationTransfer[] to array for the editable table.
+     * Transfers -> JSON for the hidden field.
      *
      * @param \ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>|null $value
-     *
-     * @return array<int, array<string, mixed>>
      */
-    public function transform(mixed $value): array
+    public function transform(mixed $value): string
     {
-        // TODO: Convert SupplierLocationTransfer[] to array of arrays
-        // Each array should have: idSupplierLocation, city, country, address, zipCode, isDefault
+        // TODO-1: Turn the SupplierLocationTransfer objects of $value (null when there are none) into a list of arrays
+        //         with the keys city, country, address, zipCode and isDefault, and return it as JSON (json_encode()).
 
-        return [];
+        return '[]';
     }
 
     /**
-     * Transforms submitted table data back to SupplierLocationTransfer[].
-     *
-     * @param array<int, array<string, mixed>>|null $value
+     * JSON of the submitted table rows -> transfers.
      *
      * @return \ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>
      */
     public function reverseTransform(mixed $value): ArrayObject
     {
-        // TODO: Convert submitted array data to SupplierLocationTransfer[]
-        // Create a SupplierLocationTransfer for each row with: city, country, address, zipCode, isDefault
+        // TODO-2: $value is the JSON the table wrote (or null). Decode it and append a SupplierLocationTransfer for every
+        //         row: city, country, address, zipCode, and isDefault as a boolean
+        //         (filter_var($row['isDefault'] ?? false, FILTER_VALIDATE_BOOLEAN)).
 
         return new ArrayObject();
     }

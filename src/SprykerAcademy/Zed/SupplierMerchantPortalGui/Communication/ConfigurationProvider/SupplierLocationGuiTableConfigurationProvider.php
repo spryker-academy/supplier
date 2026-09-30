@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider;
 
 use Generated\Shared\Transfer\GuiTableConfigurationTransfer;
+use Generated\Shared\Transfer\GuiTableDataResponseTransfer;
 use Generated\Shared\Transfer\GuiTableEditableButtonTransfer;
 use Spryker\Shared\GuiTable\GuiTableFactoryInterface;
 
@@ -46,15 +47,20 @@ class SupplierLocationGuiTableConfigurationProvider
     }
 
     /**
-     * @param array<mixed> $initialData
-     *
-     * @return \Generated\Shared\Transfer\GuiTableConfigurationTransfer
+     * @param \Generated\Shared\Transfer\GuiTableDataResponseTransfer $existingLocations The supplier's saved locations, listed read-only.
+     * @param list<array<string, mixed>> $initialData New rows a failed submit sends back, so they are not lost.
      */
-    public function getConfiguration(array $initialData = []): GuiTableConfigurationTransfer
+    public function getConfiguration(GuiTableDataResponseTransfer $existingLocations, array $initialData = []): GuiTableConfigurationTransfer
     {
         $guiTableConfigurationBuilder = $this->guiTableFactory->createConfigurationBuilder();
 
-        // Provided: a GuiTable needs at least one regular column. The editable inputs you add below are rendered on top of these columns.
+        $existingRows = [];
+        foreach ($existingLocations->getRows() as $guiTableRowDataResponseTransfer) {
+            $existingRows[] = $guiTableRowDataResponseTransfer->getResponseData();
+        }
+        $guiTableConfigurationBuilder->setDataSourceInlineData($existingRows);
+
+        // A GuiTable needs at least one regular column. The editable inputs below are rendered on top of these columns.
         $guiTableConfigurationBuilder
             ->addColumnText(static::COL_KEY_CITY, 'City', false, false)
             ->addColumnText(static::COL_KEY_COUNTRY, 'Country', false, false)
@@ -62,15 +68,17 @@ class SupplierLocationGuiTableConfigurationProvider
             ->addColumnText(static::COL_KEY_ZIP_CODE, 'Zip Code', false, false)
             ->addColumnText(static::COL_KEY_IS_DEFAULT, 'Default', false, false);
 
-        // TODO: Add editable columns using $guiTableConfigurationBuilder->addEditableColumnInput()
-        // Hint: COL_KEY_CITY => 'City', type 'text'
-        // Hint: COL_KEY_COUNTRY => 'Country', type 'text'
-        // Hint: COL_KEY_ADDRESS => 'Address', type 'text'
-        // Hint: COL_KEY_ZIP_CODE => 'Zip Code', type 'text'
-        // Hint: COL_KEY_IS_DEFAULT => 'Default', type 'checkbox'
+        // TODO-1: Declare the form input of every column with addEditableColumnInput(<column id>, <title>, <type>):
+        //         text inputs for COL_KEY_CITY, COL_KEY_COUNTRY, COL_KEY_ADDRESS and COL_KEY_ZIP_CODE,
+        //         a checkbox for COL_KEY_IS_DEFAULT.
 
-        // TODO: Enable adding new rows using $guiTableConfigurationBuilder->enableAddingNewRows()
-        // Hint: Pass FORM_INPUT_NAME, $initialData, and button configs for Add/Cancel
+        // TODO-2: Let the merchant add rows. The table writes them into the form input FORM_INPUT_NAME:
+        //         $guiTableConfigurationBuilder->enableAddingNewRows(
+        //             static::FORM_INPUT_NAME,
+        //             $initialData,
+        //             [GuiTableEditableButtonTransfer::TITLE => 'Add Location', GuiTableEditableButtonTransfer::VARIANT => 'outline'],
+        //             [GuiTableEditableButtonTransfer::TITLE => 'Cancel', GuiTableEditableButtonTransfer::VARIANT => 'outline'],
+        //         );
 
         return $guiTableConfigurationBuilder->createConfiguration();
     }

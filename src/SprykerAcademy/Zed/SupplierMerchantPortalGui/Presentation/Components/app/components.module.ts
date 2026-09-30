@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { WebComponentsModule } from '@spryker/web-components';
-import { ButtonLinkModule, ButtonLinkComponent } from '@spryker/button';
-import { CardModule, CardComponent } from '@spryker/card';
+import { ButtonActionComponent, ButtonActionModule } from '@spryker/button.action';
+import { CardComponent, CardModule } from '@spryker/card';
 
 import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { SupplierListModule } from './supplier-list/supplier-list.module';
@@ -14,14 +14,13 @@ import { SupplierLocationsTableModule } from './supplier-locations-table/supplie
     imports: [
         WebComponentsModule.withComponents([
             SupplierListComponent,
-            ButtonLinkComponent,
+            ButtonActionComponent,
             EditSupplierComponent,
             CardComponent,
-            // TODO: Register SupplierLocationsTableComponent as a web component
-            // Hint: Add SupplierLocationsTableComponent to the array above
+            // TODO: Register SupplierLocationsTableComponent (<web-mp-supplier-locations-table>)
         ]),
         SupplierListModule,
-        ButtonLinkModule,
+        ButtonActionModule,
         EditSupplierModule,
         CardModule,
         SupplierLocationsTableModule,

@@ -13,4 +13,9 @@
         <property name="searchTerm" type="string"/>
     </transfer>
 
+    <!-- The locations the merchant adds in the edit drawer (exercise 17) -->
+    <transfer name="Supplier">
+        <property name="locations" type="SupplierLocation[]" singular="location"/>
+    </transfer>
+
 </transfers>

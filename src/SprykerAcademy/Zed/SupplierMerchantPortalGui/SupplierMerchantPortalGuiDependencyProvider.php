@@ -21,6 +21,8 @@ class SupplierMerchantPortalGuiDependencyProvider extends AbstractBundleDependen
      */
     public const string FACADE_SUPPLIER = 'FACADE_SUPPLIER';
 
+    public const string FACADE_SUPPLIER_LOCATION = 'FACADE_SUPPLIER_LOCATION';
+
     /**
      * @uses \Spryker\Zed\GuiTable\Communication\Plugin\Application\GuiTableApplicationPlugin::SERVICE_GUI_TABLE_HTTP_DATA_REQUEST_EXECUTOR
      *
@@ -61,6 +63,7 @@ class SupplierMerchantPortalGuiDependencyProvider extends AbstractBundleDependen
     {
         $container = $this->addMerchantUserFacade($container);
         $container = $this->addSupplierFacade($container);
+        $container = $this->addSupplierLocationFacade($container);
         $container = $this->addGuiTableHttpDataRequestExecutor($container);
         $container = $this->addGuiTableFactory($container);
         $container = $this->addZedUiFactory($container);
@@ -114,6 +117,15 @@ class SupplierMerchantPortalGuiDependencyProvider extends AbstractBundleDependen
      *
      * @return \Spryker\Zed\Kernel\Container
      */
+    protected function addSupplierLocationFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_SUPPLIER_LOCATION, function (Container $container) {
+            return $container->getLocator()->supplierLocation()->facade();
+        });
+
+        return $container;
+    }
+
     protected function addGuiTableHttpDataRequestExecutor(Container $container): Container
     {
         $container->set(static::SERVICE_GUI_TABLE_HTTP_DATA_REQUEST_EXECUTOR, function (Container $container) {
