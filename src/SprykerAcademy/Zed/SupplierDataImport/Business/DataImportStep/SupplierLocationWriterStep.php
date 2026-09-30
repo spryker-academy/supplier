@@ -38,6 +38,9 @@ class SupplierLocationWriterStep implements DataImportStepInterface
      * @return void
      */
     #[Override]
+    /**
+     * The injected queries are templates: a Propel query keeps its filters, so every row works on a clone.
+     */
     public function execute(DataSetInterface $dataSet): void
     {
         $supplierName = $dataSet[SupplierLocationDataSetInterface::COLUMN_SUPPLIER_NAME];
@@ -49,7 +52,7 @@ class SupplierLocationWriterStep implements DataImportStepInterface
 
         $supplierId = $this->getSupplierId($supplierName);
 
-        $supplierLocationEntity = $this->supplierLocationQuery
+        $supplierLocationEntity = (clone $this->supplierLocationQuery)
             ->filterByFkSupplier($supplierId)
             ->filterByAddress($address)
             ->findOneOrCreate();
@@ -77,7 +80,7 @@ class SupplierLocationWriterStep implements DataImportStepInterface
             return static::$supplierCache[$supplierName];
         }
 
-        $supplierEntity = $this->supplierQuery
+        $supplierEntity = (clone $this->supplierQuery)
             ->clear()
             ->filterByName($supplierName)
             ->findOne();
