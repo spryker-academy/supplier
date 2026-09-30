@@ -1,56 +1,45 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Controller;
 
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Serves the "Edit" drawer of a supplier table row.
+ *
  * @method \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\SupplierMerchantPortalGuiCommunicationFactory getFactory()
  */
 class UpdateSupplierController extends AbstractController
 {
-    /**
-     * @var string
-     */
     protected const string PARAM_ID_SUPPLIER = 'id-supplier';
 
-    /**
-     * @var string
-     */
     protected const string MESSAGE_SUPPLIER_UPDATED = 'Supplier updated successfully.';
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * The table-id of <web-mp-supplier-list> in Presentation/Supplier/index.twig.
      */
+    protected const string ID_TABLE_SUPPLIER_LIST = 'web-mp-supplier-list';
+
     public function indexAction(Request $request): JsonResponse
     {
-        // TODO: Implement update supplier form handling
-        // 1. Get id-supplier from request
-        // 2. Get SupplierFormDataProvider, call getData($idSupplier) for existing transfer
-        // 3. Validate supplier exists (throw NotFoundHttpException if not)
-        // 4. Create form, handle request
-        // 5. If submitted and valid:
-        //    - Update supplier via facade
-        //    - Return JsonResponse with ZedUI actions
-        // 6. Otherwise: render the form template
+        // TODO-1: Read the supplier id from the request: $this->castId($request->get(static::PARAM_ID_SUPPLIER))
+        // TODO-2: Load the supplier with the form data provider's getData($idSupplier).
+        //         When its idSupplier is null, throw a NotFoundHttpException.
+        // TODO-3: Create the form with the loaded supplier and let it handle the request.
+        // TODO-4: When it is submitted and valid, save it with the facade's updateSupplier() and return the ZedUi
+        //         actions as CreateSupplierController does (MESSAGE_SUPPLIER_UPDATED).
+        // TODO-5: Otherwise return new JsonResponse(['form' => <the rendered _supplier_form.twig>]) - see CreateSupplierController.
 
-        $idSupplier = $this->castId($request->get(static::PARAM_ID_SUPPLIER));
-        $supplierFormDataProvider = $this->getFactory()->createSupplierFormDataProvider();
-        $supplierForm = $this->getFactory()->createSupplierForm(
-            $supplierFormDataProvider->getData($idSupplier),
-            $supplierFormDataProvider->getOptions(),
-        );
-
-        return new JsonResponse(
-            $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
-                'form' => $supplierForm->createView(),
-            ])->getContent(),
-        );
+        throw new NotFoundHttpException('TODO: implement UpdateSupplierController::indexAction()');
     }
 }

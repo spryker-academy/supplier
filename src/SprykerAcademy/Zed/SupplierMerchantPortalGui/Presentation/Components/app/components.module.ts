@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { WebComponentsModule } from '@spryker/web-components';
-import { ButtonLinkModule, ButtonLinkComponent } from '@spryker/button';
-import { CardModule, CardComponent } from '@spryker/card';
+import { ButtonActionComponent, ButtonActionModule } from '@spryker/button.action';
+import { CardComponent, CardModule } from '@spryker/card';
 
 import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { SupplierListModule } from './supplier-list/supplier-list.module';
@@ -12,12 +12,12 @@ import { EditSupplierModule } from './edit-supplier/edit-supplier.module';
     imports: [
         WebComponentsModule.withComponents([
             SupplierListComponent,
-            ButtonLinkComponent,
-            // TODO: Register EditSupplierComponent and CardComponent as web components
-            // Hint: Add EditSupplierComponent, CardComponent to the array
+            ButtonActionComponent,
+            // TODO: Register EditSupplierComponent (<web-mp-edit-supplier>, the drawer content) and
+            //       CardComponent (<web-spy-card>, the cards of the form template)
         ]),
         SupplierListModule,
-        ButtonLinkModule,
+        ButtonActionModule,
         EditSupplierModule,
         CardModule,
     ],

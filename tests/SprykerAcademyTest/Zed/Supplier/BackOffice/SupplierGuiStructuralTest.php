@@ -182,8 +182,8 @@ class SupplierGuiStructuralTest extends Unit
     public function testNavigationXmlExists(): void
     {
         $paths = [
-            __DIR__ . '/../../../../../config/Zed/navigation.xml',
-            getcwd() . '/config/Zed/navigation.xml',
+            __DIR__ . '/../../../../../src/SprykerAcademy/Zed/SupplierGui/Communication/navigation.xml',
+            getcwd() . '/src/SprykerAcademy/Zed/SupplierGui/Communication/navigation.xml',
         ];
 
         $found = false;
@@ -199,7 +199,7 @@ class SupplierGuiStructuralTest extends Unit
             }
         }
 
-        $this->assertTrue($found, 'config/Zed/navigation.xml must exist.');
+        $this->assertTrue($found, 'src/SprykerAcademy/Zed/SupplierGui/Communication/navigation.xml must exist.');
     }
 
     // --- Twig Templates ---

@@ -62,7 +62,7 @@ class SupplierForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // TODO: Add form fields using $builder->add()
+        // TODO: Add the form fields with $builder->add()
         // Hint: FIELD_NAME => TextType (required, NotBlank constraint)
         // Hint: FIELD_DESCRIPTION => TextareaType (optional)
         // Hint: FIELD_EMAIL => EmailType (required, NotBlank constraint)

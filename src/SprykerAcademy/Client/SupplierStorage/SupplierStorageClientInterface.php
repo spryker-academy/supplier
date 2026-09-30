@@ -9,28 +9,25 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Client\SupplierStorage;
 
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
+use Generated\Shared\Transfer\SupplierTransfer;
+
 interface SupplierStorageClientInterface
 {
     /**
      * Specification:
-     * - Finds supplier data in storage by supplier ID.
-     * - Returns supplier data or null if not found.
+     * - Reads the supplier from the key-value storage (Redis), key "supplier:{idSupplier}".
+     * - Returns null when the supplier is not in the storage.
      *
      * @api
-     *
-     * @param int $idSupplier
-     *
-     * @return array<string, mixed>|null
      */
-    public function findSupplierStorageData(int $idSupplier): ?array;
+    public function findSupplierById(int $idSupplier): ?SupplierTransfer;
 
     /**
      * Specification:
-     * - Returns all suppliers from storage.
+     * - Reads every supplier from the key-value storage (Redis).
      *
      * @api
-     *
-     * @return array<array<string, mixed>>
      */
-    public function getAllSuppliers(): array;
+    public function getAllSuppliers(): SupplierCollectionTransfer;
 }
