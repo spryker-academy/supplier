@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Controller;
 
@@ -10,27 +15,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Serves the "Edit" drawer of a supplier table row.
+ *
  * @method \SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\SupplierMerchantPortalGuiCommunicationFactory getFactory()
  */
 class UpdateSupplierController extends AbstractController
 {
-    /**
-     * @var string
-     */
     protected const string PARAM_ID_SUPPLIER = 'id-supplier';
 
-    /**
-     * @var string
-     */
     protected const string MESSAGE_SUPPLIER_UPDATED = 'Supplier updated successfully.';
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * The table-id of <web-mp-supplier-list> in Presentation/Supplier/index.twig.
      */
+    protected const string ID_TABLE_SUPPLIER_LIST = 'web-mp-supplier-list';
+
     public function indexAction(Request $request): JsonResponse
     {
         $idSupplier = $this->castId($request->get(static::PARAM_ID_SUPPLIER));
@@ -55,16 +54,16 @@ class UpdateSupplierController extends AbstractController
                 ->createZedUiFormResponseBuilder()
                 ->addSuccessNotification(static::MESSAGE_SUPPLIER_UPDATED)
                 ->addActionCloseDrawer()
-                ->addActionRefreshTable()
+                ->addActionRefreshTable(static::ID_TABLE_SUPPLIER_LIST)
                 ->createResponse();
 
-            return new JsonResponse($zedUiFormResponseTransfer->toArray());
+            return new JsonResponse($zedUiFormResponseTransfer->toArray(true, true));
         }
 
-        return new JsonResponse(
-            $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
+        return new JsonResponse([
+            'form' => $this->renderView('@SupplierMerchantPortalGui/Partials/_supplier_form.twig', [
                 'form' => $supplierForm->createView(),
             ])->getContent(),
-        );
+        ]);
     }
 }
