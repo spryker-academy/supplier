@@ -3,7 +3,7 @@
     <supplier-merchant-portal-gui>
         <label>Suppliers</label>
         <title>Suppliers</title>
-        <icon>handshake</icon>
+        <icon>contracts</icon>
         <bundle>supplier-merchant-portal-gui</bundle>
         <controller>supplier</controller>
         <action>index</action>

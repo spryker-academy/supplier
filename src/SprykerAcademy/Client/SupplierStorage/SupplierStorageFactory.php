@@ -14,14 +14,8 @@ use Spryker\Client\Storage\StorageClientInterface;
 use Spryker\Service\Synchronization\SynchronizationServiceInterface;
 use SprykerAcademy\Client\SupplierStorage\Storage\SupplierStorageReader;
 
-/**
- * @method \SprykerAcademy\Client\SupplierStorage\SupplierStorageConfig getConfig()
- */
 class SupplierStorageFactory extends AbstractFactory
 {
-    /**
-     * @return \SprykerAcademy\Client\SupplierStorage\Storage\SupplierStorageReader
-     */
     public function createSupplierStorageReader(): SupplierStorageReader
     {
         return new SupplierStorageReader(
@@ -30,17 +24,11 @@ class SupplierStorageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\Storage\StorageClientInterface
-     */
     public function getStorageClient(): StorageClientInterface
     {
         return $this->getProvidedDependency(SupplierStorageDependencyProvider::CLIENT_STORAGE);
     }
 
-    /**
-     * @return \Spryker\Service\Synchronization\SynchronizationServiceInterface
-     */
     public function getSynchronizationService(): SynchronizationServiceInterface
     {
         return $this->getProvidedDependency(SupplierStorageDependencyProvider::SERVICE_SYNCHRONIZATION);
