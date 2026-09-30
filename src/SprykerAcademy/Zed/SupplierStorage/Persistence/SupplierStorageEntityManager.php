@@ -28,15 +28,21 @@ class SupplierStorageEntityManager extends AbstractEntityManager implements Supp
     {
         $supplierStorageEntity = new PyzSupplierStorage();
 
-        // TODO: Use SupplierStorageMapper to map transfer to entity.
-        // Hint: $supplierStorageEntity = $this->getFactory()->...
+        $supplierStorageEntity = $this->getFactory()
+            ->createSupplierStorageMapper()
+            ->mapSupplierStorageTransferToSupplierStorageEntity(
+                $supplierStorageTransfer,
+                $supplierStorageEntity,
+            );
 
         $supplierStorageEntity->save();
 
-        // TODO: Use SupplierStorageMapper to map entity to transfer.
-        // Hint: return $this->getFactory()->...
-
-        return $supplierStorageTransfer;
+        return $this->getFactory()
+            ->createSupplierStorageMapper()
+            ->mapSupplierStorageEntityToSupplierStorageTransfer(
+                $supplierStorageEntity,
+                $supplierStorageTransfer,
+            );
     }
 
     /**
@@ -62,14 +68,20 @@ class SupplierStorageEntityManager extends AbstractEntityManager implements Supp
             );
         }
 
-        // TODO: Use SupplierStorageMapper to map transfer to entity.
-        // Hint: $supplierStorageEntity = $this->getFactory()->...
+        $supplierStorageEntity = $this->getFactory()
+            ->createSupplierStorageMapper()
+            ->mapSupplierStorageTransferToSupplierStorageEntity(
+                $supplierStorageTransfer,
+                $supplierStorageEntity,
+            );
 
         $supplierStorageEntity->save();
 
-        // TODO: Use SupplierStorageMapper to map entity to transfer.
-        // Hint: return $this->getFactory()->...
-
-        return $supplierStorageTransfer;
+        return $this->getFactory()
+            ->createSupplierStorageMapper()
+            ->mapSupplierStorageEntityToSupplierStorageTransfer(
+                $supplierStorageEntity,
+                $supplierStorageTransfer,
+            );
     }
 }

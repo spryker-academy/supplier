@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Client\SupplierSearch;
 
 use Generated\Shared\Transfer\SupplierCollectionTransfer;
+use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
@@ -12,20 +13,17 @@ use Spryker\Client\Kernel\AbstractClient;
  */
 class SupplierSearchClient extends AbstractClient implements SupplierSearchClientInterface
 {
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param array<string, mixed> $requestParameters
-     *
-     * @return \Generated\Shared\Transfer\SupplierCollectionTransfer
-     */
     public function searchSuppliers(array $requestParameters = []): SupplierCollectionTransfer
     {
-        // TODO-1: Delegate to the SupplierSearchReader to search suppliers.
-        // Hint-1: Use $this->getFactory()->createSupplierSearchReader()->searchSuppliers($requestParameters)
+        return $this->getFactory()
+            ->createSupplierSearchReader()
+            ->searchSuppliers($requestParameters);
+    }
 
-        return new SupplierCollectionTransfer();
+    public function findSupplierById(int $idSupplier): SupplierTransfer
+    {
+        return $this->getFactory()
+            ->createSupplierSearchReader()
+            ->findSupplierById($idSupplier);
     }
 }

@@ -1,54 +1,51 @@
 <?php
 
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
 declare(strict_types = 1);
 
 namespace SprykerAcademy\Glue\Supplier\Api\Storefront\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Generated\Shared\Transfer\SupplierTransfer;
+use Generated\Api\Storefront\SuppliersStorefrontResource;
 use SprykerAcademy\Client\SupplierSearch\SupplierSearchClientInterface;
 use SprykerAcademy\Glue\Supplier\Processor\Mapper\SupplierMapper;
 
 /**
- * @implements \ApiPlatform\State\ProviderInterface<object>
+ * Serves GET /suppliers and GET /suppliers/{idSupplier} from Elasticsearch, through the
+ * SupplierSearch client of exercise 11. API Platform builds the provider with Symfony's
+ * dependency injection, so the client arrives through the constructor.
  */
 class SuppliersStorefrontProvider implements ProviderInterface
 {
-    // TODO-1: Inject the SupplierSearchClientInterface via the constructor.
-    // Hint-1: The search exercise exposes supplier lookup through SupplierSearchClient.
-    // Hint-2: API Platform auto-wires constructor dependencies, so type-hint the interface.
-    public function __construct()
+    public function __construct(protected SupplierSearchClientInterface $supplierSearchClient)
     {
     }
 
+    /**
+     * @param \ApiPlatform\Metadata\Operation $operation
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return array<\Generated\Api\Storefront\SuppliersStorefrontResource>|\Generated\Api\Storefront\SuppliersStorefrontResource|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        // TODO-2: Read the supplier identifier from uri variables.
-        // Hint-1: Use the resource identifier key from `suppliers.resource.yml` (e.g., 'idSupplier').
-        $idSupplier = $uriVariables['idSupplier'] ?? null;
+        // TODO-1: Read the supplier id from $uriVariables. The key is the property marked `identifier: true`
+        //         in suppliers.resource.yml.
+        // TODO-2: No id means a collection request (GET /suppliers): load the suppliers with
+        //         $this->supplierSearchClient->searchSuppliers(), map every SupplierTransfer of
+        //         getSuppliers() to a resource and return the array.
+        // TODO-3: With an id (GET /suppliers/{idSupplier}): load the supplier with
+        //         $this->supplierSearchClient->findSupplierById((int)$idSupplier).
+        // TODO-4: The client returns an empty SupplierTransfer when the id is unknown - return null then,
+        //         API Platform answers with a 404.
+        // TODO-5: Map the SupplierTransfer to a SuppliersStorefrontResource with the provided SupplierMapper.
 
-        if ($idSupplier === null) {
-            // TODO-3: Return a supplier collection.
-            // Hint-1: Use $this->supplierSearchClient->searchSuppliers() to load all suppliers.
-            // Hint-2: Loop through SupplierCollectionTransfer::getSuppliers() and map each SupplierTransfer.
-            return [];
-        }
-
-        if (!is_numeric($idSupplier)) {
-            return null;
-        }
-
-        // TODO-4: Load the supplier by identifier.
-        // Hint-1: Use $this->supplierSearchClient->findSupplierById((int)$idSupplier).
-        $supplierTransfer = null;
-
-        if (!$supplierTransfer instanceof SupplierTransfer || $supplierTransfer->getIdSupplier() === null) {
-            return null;
-        }
-
-        // TODO-5: Return a mapped API Platform resource.
-        // Hint-1: Use (new SupplierMapper())->mapSupplierTransferToSuppliersStorefrontResource($supplierTransfer).
         return null;
     }
 }

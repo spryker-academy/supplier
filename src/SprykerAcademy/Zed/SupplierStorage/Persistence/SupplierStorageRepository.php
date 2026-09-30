@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\SupplierStorage\Persistence;
 
 use Generated\Shared\Transfer\SupplierStorageCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierStorageTransfer;
 use Orm\Zed\SupplierStorage\Persistence\PyzSupplierStorageQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
@@ -34,8 +35,16 @@ class SupplierStorageRepository extends AbstractRepository implements SupplierSt
 
         $supplierStorageEntities = $supplierStorageQuery->find();
 
-        // TODO: Use SupplierStorageMapper to map entities to transfers.
-        // Hint: iterate over $supplierStorageEntities and map each entity.
-        return [];
+        $supplierStorageTransfers = [];
+        foreach ($supplierStorageEntities as $supplierStorageEntity) {
+            $supplierStorageTransfers[] = $this->getFactory()
+                ->createSupplierStorageMapper()
+                ->mapSupplierStorageEntityToSupplierStorageTransfer(
+                    $supplierStorageEntity,
+                    new SupplierStorageTransfer(),
+                );
+        }
+
+        return $supplierStorageTransfers;
     }
 }

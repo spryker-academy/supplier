@@ -13,7 +13,6 @@ use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchTransfer;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
-use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface;
@@ -59,11 +58,8 @@ readonly class SupplierSearchWriter
         );
 
         foreach ($supplierTransfersIndexed as $supplierId => $supplierTransfer) {
-            // TODO-1: Structure the search data properly for Elasticsearch.
-            // Hint-1: Create an array with keys: 'type', 'id_supplier', 'name', 'search-result-data', 'full-text', 'full-text-boosted', 'suggestion-terms', 'completion-terms'.
-            // Hint-2: Use constants from SupplierSearchConfig instead of magic strings.
-            // Hint-3: Example: SupplierSearchConfig::KEY_TYPE => SupplierSearchConfig::SUPPLIER_RESOURCE_TYPE
-            // Hint-4: The 'search-result-data' key should contain $supplierTransfer->toArray()
+            // The document matches src/SprykerAcademy/Shared/SupplierSearch/Schema/supplier.json:
+            // id_supplier, name, description, status, email, phone.
             $searchData = $supplierTransfer->toArray();
 
             $supplierSearchTransfer = $supplierSearchTransfersIndexed[$supplierId] ?? new SupplierSearchTransfer();
@@ -93,7 +89,7 @@ readonly class SupplierSearchWriter
             return [];
         }
 
-        $supplierCriteriaTransfer = (new SupplierCriteriaTransfer())
+        $supplierCriteriaTransfer = new SupplierCriteriaTransfer()
             ->setIdsSupplier($supplierIds);
         $supplierTransfers = $this->supplierFacade
             ->getSuppliers($supplierCriteriaTransfer);
@@ -123,7 +119,7 @@ readonly class SupplierSearchWriter
             return [];
         }
 
-        $supplierSearchCriteriaTransfer = (new SupplierSearchCriteriaTransfer())
+        $supplierSearchCriteriaTransfer = new SupplierSearchCriteriaTransfer()
             ->setFksSupplier($supplierIds);
         $supplierSearchTransfers = $this->supplierSearchRepository
             ->getSupplierSearches($supplierSearchCriteriaTransfer);
