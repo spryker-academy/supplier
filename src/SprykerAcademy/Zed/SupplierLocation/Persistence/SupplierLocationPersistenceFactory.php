@@ -1,22 +1,16 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierLocation\Persistence;
 
-use Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocationQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
-use SprykerAcademy\Zed\SupplierLocation\Persistence\Propel\Mapper\SupplierLocationMapper;
 
 class SupplierLocationPersistenceFactory extends AbstractPersistenceFactory
 {
-    public function createSupplierLocationQuery(): PyzSupplierLocationQuery
-    {
-        return PyzSupplierLocationQuery::create();
-    }
-
-    public function createSupplierLocationMapper(): SupplierLocationMapper
-    {
-        return new SupplierLocationMapper();
-    }
 }

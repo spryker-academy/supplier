@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Client\SupplierStorage\Storage;
 
@@ -13,155 +13,86 @@ use Generated\Shared\Transfer\SynchronizationDataTransfer;
 use Spryker\Client\Storage\StorageClientInterface;
 use Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface;
 use Spryker\Service\Synchronization\SynchronizationServiceInterface;
-use Spryker\Service\UtilEncoding\UtilEncodingServiceInterface;
 
+/**
+ * Reads the supplier documents that Publish & Synchronize wrote to Redis ("supplier:{idSupplier}").
+ */
 class SupplierStorageReader
 {
     /**
-     * @var string
+     * The `resource` parameter of the synchronization behavior in pyz_supplier_storage.schema.xml.
      */
     protected const string RESOURCE_NAME = 'supplier';
 
-    /**
-     * @var \Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface|null
-     */
     protected static ?SynchronizationKeyGeneratorPluginInterface $storageKeyBuilder = null;
 
-    /**
-     * @param \Spryker\Client\Storage\StorageClientInterface $storageClient
-     * @param \Spryker\Service\Synchronization\SynchronizationServiceInterface $synchronizationService
-     * @param \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface $utilEncodingService
-     */
     public function __construct(
         protected StorageClientInterface $storageClient,
         protected SynchronizationServiceInterface $synchronizationService,
-        protected UtilEncodingServiceInterface $utilEncodingService,
     ) {
     }
 
     /**
-     * @param int $idSupplier
-     *
      * @return array<string, mixed>|null
      */
     public function findSupplierStorageData(int $idSupplier): ?array
     {
-        $key = $this->generateStorageKey($idSupplier);
-
-        $supplierStorageData = $this->storageClient->get($key);
-
-        if (!$supplierStorageData) {
-            return null;
-        }
-
-        return $supplierStorageData;
+        return $this->getDataByKey($this->generateStorageKey($idSupplier));
     }
 
     /**
-     * @param int $idSupplier
-     *
-     * @return string
+     * @return list<array<string, mixed>>
      */
+    public function getAllSuppliers(): array
+    {
+        $suppliers = [];
+
+        foreach ($this->storageClient->getKeys($this->generateStorageKeyPattern()) as $key) {
+            // getKeys() returns the keys with the storage prefix ("kv:supplier:1"), get() adds it itself
+            $supplierData = $this->getDataByKey((string)preg_replace('/^kv:/', '', $key));
+
+            if ($supplierData !== null) {
+                $suppliers[] = $supplierData;
+            }
+        }
+
+        return $suppliers;
+    }
+
     protected function generateStorageKey(int $idSupplier): string
     {
-        $synchronizationDataTransfer = new SynchronizationDataTransfer()
+        $synchronizationDataTransfer = (new SynchronizationDataTransfer())
             ->setReference((string)$idSupplier);
 
         return $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
     }
 
-    /**
-     * @return \Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface
-     */
+    protected function generateStorageKeyPattern(): string
+    {
+        $synchronizationDataTransfer = (new SynchronizationDataTransfer())
+            ->setReference('*');
+
+        return $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
+    }
+
     protected function getStorageKeyBuilder(): SynchronizationKeyGeneratorPluginInterface
     {
         if (static::$storageKeyBuilder === null) {
-            static::$storageKeyBuilder = $this->synchronizationService
-                ->getStorageKeyBuilder(static::RESOURCE_NAME);
+            static::$storageKeyBuilder = $this->synchronizationService->getStorageKeyBuilder(static::RESOURCE_NAME);
         }
 
         return static::$storageKeyBuilder;
     }
 
     /**
-     * @param array<int> $supplierIds
+     * StorageClient::get() decodes the JSON document already.
      *
-     * @return array<array<string, mixed>>
+     * @return array<string, mixed>|null
      */
-    public function getSuppliersByIds(array $supplierIds): array
+    protected function getDataByKey(string $key): ?array
     {
-        if (!$supplierIds) {
-            return [];
-        }
+        $supplierData = $this->storageClient->get($key);
 
-        $storageKeys = array_map(
-            fn(int $id): string => $this->generateStorageKey($id),
-            $supplierIds,
-        );
-
-        $storageData = $this->storageClient->getMulti($storageKeys);
-
-        $decodedData = [];
-        foreach ($storageData as $storageDataItem) {
-            if (!$storageDataItem) {
-                continue;
-            }
-
-            $decodedItem = $this->utilEncodingService->decodeJson($storageDataItem, true);
-
-            if (!$decodedItem) {
-                continue;
-            }
-
-            $decodedData[] = $decodedItem;
-        }
-
-        return $decodedData;
-    }
-
-    /**
-     * @return array<array<string, mixed>>
-     */
-    public function getAllSuppliers(): array
-    {
-        $pattern = $this->generateStorageKeyPattern();
-
-        $keys = $this->storageClient->getKeys($pattern);
-
-        if (!$keys) {
-            return [];
-        }
-
-        $keys = array_map(static fn(string $key) => preg_replace('/^kv:/', '', $key), $keys);
-
-        $storageData = $this->storageClient->getMulti($keys);
-
-        $decodedData = [];
-        foreach ($storageData as $storageDataItem) {
-            if (!$storageDataItem) {
-                continue;
-            }
-
-            $decodedItem = $this->utilEncodingService->decodeJson($storageDataItem, true);
-
-            if (!$decodedItem) {
-                continue;
-            }
-
-            $decodedData[] = $decodedItem;
-        }
-
-        return $decodedData;
-    }
-
-    /**
-     * @return string
-     */
-    protected function generateStorageKeyPattern(): string
-    {
-        $synchronizationDataTransfer = new SynchronizationDataTransfer()
-            ->setReference('*');
-
-        return $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
+        return is_array($supplierData) ? $supplierData : null;
     }
 }
