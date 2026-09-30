@@ -9,6 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Client\SupplierStorage;
 
+use ArrayObject;
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
+use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\Kernel\AbstractClient;
 
 /**
@@ -20,29 +23,33 @@ class SupplierStorageClient extends AbstractClient implements SupplierStorageCli
      * {@inheritDoc}
      *
      * @api
-     *
-     * @param int $idSupplier
-     *
-     * @return array<string, mixed>|null
      */
-    public function findSupplierStorageData(int $idSupplier): ?array
+    public function findSupplierById(int $idSupplier): ?SupplierTransfer
     {
-        return $this->getFactory()
+        $supplierData = $this->getFactory()
             ->createSupplierStorageReader()
             ->findSupplierStorageData($idSupplier);
+
+        if ($supplierData === null) {
+            return null;
+        }
+
+        return (new SupplierTransfer())->fromArray($supplierData, true);
     }
 
     /**
      * {@inheritDoc}
      *
      * @api
-     *
-     * @return array<array<string, mixed>>
      */
-    public function getAllSuppliers(): array
+    public function getAllSuppliers(): SupplierCollectionTransfer
     {
-        return $this->getFactory()
-            ->createSupplierStorageReader()
-            ->getAllSuppliers();
+        $supplierTransfers = new ArrayObject();
+
+        foreach ($this->getFactory()->createSupplierStorageReader()->getAllSuppliers() as $supplierData) {
+            $supplierTransfers->append((new SupplierTransfer())->fromArray($supplierData, true));
+        }
+
+        return (new SupplierCollectionTransfer())->setSuppliers($supplierTransfers);
     }
 }
