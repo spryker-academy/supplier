@@ -12,8 +12,14 @@ coverage:
     whitelist: { include: ['../../../../src/*'] }
 
 suites:
-    GlueApi:
-        path: GlueApi
+    Search:
+        path: Search
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
+    PublishSync:
+        path: PublishSync
         actor: SupplierBusinessTester
         modules:
             enabled:
@@ -29,3 +35,9 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
+    GlueApi:
+        path: GlueApi
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
