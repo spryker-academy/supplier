@@ -12,6 +12,18 @@ coverage:
     whitelist: { include: ['../../../../src/*'] }
 
 suites:
+    Search:
+        path: Search
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
+    PublishSync:
+        path: PublishSync
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
     Business:
         path: Business
         actor: SupplierBusinessTester
@@ -23,3 +35,24 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
+    GlueApi:
+        path: GlueApi
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
+    Oms:
+        path: Oms
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
+                - \PyzTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\ConfigHelper
+                - \SprykerTest\Shared\Testify\Helper\LocatorHelper
+    StorageClient:
+        path: StorageClient
+        actor: SupplierBusinessTester
+        modules:
+            enabled:
+                - Asserts
