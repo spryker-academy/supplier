@@ -14,23 +14,17 @@ use Spryker\Client\Storage\StorageClientInterface;
 use Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface;
 use Spryker\Service\Synchronization\SynchronizationServiceInterface;
 
+/**
+ * Reads the supplier documents that Publish & Synchronize wrote to Redis ("supplier:{idSupplier}").
+ */
 class SupplierStorageReader
 {
-    // TODO: Add RESOURCE_NAME constant for 'supplier'
-    // Best practice: Use constants for resource identifiers to avoid typos and enable easy refactoring
+    // TODO-1: Add the resource name constant: protected const string RESOURCE_NAME = 'supplier';
+    //         It is the `resource` parameter of the synchronization behavior in pyz_supplier_storage.schema.xml.
 
-    // TODO: Add static cached storage key builder property
-    // Best practice: Cache expensive service lookups in static properties for performance
-    // Hint: protected static ?SynchronizationKeyGeneratorPluginInterface $storageKeyBuilder = null;
+    // TODO-2: Add a static property that caches the key builder:
+    //         protected static ?SynchronizationKeyGeneratorPluginInterface $storageKeyBuilder = null;
 
-    /**
-     * TODO: Use PHP 8.4 constructor property promotion
-     * Best practice: Declare properties directly in constructor parameters using 'protected'
-     * Hint: public function __construct(protected StorageClientInterface $storageClient, ...)
-     *
-     * @param \Spryker\Client\Storage\StorageClientInterface $storageClient
-     * @param \Spryker\Service\Synchronization\SynchronizationServiceInterface $synchronizationService
-     */
     public function __construct(
         protected StorageClientInterface $storageClient,
         protected SynchronizationServiceInterface $synchronizationService,
@@ -38,122 +32,33 @@ class SupplierStorageReader
     }
 
     /**
-     * Finds supplier data from Redis storage by ID.
-     *
-     * TODO: Refactor to use best practices
-     * - Extract key generation to generateStorageKey() method
-     * - Use SynchronizationDataTransfer instead of buildKey()
-     * - Cache the key builder in a static property
-     *
-     * Best practice example:
-     * $synchronizationDataTransfer = (new SynchronizationDataTransfer())
-     *     ->setReference((string)$idSupplier);
-     * $key = $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
-     *
-     * @param int $idSupplier
-     *
      * @return array<string, mixed>|null
      */
     public function findSupplierStorageData(int $idSupplier): ?array
     {
-        $key = $this->synchronizationService
-            ->getStorageKeyBuilder('supplier')
-            ->buildKey((string)$idSupplier);
+        // TODO-3: Build the key with generateStorageKey() and return getDataByKey() for it.
 
-        $supplierStorageData = $this->storageClient->get($key);
-
-        if (!$supplierStorageData) {
-            return null;
-        }
-
-        // Note: StorageClient->get() already json_decodes automatically (see StorageRedisWrapper::get())
-        return $supplierStorageData;
+        return null;
     }
 
     /**
-     * Gets all suppliers from Redis storage.
-     *
-     * TODO: Refactor to use best practices
-     * - Extract pattern generation to generateStorageKeyPattern() method
-     * - Use array_map() and array_filter() instead of foreach loop
-     * - Extract data retrieval to getDataByKey() method
-     *
-     * Best practice example:
-     * $pattern = $this->generateStorageKeyPattern();
-     * $keys = $this->storageClient->getKeys($pattern);
-     * return array_filter(
-     *     array_map(
-     *         fn (string $key): ?array => $this->getDataByKey($key),
-     *         $keys,
-     *     ),
-     * );
-     *
-     * Note: This method scans Redis keys with pattern matching.
-     * For production with large datasets, consider:
-     * - Implementing pagination
-     * - Using Redis SCAN instead of KEYS
-     * - Caching the collection
-     *
-     * @return array<array<string, mixed>>
+     * @return list<array<string, mixed>>
      */
     public function getAllSuppliers(): array
     {
-        $pattern = $this->synchronizationService
-            ->getStorageKeyBuilder('supplier')
-            ->buildKey('*');
+        // TODO-4: Get every key of the pattern generateStorageKeyPattern() with $this->storageClient->getKeys().
+        //         getKeys() returns the keys with the storage prefix ("kv:supplier:1"), strip "kv:" before you read them.
+        //         Read every key with getDataByKey() and leave out the ones that return null.
 
-        $keys = $this->storageClient->getKeys($pattern);
-
-        $suppliers = [];
-        foreach ($keys as $key) {
-            $data = $this->storageClient->get($key);
-
-            if ($data) {
-                // Note: StorageClient->get() already json_decodes automatically
-                $suppliers[] = $data;
-            }
-        }
-
-        return $suppliers;
+        return [];
     }
 
-    // TODO: Add helper methods for best practices implementation:
-    //
-    // protected function generateStorageKey(int $idSupplier): string
-    // {
-    //     $synchronizationDataTransfer = (new SynchronizationDataTransfer())
-    //         ->setReference((string)$idSupplier);
-    //
-    //     return $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
-    // }
-    //
-    // protected function generateStorageKeyPattern(): string
-    // {
-    //     $synchronizationDataTransfer = (new SynchronizationDataTransfer())
-    //         ->setReference('*');
-    //
-    //     return $this->getStorageKeyBuilder()->generateKey($synchronizationDataTransfer);
-    // }
-    //
-    // protected function getStorageKeyBuilder(): SynchronizationKeyGeneratorPluginInterface
-    // {
-    //     if (static::$storageKeyBuilder === null) {
-    //         static::$storageKeyBuilder = $this->synchronizationService
-    //             ->getStorageKeyBuilder(static::RESOURCE_NAME);
-    //     }
-    //
-    //     return static::$storageKeyBuilder;
-    // }
-    //
-    // protected function getDataByKey(string $key): ?array
-    // {
-    //     $data = $this->storageClient->get($key);
-    //
-    //     if (!$data) {
-    //         return null;
-    //     }
-    //
-    //     // Note: StorageClient->get() already json_decodes automatically
-    //     return $data;
-    // }
+    // TODO-5: Add the helper methods:
+    //         - generateStorageKey(int $idSupplier): string - a SynchronizationDataTransfer with the id as reference,
+    //           turned into a key by getStorageKeyBuilder()->generateKey()
+    //         - generateStorageKeyPattern(): string - the same with '*' as reference
+    //         - getStorageKeyBuilder(): SynchronizationKeyGeneratorPluginInterface - creates the builder with
+    //           $this->synchronizationService->getStorageKeyBuilder(static::RESOURCE_NAME) once and caches it
+    //         - getDataByKey(string $key): ?array - $this->storageClient->get($key) returns the decoded
+    //           document; return it when it is an array, null otherwise
 }
