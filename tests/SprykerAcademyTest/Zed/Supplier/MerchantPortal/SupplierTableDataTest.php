@@ -14,6 +14,8 @@ use Generated\Shared\Transfer\SupplierMerchantPortalTableCriteriaTransfer;
 use Orm\Zed\Merchant\Persistence\SpyMerchantQuery;
 use Orm\Zed\Supplier\Persistence\PyzMerchantToSupplier;
 use Orm\Zed\Supplier\Persistence\PyzSupplier;
+use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Persistence\SupplierMerchantPortalGuiPersistenceFactory;
 use SprykerAcademy\Zed\SupplierMerchantPortalGui\Persistence\SupplierMerchantPortalGuiRepository;
 
 /**
@@ -44,7 +46,7 @@ class SupplierTableDataTest extends Unit
             ->setPage(1)
             ->setPageSize(25);
 
-        $guiTableDataResponseTransfer = (new SupplierMerchantPortalGuiRepository())->getSupplierTableData($criteriaTransfer);
+        $guiTableDataResponseTransfer = $this->createRepository()->getSupplierTableData($criteriaTransfer);
 
         $names = [];
         foreach ($guiTableDataResponseTransfer->getRows() as $row) {
@@ -54,6 +56,23 @@ class SupplierTableDataTest extends Unit
         $this->assertSame([$ownSupplier->getName()], $names);
         $this->assertSame(1, $guiTableDataResponseTransfer->getTotal());
         $this->assertNotContains($foreignSupplier->getName(), $names);
+    }
+
+    /**
+     * The repository with a persistence factory that hands out a plain supplier query, so the test does not
+     * depend on the kernel resolving the module's factory and dependency provider.
+     */
+    protected function createRepository(): SupplierMerchantPortalGuiRepository
+    {
+        $repository = new SupplierMerchantPortalGuiRepository();
+        $repository->setFactory(new class extends SupplierMerchantPortalGuiPersistenceFactory {
+            public function getSupplierPropelQuery(): PyzSupplierQuery
+            {
+                return PyzSupplierQuery::create();
+            }
+        });
+
+        return $repository;
     }
 
     protected function createSupplier(string $name): PyzSupplier
