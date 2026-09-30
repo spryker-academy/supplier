@@ -12,46 +12,28 @@ use SprykerAcademy\Client\SupplierSearch\Reader\SupplierSearchReaderInterface;
 
 class SupplierSearchFactory extends AbstractFactory
 {
-    /**
-     * @return \SprykerAcademy\Client\SupplierSearch\Reader\SupplierSearchReaderInterface
-     */
     public function createSupplierSearchReader(): SupplierSearchReaderInterface
     {
-        // TODO-1: Create and return a new SupplierSearchReader.
-        // Hint-1: Pass four parameters to the constructor:
-        //         - $this->getSearchClient()
-        //         - $this->getSupplierSearchQueryPlugin()
-        //         - $this->getSupplierSearchQueryExpanderPlugins()
-        //         - $this->getSupplierSearchResultFormatterPlugins()
-
+        // TODO-1: Pass the query expander plugins and the result formatter plugins instead of the two empty arrays.
+        // Hint: $this->getSupplierSearchQueryExpanderPlugins() and $this->getSupplierSearchResultFormatterPlugins()
         return new SupplierSearchReader(
             $this->getSearchClient(),
             $this->getSupplierSearchQueryPlugin(),
             [],
-            []
+            [],
         );
     }
 
-    /**
-     * @return \Spryker\Client\Search\SearchClientInterface
-     */
     public function getSearchClient(): SearchClientInterface
     {
-        // TODO-2: Get the Search client from provided dependencies.
-        // Hint-1: Use $this->getProvidedDependency(SupplierSearchDependencyProvider::CLIENT_SEARCH)
-
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::CLIENT_SEARCH);
+        // TODO-2: Return the Search client from the provided dependencies.
+        // Hint: $this->getProvidedDependency(SupplierSearchDependencyProvider::CLIENT_SEARCH)
     }
 
-    /**
-     * @return \Spryker\Client\SearchExtension\Dependency\Plugin\QueryInterface
-     */
     public function getSupplierSearchQueryPlugin(): QueryInterface
     {
-        // TODO-3: Get the query plugin from provided dependencies.
-        // Hint-1: Use $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY)
-
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY);
+        // TODO-3: Return the query plugin from the provided dependencies.
+        // Hint: $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGIN_SUPPLIER_SEARCH_QUERY)
     }
 
     /**
@@ -59,10 +41,8 @@ class SupplierSearchFactory extends AbstractFactory
      */
     public function getSupplierSearchQueryExpanderPlugins(): array
     {
-        // TODO-4: Get the query expander plugins from provided dependencies.
-        // Hint-1: Use $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER)
-
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER);
+        // TODO-4: Return the query expander plugins from the provided dependencies.
+        // Hint: $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER)
     }
 
     /**
@@ -70,9 +50,7 @@ class SupplierSearchFactory extends AbstractFactory
      */
     public function getSupplierSearchResultFormatterPlugins(): array
     {
-        // TODO-5: Get the result formatter plugins from provided dependencies.
-        // Hint-1: Use $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER)
-
-        return $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER);
+        // TODO-5: Return the result formatter plugins from the provided dependencies.
+        // Hint: $this->getProvidedDependency(SupplierSearchDependencyProvider::PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER)
     }
 }

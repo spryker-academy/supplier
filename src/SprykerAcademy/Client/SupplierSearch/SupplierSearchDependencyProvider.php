@@ -17,30 +17,16 @@ class SupplierSearchDependencyProvider extends AbstractDependencyProvider
     public const string PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER = 'PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER';
     public const string PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER = 'PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER';
 
-    /**
-     * @param \Spryker\Client\Kernel\Container $container
-     *
-     * @return \Spryker\Client\Kernel\Container
-     */
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
 
-        // TODO-1: Provide the Search client.
-        // Hint-1: Use $container->set() with CLIENT_SEARCH as key
-        // Hint-2: Return a closure: fn(Container $c) => $c->getLocator()->search()->client()
-
-        // TODO-2: Provide the SupplierSearchQueryPlugin.
-        // Hint-1: Use $container->set() with PLUGIN_SUPPLIER_SEARCH_QUERY as key
-        // Hint-2: Return a closure that creates a new SupplierSearchQueryPlugin: fn(): QueryInterface => new SupplierSearchQueryPlugin()
-
-        // TODO-3: Provide the result formatter plugins array.
-        // Hint-1: Use $container->set() with PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER as key
-        // Hint-2: Return a closure with an array containing new SupplierSearchResultFormatterPlugin()
-
-        // TODO-4: Provide the query expander plugins array (empty for now).
-        // Hint-1: Use $container->set() with PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER as key
-        // Hint-2: Return a closure with an empty array: fn(): array => []
+        // Every dependency is registered with $container->set(KEY, closure).
+        // TODO-1: CLIENT_SEARCH - the core Search client.
+        // Hint: $container->set(static::CLIENT_SEARCH, fn (Container $container) => $container->getLocator()->search()->client());
+        // TODO-2: PLUGIN_SUPPLIER_SEARCH_QUERY - a new SupplierSearchQueryPlugin.
+        // TODO-3: PLUGINS_SUPPLIER_SEARCH_RESULT_FORMATTER - an array with a new SupplierSearchResultFormatterPlugin.
+        // TODO-4: PLUGINS_SUPPLIER_SEARCH_QUERY_EXPANDER - an empty array (no query expanders in this exercise).
 
         return $container;
     }
