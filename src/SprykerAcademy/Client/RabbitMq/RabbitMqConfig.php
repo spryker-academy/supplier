@@ -16,9 +16,8 @@ class RabbitMqConfig extends PyzRabbitMqConfig
     protected function getPublishQueueConfiguration(): array
     {
         return array_merge(parent::getPublishQueueConfiguration(), [
-            // TODO: Register supplier publish queues
-            // Hint: Add SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE
-            // Hint: Add SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE
+            SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE,
+            SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE,
         ]);
     }
 
@@ -28,9 +27,8 @@ class RabbitMqConfig extends PyzRabbitMqConfig
     protected function getSynchronizationQueueConfiguration(): array
     {
         return array_merge(parent::getSynchronizationQueueConfiguration(), [
-            // TODO: Register supplier sync queues
-            // Hint: Add SupplierSearchConfig::SUPPLIER_SYNC_SEARCH_QUEUE
-            // Hint: Add SupplierStorageConfig::SUPPLIER_SYNC_STORAGE_QUEUE
+            SupplierSearchConfig::SUPPLIER_SYNC_SEARCH_QUEUE,
+            SupplierStorageConfig::SUPPLIER_SYNC_STORAGE_QUEUE,
         ]);
     }
 }

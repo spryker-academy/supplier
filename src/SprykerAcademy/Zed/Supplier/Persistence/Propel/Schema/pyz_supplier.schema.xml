@@ -14,7 +14,7 @@
         </unique>
         <id-method-parameter value="pyz_supplier_pk_seq"/>
 
-        <!-- TODO: Add the event-behavior -->
+        <!-- TODO: Add the event behavior, so every change of a pyz_supplier row fires an Entity.pyz_supplier.* event. -->
     </table>
 
     <table name="pyz_merchant_to_supplier" idMethod="native" allowPkInsert="true" phpName="PyzMerchantToSupplier">

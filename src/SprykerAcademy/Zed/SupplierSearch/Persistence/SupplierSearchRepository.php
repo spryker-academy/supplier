@@ -25,16 +25,20 @@ class SupplierSearchRepository extends AbstractRepository implements SupplierSea
      */
     public function getSupplierSearches(SupplierSearchCriteriaTransfer $supplierSearchCriteriaTransfer): array
     {
+        if ($supplierSearchCriteriaTransfer->getFksSupplier() === []) {
+            return [];
+        }
+
         $supplierSearchEntities = $this->getFactory()
             ->createSupplierSearchQuery()
             ->filterByFkSupplier_In($supplierSearchCriteriaTransfer->getFksSupplier())
             ->find();
 
         $supplierSearchTransfers = [];
+        $supplierSearchMapper = $this->getFactory()->createSupplierSearchMapper();
 
         foreach ($supplierSearchEntities as $supplierSearchEntity) {
-            $supplierSearchTransfers[] = $this->getFactory()
-                ->createSupplierSearchMapper()
+            $supplierSearchTransfers[] = $supplierSearchMapper
                 ->mapSupplierSearchEntityToSupplierSearchTransfer($supplierSearchEntity, new SupplierSearchTransfer());
         }
 

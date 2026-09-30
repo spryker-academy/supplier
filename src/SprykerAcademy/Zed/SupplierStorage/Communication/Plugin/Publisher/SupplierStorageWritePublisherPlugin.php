@@ -45,10 +45,9 @@ class SupplierStorageWritePublisherPlugin extends AbstractPlugin implements Publ
      */
     public function getSubscribedEvents(): array
     {
-        return [
-            SupplierStorageConfig::SUPPLIER_PUBLISH,
-            SupplierStorageConfig::ENTITY_PYZ_SUPPLIER_CREATE,
-            SupplierStorageConfig::ENTITY_PYZ_SUPPLIER_UPDATE,
-        ];
+        // TODO: Return the events this plugin reacts to: the manual publish event and the entity create and update
+        //       events of pyz_supplier. Use the constants of SupplierStorageConfig.
+
+        return [];
     }
 }
