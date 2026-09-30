@@ -34,6 +34,10 @@ class SupplierStorageReaderTest extends Unit
     {
         parent::setUp();
 
+        if (!property_exists(SupplierStorageReader::class, 'storageKeyBuilder')) {
+            $this->fail('SupplierStorageReader needs the static property $storageKeyBuilder that caches the key builder (guide part 2.2).');
+        }
+
         // the reader caches the key builder in a static property; every test brings its own
         (new ReflectionProperty(SupplierStorageReader::class, 'storageKeyBuilder'))->setValue(null, null);
     }
