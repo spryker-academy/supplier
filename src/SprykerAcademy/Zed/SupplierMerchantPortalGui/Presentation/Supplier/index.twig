@@ -3,17 +3,29 @@
 {% block headTitle %}{{ 'Suppliers' | trans }}{% endblock %}
 
 {% block content %}
+    {# Opens CreateSupplierController's form in a drawer, like a table row action does #}
+    {% set createSupplierAction = {
+        type: 'drawer',
+        component: 'ajax-form',
+        options: {
+            inputs: {
+                action: '/supplier-merchant-portal-gui/create-supplier',
+            },
+        },
+    } %}
+
     <web-mp-supplier-list
         cloak
         table-id="web-mp-supplier-list"
         table-config='{{ guiTableConfiguration(supplierTableConfiguration) }}'>
         <h1 title>{{ 'Suppliers' | trans }}</h1>
-        <web-spy-button-link
-            action
-            url="/supplier-merchant-portal-gui/create-supplier"
+        {# `action` is the button's action config and, being an attribute, also the header slot of the list #}
+        <web-spy-button-action
+            type="button"
             size="lg"
-            variant="primary">
+            variant="primary"
+            action="{{ createSupplierAction | json_encode }}">
             {{ 'Add Supplier' | trans }}
-        </web-spy-button-link>
+        </web-spy-button-action>
     </web-mp-supplier-list>
 {% endblock %}

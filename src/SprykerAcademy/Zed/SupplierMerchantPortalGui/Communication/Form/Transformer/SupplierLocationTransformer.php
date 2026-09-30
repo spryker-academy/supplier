@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\Transformer;
 
@@ -8,66 +13,62 @@ use ArrayObject;
 use Generated\Shared\Transfer\SupplierLocationTransfer;
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * The editable locations table writes the rows the merchant adds into the hidden form field
+ * supplierForm[locations], as a JSON array of objects keyed by the column ids
+ * (city, country, address, zipCode, isDefault).
+ *
+ * @implements \Symfony\Component\Form\DataTransformerInterface<\ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>, string>
+ */
 class SupplierLocationTransformer implements DataTransformerInterface
 {
     /**
-     * Transforms SupplierLocationTransfer[] to array for the editable table.
+     * Transfers -> JSON for the hidden field.
      *
      * @param \ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>|null $value
-     *
-     * @return array<int, array<string, mixed>>
      */
-    public function transform(mixed $value): array
+    public function transform(mixed $value): string
     {
-        if ($value === null) {
-            return [];
-        }
+        $rows = [];
 
-        $data = [];
-        foreach ($value as $locationTransfer) {
-            $data[] = [
-                'idSupplierLocation' => $locationTransfer->getIdSupplierLocation(),
-                'city' => $locationTransfer->getCity(),
-                'country' => $locationTransfer->getCountry(),
-                'address' => $locationTransfer->getAddress(),
-                'zipCode' => $locationTransfer->getZipCode(),
-                'isDefault' => $locationTransfer->getIsDefault(),
+        foreach ($value ?? [] as $supplierLocationTransfer) {
+            $rows[] = [
+                'city' => $supplierLocationTransfer->getCity(),
+                'country' => $supplierLocationTransfer->getCountry(),
+                'address' => $supplierLocationTransfer->getAddress(),
+                'zipCode' => $supplierLocationTransfer->getZipCode(),
+                'isDefault' => (bool)$supplierLocationTransfer->getIsDefault(),
             ];
         }
 
-        return $data;
+        return (string)json_encode($rows);
     }
 
     /**
-     * Transforms submitted table data back to SupplierLocationTransfer[].
-     *
-     * @param array<int, array<string, mixed>>|null $value
+     * JSON of the submitted table rows -> transfers.
      *
      * @return \ArrayObject<int, \Generated\Shared\Transfer\SupplierLocationTransfer>
      */
     public function reverseTransform(mixed $value): ArrayObject
     {
-        $locationTransfers = new ArrayObject();
+        $supplierLocationTransfers = new ArrayObject();
+        $rows = is_string($value) && $value !== '' ? json_decode($value, true) : [];
 
-        if ($value === null || !is_array($value)) {
-            return $locationTransfers;
-        }
-
-        foreach ($value as $locationData) {
-            $locationTransfer = (new SupplierLocationTransfer())
-                ->setCity($locationData['city'] ?? null)
-                ->setCountry($locationData['country'] ?? null)
-                ->setAddress($locationData['address'] ?? null)
-                ->setZipCode($locationData['zipCode'] ?? null)
-                ->setIsDefault((bool)($locationData['isDefault'] ?? false));
-
-            if (!empty($locationData['idSupplierLocation'])) {
-                $locationTransfer->setIdSupplierLocation((int)$locationData['idSupplierLocation']);
+        foreach (is_array($rows) ? $rows : [] as $row) {
+            if (!is_array($row)) {
+                continue;
             }
 
-            $locationTransfers->append($locationTransfer);
+            $supplierLocationTransfers->append(
+                (new SupplierLocationTransfer())
+                    ->setCity($row['city'] ?? null)
+                    ->setCountry($row['country'] ?? null)
+                    ->setAddress($row['address'] ?? null)
+                    ->setZipCode($row['zipCode'] ?? null)
+                    ->setIsDefault(filter_var($row['isDefault'] ?? false, FILTER_VALIDATE_BOOLEAN)),
+            );
         }
 
-        return $locationTransfers;
+        return $supplierLocationTransfers;
     }
 }

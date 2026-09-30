@@ -58,6 +58,8 @@ readonly class SupplierSearchWriter
         );
 
         foreach ($supplierTransfersIndexed as $supplierId => $supplierTransfer) {
+            // The document matches src/SprykerAcademy/Shared/SupplierSearch/Schema/supplier.json:
+            // id_supplier, name, description, status, email, phone.
             $searchData = $supplierTransfer->toArray();
 
             $supplierSearchTransfer = $supplierSearchTransfersIndexed[$supplierId] ?? new SupplierSearchTransfer();
@@ -87,7 +89,7 @@ readonly class SupplierSearchWriter
             return [];
         }
 
-        $supplierCriteriaTransfer = (new SupplierCriteriaTransfer())
+        $supplierCriteriaTransfer = new SupplierCriteriaTransfer()
             ->setIdsSupplier($supplierIds);
         $supplierTransfers = $this->supplierFacade
             ->getSuppliers($supplierCriteriaTransfer);
@@ -117,7 +119,7 @@ readonly class SupplierSearchWriter
             return [];
         }
 
-        $supplierSearchCriteriaTransfer = (new SupplierSearchCriteriaTransfer())
+        $supplierSearchCriteriaTransfer = new SupplierSearchCriteriaTransfer()
             ->setFksSupplier($supplierIds);
         $supplierSearchTransfers = $this->supplierSearchRepository
             ->getSupplierSearches($supplierSearchCriteriaTransfer);

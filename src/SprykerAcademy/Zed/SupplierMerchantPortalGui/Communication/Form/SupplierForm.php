@@ -9,11 +9,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\Form\Transformer\SupplierLocationTransformer;
 
 class SupplierForm extends AbstractType
 {
@@ -41,6 +43,8 @@ class SupplierForm extends AbstractType
      * @var string
      */
     public const string FIELD_IS_ACTIVE = 'isActive';
+
+    public const string FIELD_LOCATIONS = 'locations';
 
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
@@ -92,6 +96,14 @@ class SupplierForm extends AbstractType
             fn (?int $status): bool => (bool)$status,
             fn (?bool $isActive): int => $isActive ? 1 : 0,
         ));
+
+        // Exercise 17: the rows the merchant adds to the editable locations table arrive as JSON in
+        // supplierForm[locations]; the transformer turns them into SupplierLocationTransfer objects.
+        $builder->add(static::FIELD_LOCATIONS, HiddenType::class, [
+            'required' => false,
+            'label' => false,
+        ]);
+        $builder->get(static::FIELD_LOCATIONS)->addModelTransformer(new SupplierLocationTransformer());
     }
 
     /**

@@ -1,46 +1,46 @@
-{% extends '@ZedUi/Layout/merchant-layout-centered.twig' %}
-
+{#
+    Content of the create and edit drawers. The drawer's ajax form wraps it in its own <form> and
+    posts it back to the controller, hence excludeFormTag.
+#}
 {% form_theme form '@ZedUi/Form/form-webcomponent-layout.twig' %}
 
-{% block headTitle %}
-    {% if form.vars.data.idSupplier %}
-        {{ 'Edit Supplier' | trans }}
-    {% else %}
-        {{ 'Create Supplier' | trans }}
-    {% endif %}
-{% endblock %}
-
-{% block content %}
+{% block body %}
     <web-mp-edit-supplier cloak>
-        {{ form_start(form, { action: app.request.requestUri }) }}
+        {{ form_start(form, { attr: { excludeFormTag: true } }) }}
+            <h3 title>
+                {{ (form.vars.data.idSupplier ? 'Edit Supplier' : 'Create Supplier') | trans }}
+            </h3>
 
-        <web-spy-card spy-title="{{ 'Supplier Details' | trans }}">
-            {{ form_row(form.children.name) }}
-            {{ form_row(form.children.description) }}
-        </web-spy-card>
-
-        <web-spy-card spy-title="{{ 'Contact Information' | trans }}">
-            {{ form_row(form.children.email) }}
-            {{ form_row(form.children.phone) }}
-        </web-spy-card>
-
-        <web-spy-card spy-title="{{ 'Status' | trans }}">
-            {{ form_row(form.children.isActive) }}
-        </web-spy-card>
-
-        {% if supplierLocationTableConfiguration is defined %}
-            <web-spy-card spy-title="{{ 'Locations' | trans }}">
-                <web-mp-supplier-locations-table
-                    table-id="web-mp-supplier-locations"
-                    config='{{ guiTableConfiguration(supplierLocationTableConfiguration) }}'>
-                </web-mp-supplier-locations-table>
+            <web-spy-card cloak spy-title="{{ 'Supplier Details' | trans }}">
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
             </web-spy-card>
-        {% endif %}
 
-        <button type="submit" class="btn btn-primary">
-            {{ 'Save' | trans }}
-        </button>
+            <web-spy-card cloak spy-title="{{ 'Contact Information' | trans }}">
+                {{ form_row(form.email) }}
+                {{ form_row(form.phone) }}
+            </web-spy-card>
 
+            <web-spy-card cloak spy-title="{{ 'Status' | trans }}">
+                {{ form_row(form.isActive) }}
+            </web-spy-card>
+
+            {# Edit drawer only: the create drawer has no supplier to attach locations to yet #}
+            {% if supplierLocationTableConfiguration is defined %}
+                <web-spy-card cloak spy-title="{{ 'Locations' | trans }}">
+                    <web-mp-supplier-locations-table
+                        cloak
+                        table-id="web-mp-supplier-locations"
+                        table-config='{{ guiTableConfiguration(supplierLocationTableConfiguration) }}'>
+                    </web-mp-supplier-locations-table>
+                </web-spy-card>
+                {# the table writes the added rows into its own supplierForm[locations] input #}
+                {% do form.locations.setRendered %}
+            {% endif %}
+
+            <web-spy-button cloak action type="submit" size="lg">
+                {{ 'Save' | trans }}
+            </web-spy-button>
         {{ form_end(form) }}
     </web-mp-edit-supplier>
 {% endblock %}

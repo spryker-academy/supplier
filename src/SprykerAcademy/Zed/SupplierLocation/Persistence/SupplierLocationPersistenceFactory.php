@@ -7,10 +7,10 @@
 
 declare(strict_types = 1);
 
-namespace SprykerAcademy\Client\SupplierStorage;
+namespace SprykerAcademy\Zed\SupplierLocation\Persistence;
 
-use Spryker\Client\Kernel\AbstractBundleConfig;
+use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 
-class SupplierStorageConfig extends AbstractBundleConfig
+class SupplierLocationPersistenceFactory extends AbstractPersistenceFactory
 {
 }

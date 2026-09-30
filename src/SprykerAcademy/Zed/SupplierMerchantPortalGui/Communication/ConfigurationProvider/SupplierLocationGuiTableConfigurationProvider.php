@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Zed\SupplierMerchantPortalGui\Communication\ConfigurationProvider;
 
 use Generated\Shared\Transfer\GuiTableConfigurationTransfer;
+use Generated\Shared\Transfer\GuiTableDataResponseTransfer;
 use Generated\Shared\Transfer\GuiTableEditableButtonTransfer;
 use Spryker\Shared\GuiTable\GuiTableFactoryInterface;
 
@@ -46,13 +47,18 @@ class SupplierLocationGuiTableConfigurationProvider
     }
 
     /**
-     * @param array<mixed> $initialData
-     *
-     * @return \Generated\Shared\Transfer\GuiTableConfigurationTransfer
+     * @param \Generated\Shared\Transfer\GuiTableDataResponseTransfer $existingLocations The supplier's saved locations, listed read-only.
+     * @param list<array<string, mixed>> $initialData New rows a failed submit sends back, so they are not lost.
      */
-    public function getConfiguration(array $initialData = []): GuiTableConfigurationTransfer
+    public function getConfiguration(GuiTableDataResponseTransfer $existingLocations, array $initialData = []): GuiTableConfigurationTransfer
     {
         $guiTableConfigurationBuilder = $this->guiTableFactory->createConfigurationBuilder();
+
+        $existingRows = [];
+        foreach ($existingLocations->getRows() as $guiTableRowDataResponseTransfer) {
+            $existingRows[] = $guiTableRowDataResponseTransfer->getResponseData();
+        }
+        $guiTableConfigurationBuilder->setDataSourceInlineData($existingRows);
 
         // A GuiTable needs at least one regular column. The editable inputs below are rendered on top of these columns.
         $guiTableConfigurationBuilder
