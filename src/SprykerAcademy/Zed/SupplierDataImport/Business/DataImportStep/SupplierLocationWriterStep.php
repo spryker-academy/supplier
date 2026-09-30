@@ -48,7 +48,7 @@ class SupplierLocationWriterStep implements DataImportStepInterface
 
         $supplierId = $this->getSupplierId($supplierName);
 
-        $supplierLocationEntity = $this->supplierLocationQuery
+        $supplierLocationEntity = (clone $this->supplierLocationQuery)
             ->filterByFkSupplier($supplierId)
             ->filterByAddress($address)
             ->findOneOrCreate();
@@ -76,7 +76,7 @@ class SupplierLocationWriterStep implements DataImportStepInterface
             return static::$supplierCache[$supplierName];
         }
 
-        $supplierEntity = $this->supplierQuery
+        $supplierEntity = (clone $this->supplierQuery)
             ->clear()
             ->filterByName($supplierName)
             ->findOne();

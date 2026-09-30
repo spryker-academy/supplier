@@ -1,29 +1,24 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * This file is part of the Spryker Commerce OS.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\SupplierLocation\Business;
 
-use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierLocationTransfer;
 
 interface SupplierLocationFacadeInterface
 {
     /**
+     * Specification:
+     * - Persists a new location of the supplier `fkSupplier`.
+     * - Returns the transfer with idSupplierLocation set.
+     *
      * @api
-     *
-     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
-     *
-     * @return list<\Generated\Shared\Transfer\SupplierLocationTransfer>
      */
-    public function getSupplierLocations(SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer): array;
-
-    /**
-     * @api
-     *
-     * @param int $idSupplierLocation
-     *
-     * @return \Generated\Shared\Transfer\SupplierLocationTransfer|null
-     */
-    public function findSupplierLocationById(int $idSupplierLocation): ?SupplierLocationTransfer;
+    public function createSupplierLocation(SupplierLocationTransfer $supplierLocationTransfer): SupplierLocationTransfer;
 }

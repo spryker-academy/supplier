@@ -23,4 +23,3 @@ class DataImportDependencyProvider extends PyzDataImportDependencyProvider
         return $plugins;
     }
 }
-

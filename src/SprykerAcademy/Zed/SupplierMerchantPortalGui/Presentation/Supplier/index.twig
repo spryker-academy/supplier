@@ -1,0 +1,31 @@
+{% extends '@ZedUi/Layout/merchant-layout-main.twig' %}
+
+{% block headTitle %}{{ 'Suppliers' | trans }}{% endblock %}
+
+{% block content %}
+    {# Opens CreateSupplierController's form in a drawer, like a table row action does #}
+    {% set createSupplierAction = {
+        type: 'drawer',
+        component: 'ajax-form',
+        options: {
+            inputs: {
+                action: '/supplier-merchant-portal-gui/create-supplier',
+            },
+        },
+    } %}
+
+    <web-mp-supplier-list
+        cloak
+        table-id="web-mp-supplier-list"
+        table-config='{{ guiTableConfiguration(supplierTableConfiguration) }}'>
+        <h1 title>{{ 'Suppliers' | trans }}</h1>
+        {# `action` is the button's action config and, being an attribute, also the header slot of the list #}
+        <web-spy-button-action
+            type="button"
+            size="lg"
+            variant="primary"
+            action="{{ createSupplierAction | json_encode }}">
+            {{ 'Add Supplier' | trans }}
+        </web-spy-button-action>
+    </web-mp-supplier-list>
+{% endblock %}
