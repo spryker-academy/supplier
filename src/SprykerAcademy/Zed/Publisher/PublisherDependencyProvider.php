@@ -9,6 +9,7 @@ use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierPublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStoragePublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageWritePublisherPlugin;
 
 class PublisherDependencyProvider extends PyzPublisherDependencyProvider
@@ -28,8 +29,8 @@ class PublisherDependencyProvider extends PyzPublisherDependencyProvider
      * @return array<string, array<\Spryker\Zed\PublisherExtension\Dependency\Plugin\PublisherPluginInterface>>
      */
     /**
-     * Lets `console publish:trigger-events -r supplier` republish every supplier, for example after
-     * the search index or the storage was cleared.
+     * Lets `console publish:trigger-events -r supplier` republish every supplier to search and to storage,
+     * for example after the search index or the storage was cleared.
      *
      * @return array<\Spryker\Zed\PublisherExtension\Dependency\Plugin\PublisherTriggerPluginInterface>
      */
@@ -39,6 +40,7 @@ class PublisherDependencyProvider extends PyzPublisherDependencyProvider
             parent::getPublisherTriggerPlugins(),
             [
                 new SupplierPublisherTriggerPlugin(),
+                new SupplierStoragePublisherTriggerPlugin(),
             ],
         );
     }
