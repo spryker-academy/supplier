@@ -11,11 +11,11 @@ namespace SprykerAcademy\Zed\SupplierGui\Communication\Controller;
 
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
-use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /**
  * @method \SprykerAcademy\Zed\SupplierGui\Communication\SupplierGuiCommunicationFactory getFactory()
@@ -35,49 +35,22 @@ class EditController extends AbstractController
     protected const int STATUS_INACTIVE = 0;
 
     /**
-     * @param \SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface $supplierFacade
-     */
-    public function __construct(protected SupplierFacadeInterface $supplierFacade)
-    {
-    }
-
-    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function indexAction(Request $request): RedirectResponse|array
     {
-        // TODO-1: Read supplier id from request and fetch supplier transfer from facade.
-        $idSupplier = $this->castId($request->query->get(static::REQUEST_PARAM_ID_SUPPLIER));
-        $supplierTransfer = $this->supplierFacade->findSupplierById($idSupplier);
+        // TODO-1: Read the supplier id from the request query (REQUEST_PARAM_ID_SUPPLIER) with $this->castId()
+        //         and load the supplier with the facade's findSupplierById().
+        //         Hint: $this->getFactory()->getSupplierFacade()
+        // TODO-2: When no supplier is found, add an error message and redirect to the overview.
+        // TODO-3: Create the form with $this->getFactory()->createSupplierCreateForm(). Pass the supplier transfer,
+        //         so the form is pre-filled, and [SupplierCreateForm::FIELD_IS_ACTIVE => true when its status is STATUS_ACTIVE]
+        //         as options. Then let the form handle the request.
+        // TODO-4: When the form is submitted and valid, return $this->updateSupplier($supplierCreateForm).
+        // TODO-5: Otherwise return $this->viewResponse() with
+        //         'supplierCreateForm' => $supplierCreateForm->createView() and 'backUrl' => $this->getSupplierOverviewUrl().
 
-        // TODO-2: Handle missing supplier and redirect to overview with an error message.
-        if ($supplierTransfer === null) {
-            $this->addErrorMessage('Supplier was not found.');
-
-            return $this->redirectResponse($this->getSupplierOverviewUrl());
-        }
-
-        // TODO-3: Create and handle form prefilled with supplier data.
-        $supplierCreateForm = $this->getFactory()->createSupplierCreateForm(
-            $supplierTransfer,
-            [SupplierCreateForm::FIELD_IS_ACTIVE => (int)$supplierTransfer->getStatus() === static::STATUS_ACTIVE],
-        );
-        $supplierCreateForm->handleRequest($request);
-
-        if ($supplierCreateForm->isSubmitted() && $supplierCreateForm->isValid()) {
-            // TODO-4: Delegate update logic into updateSupplier().
-            return $this->updateSupplier($supplierCreateForm);
-        }
-
-        return $this->viewResponse([
-            'supplierCreateForm' => $supplierCreateForm->createView(),
-            'backUrl' => $this->getSupplierOverviewUrl(),
-        ]);
-    }
-
-    protected function getSupplierOverviewUrl(): string
-    {
-        return (string)Url::generate(static::URL_SUPPLIER_OVERVIEW);
+        return $this->redirectResponse($this->getSupplierOverviewUrl());
     }
 
     /**
@@ -85,26 +58,18 @@ class EditController extends AbstractController
      */
     protected function updateSupplier(FormInterface $supplierCreateForm): RedirectResponse
     {
-        // TODO-5: Read supplier transfer from form data and validate it.
-        $supplierTransfer = $supplierCreateForm->getData();
+        // TODO-6: Get the SupplierTransfer from $supplierCreateForm->getData().
+        // TODO-7: Set its status from the FIELD_IS_ACTIVE checkbox: STATUS_ACTIVE when checked, STATUS_INACTIVE otherwise.
+        // TODO-8: Save it with the facade's updateSupplier().
+        //         Hint: wrap the call in try/catch (Throwable); on failure add MESSAGE_SUPPLIER_UPDATE_FAILED as an
+        //         error message and redirect to the overview.
+        // TODO-9: Add MESSAGE_SUPPLIER_UPDATED_SUCCESS as a success message.
 
-        if ($supplierTransfer === null) {
-            return $this->redirectResponse($this->getSupplierOverviewUrl());
-        }
-
-        // TODO-6: Map form active checkbox to integer status flag.
-        $supplierTransfer->setStatus(
-            $supplierCreateForm->get(SupplierCreateForm::FIELD_IS_ACTIVE)->getData(
-            ) ? static::STATUS_ACTIVE : static::STATUS_INACTIVE,
-        );
-        // TODO-7: Persist updated supplier and notify user.
-        // Hint-1: Wrap the facade call in a try/catch block to handle database exceptions
-        // Hint-2: Catch \Throwable and use $this->addErrorMessage(static::MESSAGE_SUPPLIER_UPDATE_FAILED)
-        // Hint-3: On failure, redirect back to the overview page
-        $this->supplierFacade->updateSupplier($supplierTransfer);
-        $this->addSuccessMessage(static::MESSAGE_SUPPLIER_UPDATED_SUCCESS);
-
-        // TODO-8: Redirect back to supplier overview.
         return $this->redirectResponse($this->getSupplierOverviewUrl());
+    }
+
+    protected function getSupplierOverviewUrl(): string
+    {
+        return (string)Url::generate(static::URL_SUPPLIER_OVERVIEW);
     }
 }

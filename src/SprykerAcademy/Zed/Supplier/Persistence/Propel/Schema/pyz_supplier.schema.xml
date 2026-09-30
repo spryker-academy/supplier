@@ -13,10 +13,6 @@
             <unique-column name="name"/>
         </unique>
         <id-method-parameter value="pyz_supplier_pk_seq"/>
-
-        <behavior name="event">
-            <parameter name="pyz_supplier_all" column="*"/>
-        </behavior>
     </table>
 
     <table name="pyz_merchant_to_supplier" idMethod="native" allowPkInsert="true" phpName="PyzMerchantToSupplier">
