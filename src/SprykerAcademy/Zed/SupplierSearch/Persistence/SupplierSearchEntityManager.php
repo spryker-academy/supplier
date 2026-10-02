@@ -74,4 +74,22 @@ class SupplierSearchEntityManager extends AbstractEntityManager implements Suppl
             ->createSupplierSearchMapper()
             ->mapSupplierSearchEntityToSupplierSearchTransfer($supplierSearchEntity, $supplierSearchTransfer);
     }
+
+    /**
+     * @param array<int> $supplierIds
+     */
+    #[\Override]
+    public function deleteSupplierSearchsBySupplierIds(array $supplierIds): void
+    {
+        // Not ->delete() on the query: a bulk delete skips the Propel behaviors, and the synchronization
+        // behavior is what removes the entry from Elasticsearch.
+        $searchEntities = $this->getFactory()
+            ->createSupplierSearchQuery()
+            ->filterByFkSupplier_In($supplierIds)
+            ->find();
+
+        foreach ($searchEntities as $searchEntity) {
+            $searchEntity->delete();
+        }
+    }
 }

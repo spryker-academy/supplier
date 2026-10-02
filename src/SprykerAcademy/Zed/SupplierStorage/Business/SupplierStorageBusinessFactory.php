@@ -11,6 +11,7 @@ namespace SprykerAcademy\Zed\SupplierStorage\Business;
 
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerAcademy\Zed\SupplierStorage\Business\Deleter\SupplierStorageDeleter;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierStorage\Business\Writer\SupplierStorageWriter;
 use SprykerAcademy\Zed\SupplierStorage\SupplierStorageDependencyProvider;
@@ -49,5 +50,10 @@ class SupplierStorageBusinessFactory extends AbstractBusinessFactory
     public function getSupplierFacade(): SupplierFacadeInterface
     {
         return $this->getProvidedDependency(SupplierStorageDependencyProvider::FACADE_SUPPLIER);
+    }
+
+    public function createSupplierStorageDeleter(): SupplierStorageDeleter
+    {
+        return new SupplierStorageDeleter($this->getEntityManager());
     }
 }
