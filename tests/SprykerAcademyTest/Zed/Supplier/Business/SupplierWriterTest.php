@@ -59,16 +59,34 @@ class SupplierWriterTest extends Unit
         $this->assertSame($expectedSupplierTransfer, $actualSupplierTransfer);
     }
 
-    public function testDeleteDelegatesToEntityManager(): void
+    public function testDeleteRemovesLocationsAndMerchantRelationsBeforeTheSupplier(): void
     {
         $supplierTransfer = (new SupplierTransfer())->setIdSupplier(3);
+        $calls = [];
 
         $supplierEntityManagerMock = $this->createMock(SupplierEntityManagerInterface::class);
         $supplierEntityManagerMock->expects($this->once())
-        ->method('deleteSupplier')
-        ->with($supplierTransfer);
+            ->method('deleteSupplierLocations')
+            ->with(3)
+            ->willReturnCallback(function () use (&$calls): void {
+                $calls[] = 'locations';
+            });
+        $supplierEntityManagerMock->expects($this->once())
+            ->method('deleteSupplierMerchantRelations')
+            ->with(3)
+            ->willReturnCallback(function () use (&$calls): void {
+                $calls[] = 'merchants';
+            });
+        $supplierEntityManagerMock->expects($this->once())
+            ->method('deleteSupplier')
+            ->with($supplierTransfer)
+            ->willReturnCallback(function () use (&$calls): void {
+                $calls[] = 'supplier';
+            });
 
         $supplierWriter = new SupplierWriter($supplierEntityManagerMock);
         $supplierWriter->delete($supplierTransfer);
+
+        $this->assertSame(['locations', 'merchants', 'supplier'], $calls, 'The rows that reference the supplier have to go first.');
     }
 }
