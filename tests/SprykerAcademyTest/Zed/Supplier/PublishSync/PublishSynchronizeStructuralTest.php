@@ -224,4 +224,25 @@ class PublishSynchronizeStructuralTest extends Unit
 
         return null;
     }
+
+    public function testDeletePublisherPluginsSubscribeToTheSupplierDeleteEvent(): void
+    {
+        foreach ([
+            \SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchDeletePublisherPlugin::class,
+            \SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageDeletePublisherPlugin::class,
+        ] as $class) {
+            $this->assertTrue(class_exists($class), $class . ' must exist.');
+            $this->assertContains('Entity.pyz_supplier.delete', (new $class())->getSubscribedEvents());
+        }
+    }
+
+    public function testDeletePublisherPluginsAreRegistered(): void
+    {
+        $method = new \ReflectionMethod(\SprykerAcademy\Zed\Publisher\PublisherDependencyProvider::class, 'getSupplierPublisherPlugins');
+        $plugins = $method->invoke(new \SprykerAcademy\Zed\Publisher\PublisherDependencyProvider());
+        $classes = array_map('get_class', array_merge(...array_values($plugins)));
+
+        $this->assertContains(\SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchDeletePublisherPlugin::class, $classes, 'Register SupplierSearchDeletePublisherPlugin under the search publish queue.');
+        $this->assertContains(\SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageDeletePublisherPlugin::class, $classes, 'Register SupplierStorageDeletePublisherPlugin under the storage publish queue.');
+    }
 }
