@@ -36,7 +36,8 @@ class SupplierTable extends AbstractTable
 
     protected const string URL_SUPPLIER_EDIT = '/supplier-gui/edit';
 
-    protected const string URL_SUPPLIER_DELETE = '/supplier-gui/delete';
+    // The Delete button opens the confirmation page; the supplier is deleted from there.
+    protected const string URL_SUPPLIER_DELETE = '/supplier-gui/delete/confirm';
 
     /**
      * @param \Orm\Zed\Supplier\Persistence\PyzSupplierQuery $supplierQuery

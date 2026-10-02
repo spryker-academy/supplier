@@ -27,4 +27,14 @@ interface SupplierEntityManagerInterface
      * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
      */
     public function deleteSupplier(SupplierTransfer $supplierTransfer): void;
+
+    /**
+     * Deletes the locations of the supplier (pyz_supplier_location references it).
+     */
+    public function deleteSupplierLocations(int $idSupplier): void;
+
+    /**
+     * Deletes the merchant assignments of the supplier (pyz_merchant_to_supplier references it).
+     */
+    public function deleteSupplierMerchantRelations(int $idSupplier): void;
 }

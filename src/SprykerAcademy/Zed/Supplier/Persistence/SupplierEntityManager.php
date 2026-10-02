@@ -85,4 +85,22 @@ class SupplierEntityManager extends AbstractEntityManager implements SupplierEnt
 
         $supplierEntity->delete();
     }
+
+    #[\Override]
+    public function deleteSupplierLocations(int $idSupplier): void
+    {
+        $this->getFactory()
+            ->createSupplierLocationQuery()
+            ->filterByFkSupplier($idSupplier)
+            ->delete();
+    }
+
+    #[\Override]
+    public function deleteSupplierMerchantRelations(int $idSupplier): void
+    {
+        $this->getFactory()
+            ->createMerchantToSupplierQuery()
+            ->filterByFkSupplier($idSupplier)
+            ->delete();
+    }
 }

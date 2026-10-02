@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\SupplierGui\Communication;
 
 use Generated\Shared\Transfer\SupplierTransfer;
+use Spryker\Zed\Gui\Communication\Form\DeleteForm;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use SprykerAcademy\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
 use Symfony\Component\Form\FormInterface;
@@ -44,4 +45,15 @@ class SupplierGuiCommunicationFactory extends AbstractCommunicationFactory
     // i.e.: getMyClassName()
     // Hint-2: Have a look at `src/Pyz/Zed/DataImport/Business/DataImportBusinessFactory.php::getCurrencyFacade()` for the right syntax
     // Hint-3: Use the interface as return type
+
+    /**
+     * The form of the confirmation page: a DELETE request with a CSRF token to the given URL.
+     */
+    public function createDeleteForm(string $action): FormInterface
+    {
+        return $this->getFormFactory()->create(DeleteForm::class, null, [
+            'action' => $action,
+            'fields' => [],
+        ]);
+    }
 }

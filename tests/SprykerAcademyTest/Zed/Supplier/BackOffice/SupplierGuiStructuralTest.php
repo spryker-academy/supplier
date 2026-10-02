@@ -76,6 +76,7 @@ class SupplierGuiStructuralTest extends Unit
         $class = 'SprykerAcademy\Zed\SupplierGui\Communication\Controller\DeleteController';
         $this->assertTrue(class_exists($class), 'DeleteController must exist.');
         $this->assertTrue(method_exists($class, 'indexAction'), 'DeleteController must have indexAction().');
+        $this->assertTrue(method_exists($class, 'confirmAction'), 'DeleteController must have confirmAction() for the confirmation page.');
     }
 
     // --- Form ---
