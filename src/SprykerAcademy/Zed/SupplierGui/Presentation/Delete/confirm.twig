@@ -1,0 +1,21 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% set widget_title = 'Delete Supplier' %}
+
+{% block action %}
+    {{ backActionButton(overviewUrl, 'Back to Suppliers' | trans) }}
+{% endblock %}
+
+{% block content %}
+    {% embed '@Gui/Partials/widget.twig' %}
+        {% block widget_content %}
+            <p>{{ 'You are about to delete the supplier' | trans }} <b>{{ supplier.name }}</b>.</p>
+            <p>{{ 'Its locations and its merchant assignments are deleted with it. This cannot be undone.' | trans }}</p>
+            <hr/>
+            <a href="{{ overviewUrl }}" class="btn btn-back">{{ 'Cancel' | trans }}</a>
+            {{ form_start(deleteForm) }}
+                <input type="submit" class="btn btn-danger safe-submit" value="{{ 'Delete supplier and locations' | trans }}" />
+            {{ form_end(deleteForm) }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
