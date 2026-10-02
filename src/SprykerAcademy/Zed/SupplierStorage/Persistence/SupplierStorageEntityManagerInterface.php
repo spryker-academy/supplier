@@ -26,4 +26,12 @@ interface SupplierStorageEntityManagerInterface
      * @return \Generated\Shared\Transfer\SupplierStorageTransfer
      */
     public function updateSupplierStorage(SupplierStorageTransfer $supplierStorageTransfer): SupplierStorageTransfer;
+
+    /**
+     * Deletes the pyz_supplier_storage rows of the given suppliers, one entity at a time so that the synchronization
+     * behavior sends the delete to Redis.
+     *
+     * @param array<int> $supplierIds
+     */
+    public function deleteSupplierStoragesBySupplierIds(array $supplierIds): void;
 }
