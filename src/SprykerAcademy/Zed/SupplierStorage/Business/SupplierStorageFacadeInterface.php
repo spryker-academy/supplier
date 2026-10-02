@@ -23,4 +23,14 @@ interface SupplierStorageFacadeInterface
      * @return void
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void;
+
+    /**
+     * Specification:
+     * - Deletes the storage entries of the suppliers whose pyz_supplier rows were deleted.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    public function deleteCollectionBySupplierEvents(array $eventEntityTransfers): void;
 }

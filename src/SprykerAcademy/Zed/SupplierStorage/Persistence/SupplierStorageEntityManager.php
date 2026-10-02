@@ -84,4 +84,22 @@ class SupplierStorageEntityManager extends AbstractEntityManager implements Supp
                 $supplierStorageTransfer,
             );
     }
+
+    /**
+     * @param array<int> $supplierIds
+     */
+    #[\Override]
+    public function deleteSupplierStoragesBySupplierIds(array $supplierIds): void
+    {
+        // Not ->delete() on the query: a bulk delete skips the Propel behaviors, and the synchronization
+        // behavior is what removes the entry from Redis.
+        $storageEntities = $this->getFactory()
+            ->createSupplierStorageQuery()
+            ->filterByFkSupplier_In($supplierIds)
+            ->find();
+
+        foreach ($storageEntities as $storageEntity) {
+            $storageEntity->delete();
+        }
+    }
 }
