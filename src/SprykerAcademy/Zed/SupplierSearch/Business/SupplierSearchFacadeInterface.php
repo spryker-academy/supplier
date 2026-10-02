@@ -22,4 +22,14 @@ interface SupplierSearchFacadeInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      */
     public function writeCollectionBySupplierEvents(array $eventTransfers): void;
+
+    /**
+     * Specification:
+     * - Deletes the search entries of the suppliers whose pyz_supplier rows were deleted.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    public function deleteCollectionBySupplierEvents(array $eventEntityTransfers): void;
 }
