@@ -11,6 +11,7 @@ namespace SprykerAcademy\Zed\SupplierGui\Communication;
 
 use Generated\Shared\Transfer\SupplierTransfer;
 use Orm\Zed\Supplier\Persistence\PyzSupplierQuery;
+use Spryker\Zed\Gui\Communication\Form\DeleteForm;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierGui\Communication\Form\SupplierCreateForm;
@@ -42,5 +43,16 @@ class SupplierGuiCommunicationFactory extends AbstractCommunicationFactory
     public function getSupplierFacade(): SupplierFacadeInterface
     {
         return $this->getProvidedDependency(SupplierGuiDependencyProvider::FACADE_SUPPLIER);
+    }
+
+    /**
+     * The form of the confirmation page: a DELETE request with a CSRF token to the given URL.
+     */
+    public function createDeleteForm(string $action): FormInterface
+    {
+        return $this->getFormFactory()->create(DeleteForm::class, null, [
+            'action' => $action,
+            'fields' => [],
+        ]);
     }
 }
