@@ -24,4 +24,12 @@ interface SupplierSearchEntityManagerInterface
      * @throws \SprykerAcademy\Zed\SupplierSearch\Persistence\Exception\SupplierSearchNotFoundException
      */
     public function updateSupplierSearch(SupplierSearchTransfer $supplierSearchTransfer): SupplierSearchTransfer;
+
+    /**
+     * Deletes the pyz_supplier_search rows of the given suppliers, one entity at a time so that the synchronization
+     * behavior sends the delete to Elasticsearch.
+     *
+     * @param array<int> $supplierIds
+     */
+    public function deleteSupplierSearchsBySupplierIds(array $supplierIds): void;
 }
