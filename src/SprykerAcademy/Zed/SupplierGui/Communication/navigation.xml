@@ -40,6 +40,14 @@
                 <action>index</action>
                 <visible>0</visible>
             </supplier-gui-delete>
+            <supplier-gui-delete-confirm>
+                <label>Delete Supplier</label>
+                <title>Delete Supplier</title>
+                <bundle>supplier-gui</bundle>
+                <controller>delete</controller>
+                <action>confirm</action>
+                <visible>0</visible>
+            </supplier-gui-delete-confirm>
         </pages>
     </supplier-gui>
 </config>
