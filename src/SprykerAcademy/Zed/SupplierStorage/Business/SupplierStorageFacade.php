@@ -32,4 +32,19 @@ class SupplierStorageFacade extends AbstractFacade implements SupplierStorageFac
         // TODO-1: Use the SupplierStorageWriter logic `writeCollectionBySupplierEvents`.
         // Hint-1: Get the writer from factory and call the method.
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    #[\Override]
+    public function deleteCollectionBySupplierEvents(array $eventEntityTransfers): void
+    {
+        $this->getFactory()
+            ->createSupplierStorageDeleter()
+            ->deleteCollectionBySupplierEvents($eventEntityTransfers);
+    }
 }

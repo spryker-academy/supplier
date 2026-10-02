@@ -30,4 +30,19 @@ class SupplierSearchFacade extends AbstractFacade implements SupplierSearchFacad
         // TODO-1: Use the SupplierSearchWriter logic `writeCollectionBySupplierEvents`.
         // Hint-1: Access business factory via `$this->getFactory()`.
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    #[\Override]
+    public function deleteCollectionBySupplierEvents(array $eventEntityTransfers): void
+    {
+        $this->getFactory()
+            ->createSupplierSearchDeleter()
+            ->deleteCollectionBySupplierEvents($eventEntityTransfers);
+    }
 }

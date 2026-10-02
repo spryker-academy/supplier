@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\SupplierStorage\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerAcademy\Zed\SupplierStorage\Business\Deleter\SupplierStorageDeleter;
 use SprykerAcademy\Zed\SupplierStorage\Business\Writer\SupplierStorageWriter;
 
 /**
@@ -34,4 +35,9 @@ class SupplierStorageBusinessFactory extends AbstractBusinessFactory
 
     // TODO-2: Create getSupplierFacade() and return SupplierFacade.
     // Hint-1: Use $this->getProvidedDependency() with the constant from DependencyProvider.
+
+    public function createSupplierStorageDeleter(): SupplierStorageDeleter
+    {
+        return new SupplierStorageDeleter($this->getEntityManager());
+    }
 }

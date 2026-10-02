@@ -11,6 +11,7 @@ namespace SprykerAcademy\Zed\SupplierSearch\Business;
 
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerAcademy\Zed\SupplierSearch\Business\Deleter\SupplierSearchDeleter;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierSearch\Business\Writer\SupplierSearchWriter;
 use SprykerAcademy\Zed\SupplierSearch\SupplierSearchDependencyProvider;
@@ -37,4 +38,9 @@ class SupplierSearchBusinessFactory extends AbstractBusinessFactory
 
     // TODO-2: Create getSupplierFacade() and return SupplierFacade.
     // Hint-1: Use getProvidedDependency() with key `SupplierSearchDependencyProvider::FACADE_SUPPLIER`.
+
+    public function createSupplierSearchDeleter(): SupplierSearchDeleter
+    {
+        return new SupplierSearchDeleter($this->getEntityManager());
+    }
 }

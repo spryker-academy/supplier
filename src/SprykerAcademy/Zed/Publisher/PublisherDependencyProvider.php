@@ -8,7 +8,9 @@ use Pyz\Zed\Publisher\PublisherDependencyProvider as PyzPublisherDependencyProvi
 use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierPublisherTriggerPlugin;
+use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStoragePublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageWritePublisherPlugin;
 
@@ -48,8 +50,9 @@ class PublisherDependencyProvider extends PyzPublisherDependencyProvider
     protected function getSupplierPublisherPlugins(): array
     {
         // TODO: Register the supplier publisher plugins, each under its publish queue
-        // Hint: Map SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE => [new SupplierSearchWritePublisherPlugin()]
-        // Hint: Map SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE => [new SupplierStorageWritePublisherPlugin()]
+        // Hint: Map SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE => [new SupplierSearchWritePublisherPlugin(), new SupplierSearchDeletePublisherPlugin()]
+        // Hint: Map SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE => [new SupplierStorageWritePublisherPlugin(), new SupplierStorageDeletePublisherPlugin()]
+        // The delete plugins are provided: they remove a deleted supplier from Elasticsearch and Redis.
         return [
         ];
     }
