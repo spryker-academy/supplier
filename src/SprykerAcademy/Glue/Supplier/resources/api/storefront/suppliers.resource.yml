@@ -14,6 +14,14 @@ resource:
         - type: Get
         - type: GetCollection
 
+    # TODO-3: Let clients ask for the locations of a supplier: GET /suppliers?include=supplier-locations
+    # Hint-1: Add an `includes:` list with one entry.
+    # Hint-2: `relationshipName` is the value of ?include= : supplier-locations
+    # Hint-3: `targetResource` is the `name` of the resource in supplier-locations.resource.yml: SupplierLocations
+    # Hint-4: `uriTemplate` is the collection URL of that resource: /suppliers/{idSupplier}/supplier-locations
+    # Hint-5: `uriVariableMappings` tells Glue which property of the supplier fills which URI variable
+    #         of the locations provider: `idSupplier: idSupplier`
+
     properties:
         idSupplier:
             type: int
