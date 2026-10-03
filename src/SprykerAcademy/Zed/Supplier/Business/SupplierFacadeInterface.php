@@ -80,6 +80,19 @@ interface SupplierFacadeInterface
 
     /**
      * Specification:
+     * - Retrieves the supplier locations that match the criteria.
+     * - Filters by `SupplierLocationCriteriaTransfer.fkSupplier`, `.fksSupplier` and `.idSupplierLocation` when they are set.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer;
+
+    /**
+     * Specification:
      * - Retrieves one page of suppliers, ordered by id.
      * - Uses `SupplierCriteriaTransfer.pagination.offset` and `.limit`; without a pagination it returns all suppliers.
      * - Sets `SupplierCollectionTransfer.pagination.nbResults` to the number of suppliers that match the criteria.
@@ -89,17 +102,4 @@ interface SupplierFacadeInterface
      * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
      */
     public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer;
-
-    /**
-     * Specification:
-     * - Retrieves the supplier locations that match the criteria.
-     * - Filters by `SupplierLocationCriteriaTransfer.fkSupplier` and `.idSupplierLocation` when they are set.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
-     */
-    public function getSupplierLocationCollection(
-        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
-    ): SupplierLocationCollectionTransfer;
 }

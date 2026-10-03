@@ -10,9 +10,11 @@ use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierPublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierLocationSearchWritePublisherPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStoragePublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierLocationStorageWritePublisherPlugin;
 
 class PublisherDependencyProvider extends PyzPublisherDependencyProvider
 {
@@ -53,10 +55,12 @@ class PublisherDependencyProvider extends PyzPublisherDependencyProvider
             SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE => [
                 new SupplierSearchWritePublisherPlugin(),
                 new SupplierSearchDeletePublisherPlugin(),
+                new SupplierLocationSearchWritePublisherPlugin(),
             ],
             SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE => [
                 new SupplierStorageWritePublisherPlugin(),
                 new SupplierStorageDeletePublisherPlugin(),
+                new SupplierLocationStorageWritePublisherPlugin(),
             ],
         ];
     }

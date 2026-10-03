@@ -15,6 +15,11 @@
         </foreign-key>
 
         <id-method-parameter value="pyz_supplier_location_pk_seq"/>
+
+        <!-- A location is published inside its supplier's document: its events republish that supplier. -->
+        <behavior name="event">
+            <parameter name="pyz_supplier_location_all" column="*"/>
+        </behavior>
     </table>
 
 </database>

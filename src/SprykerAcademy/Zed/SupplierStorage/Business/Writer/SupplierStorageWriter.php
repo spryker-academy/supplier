@@ -13,6 +13,7 @@ use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierStorageCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierStorageTransfer;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
+use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierStorage\Persistence\SupplierStorageEntityManagerInterface;
 use SprykerAcademy\Zed\SupplierStorage\Persistence\SupplierStorageRepositoryInterface;
@@ -56,6 +57,22 @@ class SupplierStorageWriter
     }
 
     /**
+     * A location has no document of its own: it lives in its supplier's document. The event of a
+     * pyz_supplier_location row carries the row's foreign keys, and fk_supplier names the supplier to republish.
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    public function writeCollectionBySupplierLocationEvents(array $eventEntityTransfers): void
+    {
+        $supplierIds = $this->eventBehaviorFacade->getEventTransferForeignKeys(
+            $eventEntityTransfers,
+            SupplierStorageConfig::COL_SUPPLIER_LOCATION_FK_SUPPLIER,
+        );
+
+        $this->writeCollectionBySupplierIds(array_values(array_unique($supplierIds)));
+    }
+
+    /**
      * @param array<int> $supplierIds
      */
     protected function writeCollectionBySupplierIds(array $supplierIds): void
@@ -96,7 +113,8 @@ class SupplierStorageWriter
     protected function getSupplierTransfersIndexed(array $supplierIds): array
     {
         $supplierCriteriaTransfer = (new SupplierCriteriaTransfer())
-            ->setIdsSupplier($supplierIds);
+            ->setIdsSupplier($supplierIds)
+            ->setWithSupplierLocations(true);
 
         $supplierTransfers = $this->supplierFacade->getSupplierCollection($supplierCriteriaTransfer);
 
