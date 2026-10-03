@@ -116,21 +116,6 @@ class SupplierFacade extends AbstractFacade implements SupplierFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
-     */
-    #[\Override]
-    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer
-    {
-        return $this->getFactory()
-            ->createSupplierReader()
-            ->getPaginatedSupplierCollection($supplierCriteriaTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
      */
     #[\Override]
@@ -140,5 +125,20 @@ class SupplierFacade extends AbstractFacade implements SupplierFacadeInterface
         return $this->getFactory()
             ->createSupplierReader()
             ->getSupplierLocationCollection($supplierLocationCriteriaTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    #[\Override]
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer
+    {
+        return $this->getFactory()
+            ->createSupplierReader()
+            ->getPaginatedSupplierCollection($supplierCriteriaTransfer);
     }
 }
