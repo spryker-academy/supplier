@@ -9,7 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\Supplier\Business;
 
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 
 interface SupplierFacadeInterface
@@ -74,4 +77,29 @@ interface SupplierFacadeInterface
      * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
      */
     public function deleteSupplier(SupplierTransfer $supplierTransfer): void;
+
+    /**
+     * Specification:
+     * - Retrieves one page of suppliers, ordered by id.
+     * - Uses `SupplierCriteriaTransfer.pagination.offset` and `.limit`; without a pagination it returns all suppliers.
+     * - Sets `SupplierCollectionTransfer.pagination.nbResults` to the number of suppliers that match the criteria.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer;
+
+    /**
+     * Specification:
+     * - Retrieves the supplier locations that match the criteria.
+     * - Filters by `SupplierLocationCriteriaTransfer.fkSupplier` and `.idSupplierLocation` when they are set.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer;
 }
