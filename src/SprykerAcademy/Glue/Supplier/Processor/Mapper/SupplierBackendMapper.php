@@ -14,7 +14,13 @@ class SupplierBackendMapper
     public function mapSupplierTransferToSuppliersBackendResource(
         SupplierTransfer $supplierTransfer,
     ): SuppliersBackendResource {
-        return SuppliersBackendResource::fromArray($supplierTransfer->toArray(false, true));
+        $supplierData = $supplierTransfer->toArray(false, true);
+
+        // The `supplier-locations` include gives the resource a `supplierLocations` property of its own.
+        // Glue fills it from the related resources when the client asks for the include - not the mapper.
+        unset($supplierData[SupplierTransfer::SUPPLIER_LOCATIONS]);
+
+        return SuppliersBackendResource::fromArray($supplierData);
     }
 
     public function mapSupplierLocationTransferToSupplierLocationsBackendResource(
