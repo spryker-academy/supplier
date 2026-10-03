@@ -13,6 +13,14 @@ resource:
         - type: Get
         - type: GetCollection
 
+    # GET /suppliers?include=supplier-locations
+    includes:
+        - relationshipName: supplier-locations
+          targetResource: SupplierLocations
+          uriTemplate: /suppliers/{idSupplier}/supplier-locations
+          uriVariableMappings:
+              idSupplier: idSupplier
+
     properties:
         idSupplier:
             type: int
