@@ -1,0 +1,50 @@
+resource:
+    name: SupplierLocations
+    shortName: SupplierLocation
+    description: The published locations of a supplier
+
+    provider: SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SupplierLocationsStorefrontProvider
+
+    # A supplier has a handful of locations: no paging
+    paginationEnabled: false
+
+    # The locations are published inside the supplier's document, so both URLs name the supplier
+    operations:
+        - type: GetCollection
+          uriTemplate: /suppliers/{idSupplier}/supplier-locations
+          uriVariables:
+              idSupplier:
+                  fromClass: SuppliersStorefrontResource
+        - type: Get
+          uriTemplate: /suppliers/{idSupplier}/supplier-locations/{idSupplierLocation}
+          uriVariables:
+              idSupplier:
+                  fromClass: SupplierLocationsStorefrontResource
+                  identifiers: [idSupplier]
+              idSupplierLocation:
+                  fromClass: SupplierLocationsStorefrontResource
+                  identifiers: [idSupplierLocation]
+
+    properties:
+        idSupplierLocation:
+            type: int
+            description: The unique supplier location identifier
+            identifier: true
+        idSupplier:
+            type: int
+            description: The supplier the location belongs to
+        city:
+            type: string
+            description: City
+        country:
+            type: string
+            description: Country
+        address:
+            type: string
+            description: Street and house number
+        zipCode:
+            type: string
+            description: Zip code
+        isDefault:
+            type: bool
+            description: Whether this is the default location of the supplier
