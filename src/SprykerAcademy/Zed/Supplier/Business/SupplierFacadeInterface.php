@@ -10,6 +10,8 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\Supplier\Business;
 
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 
 interface SupplierFacadeInterface
@@ -74,4 +76,17 @@ interface SupplierFacadeInterface
      * @param \Generated\Shared\Transfer\SupplierTransfer $supplierTransfer
      */
     public function deleteSupplier(SupplierTransfer $supplierTransfer): void;
+
+    /**
+     * Specification:
+     * - Retrieves the supplier locations that match the criteria.
+     * - Filters by `SupplierLocationCriteriaTransfer.fkSupplier`, `.fksSupplier` and `.idSupplierLocation` when they are set.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer;
 }
