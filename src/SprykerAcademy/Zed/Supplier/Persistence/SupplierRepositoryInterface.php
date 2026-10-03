@@ -28,16 +28,16 @@ interface SupplierRepositoryInterface
     public function findSupplierById(int $idSupplier): ?SupplierTransfer;
 
     /**
-     * Returns one page of suppliers (criteria.pagination.offset/limit) and the total in pagination.nbResults.
-     *
-     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
-     */
-    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer;
-
-    /**
      * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
      */
     public function getSupplierLocationCollection(
         SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
     ): SupplierLocationCollectionTransfer;
+
+    /**
+     * Returns one page of suppliers (criteria.pagination.offset/limit) and the total in pagination.nbResults.
+     *
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer;
 }

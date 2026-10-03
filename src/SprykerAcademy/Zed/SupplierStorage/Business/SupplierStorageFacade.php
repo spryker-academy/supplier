@@ -48,4 +48,19 @@ class SupplierStorageFacade extends AbstractFacade implements SupplierStorageFac
             ->createSupplierStorageDeleter()
             ->deleteCollectionBySupplierEvents($eventEntityTransfers);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    #[\Override]
+    public function writeCollectionBySupplierLocationEvents(array $eventEntityTransfers): void
+    {
+        $this->getFactory()
+            ->createSupplierStorageWriter()
+            ->writeCollectionBySupplierLocationEvents($eventEntityTransfers);
+    }
 }
