@@ -9,7 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\Supplier\Business;
 
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
@@ -106,5 +109,36 @@ class SupplierFacade extends AbstractFacade implements SupplierFacadeInterface
         $this->getFactory()
             ->createSupplierWriter()
             ->delete($supplierTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    #[\Override]
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer
+    {
+        return $this->getFactory()
+            ->createSupplierReader()
+            ->getPaginatedSupplierCollection($supplierCriteriaTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    #[\Override]
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        return $this->getFactory()
+            ->createSupplierReader()
+            ->getSupplierLocationCollection($supplierLocationCriteriaTransfer);
     }
 }
