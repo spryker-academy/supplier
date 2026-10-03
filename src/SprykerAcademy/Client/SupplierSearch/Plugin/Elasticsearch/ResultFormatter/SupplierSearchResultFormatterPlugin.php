@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SprykerAcademy\Client\SupplierSearch\Plugin\Elasticsearch\ResultFormatter;
 
 use Elastica\ResultSet;
+use Generated\Shared\Transfer\PaginationTransfer;
 use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Spryker\Client\SearchElasticsearch\Plugin\ResultFormatter\AbstractElasticsearchResultFormatterPlugin;
@@ -23,7 +24,9 @@ class SupplierSearchResultFormatterPlugin extends AbstractElasticsearchResultFor
 
     protected function formatSearchResult(ResultSet $searchResult, array $requestParameters): SupplierCollectionTransfer
     {
-        $supplierCollectionTransfer = new SupplierCollectionTransfer();
+        // The total of all matching suppliers, not of the page: a paginated API needs it for its "last" link
+        $supplierCollectionTransfer = (new SupplierCollectionTransfer())
+            ->setPagination((new PaginationTransfer())->setNbResults($searchResult->getTotalHits()));
 
         foreach ($searchResult->getResults() as $document) {
             $supplierTransfer = (new SupplierTransfer())->fromArray($document->getSource(), true);

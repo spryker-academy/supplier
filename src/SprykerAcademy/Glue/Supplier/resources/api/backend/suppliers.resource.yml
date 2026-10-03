@@ -1,9 +1,9 @@
 resource:
     name: Suppliers
     shortName: Supplier
-    description: Supplier management API for storefront operations
+    description: Supplier management API for back-office integrations
 
-    provider: SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SuppliersStorefrontProvider
+    provider: SprykerAcademy\Glue\Supplier\Api\Backend\Provider\SuppliersBackendProvider
 
     # GET /suppliers?page[offset]=2&page[limit]=2 - the provider cuts the page out, see provideCollection()
     paginationEnabled: true
@@ -12,6 +12,14 @@ resource:
     operations:
         - type: Get
         - type: GetCollection
+
+    # GET /suppliers?include=supplier-locations
+    includes:
+        - relationshipName: supplier-locations
+          targetResource: SupplierLocations
+          uriTemplate: /suppliers/{idSupplier}/supplier-locations
+          uriVariableMappings:
+              idSupplier: idSupplier
 
     properties:
         idSupplier:
