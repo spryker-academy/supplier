@@ -10,6 +10,7 @@
         <property name="status" type="int" />
         <property name="email" type="string" />
         <property name="phone" type="string" />
+        <property name="supplierLocations" type="SupplierLocation[]" singular="supplierLocation" />
     </transfer>
 
     <transfer name="SupplierCollection">
@@ -22,6 +23,7 @@
         <property name="idSupplier" type="int"/>
         <property name="name" type="string"/>
         <property name="description" type="string"/>
+        <property name="withSupplierLocations" type="bool"/>
         <property name="pagination" type="Pagination" />
     </transfer>
 
@@ -49,6 +51,7 @@
         <property name="idSupplierLocation" type="int" />
         <property name="fkSupplier" type="int" />
         <property name="idsSupplierLocation" singular="idSupplierLocation" type="array"/>
+        <property name="fksSupplier" singular="fkSupplier" type="array"/>
     </transfer>
 
 </transfers>
