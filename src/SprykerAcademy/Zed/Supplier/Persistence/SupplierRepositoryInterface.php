@@ -10,6 +10,8 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\Supplier\Persistence;
 
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 
 interface SupplierRepositoryInterface
@@ -23,4 +25,11 @@ interface SupplierRepositoryInterface
      * @param int $idSupplier
      */
     public function findSupplierById(int $idSupplier): ?SupplierTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer;
 }
