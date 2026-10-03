@@ -10,6 +10,8 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\Supplier\Business\Reader;
 
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use SprykerAcademy\Zed\Supplier\Persistence\SupplierRepositoryInterface;
 
@@ -27,8 +29,50 @@ readonly class SupplierReader
      */
     public function getSuppliers(SupplierCriteriaTransfer $supplierCriteriaTransfer): array
     {
-        return $this->supplierRepository
+        $supplierTransfers = $this->supplierRepository
             ->getSuppliers($supplierCriteriaTransfer);
+
+        if ($supplierCriteriaTransfer->getWithSupplierLocations()) {
+            $this->expandSuppliersWithSupplierLocations($supplierTransfers);
+        }
+
+        return $supplierTransfers;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        return $this->supplierRepository->getSupplierLocationCollection($supplierLocationCriteriaTransfer);
+    }
+
+    /**
+     * One query for the locations of all suppliers, not one per supplier.
+     *
+     * @param array<\Generated\Shared\Transfer\SupplierTransfer> $supplierTransfers
+     */
+    protected function expandSuppliersWithSupplierLocations(array $supplierTransfers): void
+    {
+        $supplierTransfersIndexed = [];
+
+        foreach ($supplierTransfers as $supplierTransfer) {
+            $supplierTransfersIndexed[$supplierTransfer->getIdSupplier()] = $supplierTransfer;
+        }
+
+        if ($supplierTransfersIndexed === []) {
+            return;
+        }
+
+        $supplierLocationCollectionTransfer = $this->supplierRepository->getSupplierLocationCollection(
+            (new SupplierLocationCriteriaTransfer())->setFksSupplier(array_keys($supplierTransfersIndexed)),
+        );
+
+        foreach ($supplierLocationCollectionTransfer->getSupplierLocations() as $supplierLocationTransfer) {
+            $supplierTransfersIndexed[$supplierLocationTransfer->getFkSupplier()]
+                ->addSupplierLocation($supplierLocationTransfer);
+        }
     }
 
     /**

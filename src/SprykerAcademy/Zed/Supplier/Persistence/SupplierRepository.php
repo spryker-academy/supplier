@@ -10,6 +10,9 @@ declare(strict_types = 1);
 namespace SprykerAcademy\Zed\Supplier\Persistence;
 
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Propel\Runtime\Collection\ObjectCollection;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
@@ -83,5 +86,43 @@ class SupplierRepository extends AbstractRepository implements SupplierRepositor
         return $this->getFactory()
             ->createSupplierMapper()
             ->mapSupplierEntityToSupplierTransfer($supplierEntity, new SupplierTransfer());
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    #[\Override]
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        $supplierLocationQuery = $this->getFactory()->createSupplierLocationQuery();
+
+        if ($supplierLocationCriteriaTransfer->getFkSupplier() !== null) {
+            $supplierLocationQuery->filterByFkSupplier($supplierLocationCriteriaTransfer->getFkSupplier());
+        }
+
+        if ($supplierLocationCriteriaTransfer->getFksSupplier()) {
+            $supplierLocationQuery->filterByFkSupplier_In($supplierLocationCriteriaTransfer->getFksSupplier());
+        }
+
+        if ($supplierLocationCriteriaTransfer->getIdSupplierLocation() !== null) {
+            $supplierLocationQuery->filterByIdSupplierLocation($supplierLocationCriteriaTransfer->getIdSupplierLocation());
+        }
+
+        $supplierLocationQuery->orderByIdSupplierLocation();
+
+        $supplierLocationCollectionTransfer = new SupplierLocationCollectionTransfer();
+        $supplierMapper = $this->getFactory()->createSupplierMapper();
+
+        foreach ($supplierLocationQuery->find() as $supplierLocationEntity) {
+            $supplierLocationCollectionTransfer->addSupplierLocation(
+                $supplierMapper->mapSupplierLocationEntityToSupplierLocationTransfer(
+                    $supplierLocationEntity,
+                    new SupplierLocationTransfer(),
+                ),
+            );
+        }
+
+        return $supplierLocationCollectionTransfer;
     }
 }

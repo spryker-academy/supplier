@@ -12,10 +12,13 @@ use Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocationQuery;
 use Override;
 use Spryker\Zed\DataImport\Business\Exception\EntityNotFoundException;
 use Spryker\Zed\DataImport\Business\Model\DataImportStep\DataImportStepInterface;
+use Spryker\Zed\DataImport\Business\Model\DataImportStep\PublishAwareStep;
 use Spryker\Zed\DataImport\Business\Model\DataSet\DataSetInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
+use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierDataImport\Business\DataSet\SupplierLocationDataSetInterface;
 
-class SupplierLocationWriterStep implements DataImportStepInterface
+class SupplierLocationWriterStep extends PublishAwareStep implements DataImportStepInterface
 {
     /**
      * @var array<string, int>
@@ -64,6 +67,11 @@ class SupplierLocationWriterStep implements DataImportStepInterface
 
         if ($supplierLocationEntity->isNew() || $supplierLocationEntity->isModified()) {
             $supplierLocationEntity->save();
+
+            // The event behavior is off during data import. The location is published inside its
+            // supplier's document, so queue a publish event for the supplier.
+            $this->addPublishEvents(SupplierSearchConfig::SUPPLIER_PUBLISH, $supplierId);
+            $this->addPublishEvents(SupplierStorageConfig::SUPPLIER_PUBLISH, $supplierId);
         }
     }
 
