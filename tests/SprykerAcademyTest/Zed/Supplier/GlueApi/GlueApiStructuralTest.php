@@ -151,6 +151,37 @@ class GlueApiStructuralTest extends Unit
         $this->assertStringContainsString('numFound:', $content, 'The pagination object must have numFound.');
     }
 
+    public function testSuppliersResourceYamlIncludesTheSupplierLocations(): void
+    {
+        $path = $this->findResourceYaml('suppliers.resource.yml');
+        $this->assertNotNull($path);
+
+        $content = file_get_contents($path);
+        $this->assertMatchesRegularExpression('/^\s*includes:/m', $content, 'The Storefront suppliers resource needs an `includes` list.');
+        $this->assertMatchesRegularExpression(
+            '/^\s*-\s*relationshipName:\s*supplier-locations\s*$/m',
+            $content,
+            'The relationship must be named supplier-locations: that is the value of ?include=.',
+        );
+        $this->assertMatchesRegularExpression(
+            '/^\s*targetResource:\s*SupplierLocations\s*$/m',
+            $content,
+            'targetResource is the `name` of the supplier-locations resource: SupplierLocations.',
+        );
+        $this->assertMatchesRegularExpression(
+            '/^\s*uriVariableMappings:\s*\n\s*idSupplier:\s*idSupplier\s*$/m',
+            $content,
+            'uriVariableMappings must pass the supplier\'s idSupplier to the idSupplier URI variable of the locations provider.',
+        );
+    }
+
+    public function testSupplierLocationsStorefrontProviderExists(): void
+    {
+        $class = 'SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SupplierLocationsStorefrontProvider';
+        $this->assertTrue(class_exists($class), 'SupplierLocationsStorefrontProvider must exist.');
+        $this->assertContains('ApiPlatform\State\ProviderInterface', class_implements($class));
+    }
+
     // --- Backend API ---
 
     public function testSuppliersBackendProviderExists(): void

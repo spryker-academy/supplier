@@ -91,6 +91,44 @@ class SupplierRepository extends AbstractRepository implements SupplierRepositor
     }
 
     /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    #[\Override]
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        $supplierLocationQuery = $this->getFactory()->createSupplierLocationQuery();
+
+        if ($supplierLocationCriteriaTransfer->getFkSupplier() !== null) {
+            $supplierLocationQuery->filterByFkSupplier($supplierLocationCriteriaTransfer->getFkSupplier());
+        }
+
+        if ($supplierLocationCriteriaTransfer->getFksSupplier()) {
+            $supplierLocationQuery->filterByFkSupplier_In($supplierLocationCriteriaTransfer->getFksSupplier());
+        }
+
+        if ($supplierLocationCriteriaTransfer->getIdSupplierLocation() !== null) {
+            $supplierLocationQuery->filterByIdSupplierLocation($supplierLocationCriteriaTransfer->getIdSupplierLocation());
+        }
+
+        $supplierLocationQuery->orderByIdSupplierLocation();
+
+        $supplierLocationCollectionTransfer = new SupplierLocationCollectionTransfer();
+        $supplierMapper = $this->getFactory()->createSupplierMapper();
+
+        foreach ($supplierLocationQuery->find() as $supplierLocationEntity) {
+            $supplierLocationCollectionTransfer->addSupplierLocation(
+                $supplierMapper->mapSupplierLocationEntityToSupplierLocationTransfer(
+                    $supplierLocationEntity,
+                    new SupplierLocationTransfer(),
+                ),
+            );
+        }
+
+        return $supplierLocationCollectionTransfer;
+    }
+
+    /**
      * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
      */
     #[\Override]
@@ -129,39 +167,5 @@ class SupplierRepository extends AbstractRepository implements SupplierRepositor
         }
 
         return $supplierCollectionTransfer;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
-     */
-    #[\Override]
-    public function getSupplierLocationCollection(
-        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
-    ): SupplierLocationCollectionTransfer {
-        $supplierLocationQuery = $this->getFactory()->createSupplierLocationQuery();
-
-        if ($supplierLocationCriteriaTransfer->getFkSupplier() !== null) {
-            $supplierLocationQuery->filterByFkSupplier($supplierLocationCriteriaTransfer->getFkSupplier());
-        }
-
-        if ($supplierLocationCriteriaTransfer->getIdSupplierLocation() !== null) {
-            $supplierLocationQuery->filterByIdSupplierLocation($supplierLocationCriteriaTransfer->getIdSupplierLocation());
-        }
-
-        $supplierLocationQuery->orderByIdSupplierLocation();
-
-        $supplierLocationCollectionTransfer = new SupplierLocationCollectionTransfer();
-        $supplierMapper = $this->getFactory()->createSupplierMapper();
-
-        foreach ($supplierLocationQuery->find() as $supplierLocationEntity) {
-            $supplierLocationCollectionTransfer->addSupplierLocation(
-                $supplierMapper->mapSupplierLocationEntityToSupplierLocationTransfer(
-                    $supplierLocationEntity,
-                    new SupplierLocationTransfer(),
-                ),
-            );
-        }
-
-        return $supplierLocationCollectionTransfer;
     }
 }
