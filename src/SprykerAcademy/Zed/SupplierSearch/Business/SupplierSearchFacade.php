@@ -45,4 +45,19 @@ class SupplierSearchFacade extends AbstractFacade implements SupplierSearchFacad
             ->createSupplierSearchDeleter()
             ->deleteCollectionBySupplierEvents($eventEntityTransfers);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    #[\Override]
+    public function writeCollectionBySupplierLocationEvents(array $eventEntityTransfers): void
+    {
+        $this->getFactory()
+            ->createSupplierSearchWriter()
+            ->writeCollectionBySupplierLocationEvents($eventEntityTransfers);
+    }
 }

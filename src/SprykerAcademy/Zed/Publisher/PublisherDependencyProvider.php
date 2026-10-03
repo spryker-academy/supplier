@@ -10,9 +10,11 @@ use SprykerAcademy\Shared\SupplierStorage\SupplierStorageConfig;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierPublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierSearchWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierSearch\Communication\Plugin\Publisher\SupplierLocationSearchWritePublisherPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageDeletePublisherPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStoragePublisherTriggerPlugin;
 use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierStorageWritePublisherPlugin;
+use SprykerAcademy\Zed\SupplierStorage\Communication\Plugin\Publisher\SupplierLocationStorageWritePublisherPlugin;
 
 class PublisherDependencyProvider extends PyzPublisherDependencyProvider
 {
@@ -50,9 +52,10 @@ class PublisherDependencyProvider extends PyzPublisherDependencyProvider
     protected function getSupplierPublisherPlugins(): array
     {
         // TODO: Register the supplier publisher plugins, each under its publish queue
-        // Hint: Map SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE => [new SupplierSearchWritePublisherPlugin(), new SupplierSearchDeletePublisherPlugin()]
-        // Hint: Map SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE => [new SupplierStorageWritePublisherPlugin(), new SupplierStorageDeletePublisherPlugin()]
+        // Hint: Map SupplierSearchConfig::SUPPLIER_PUBLISH_SEARCH_QUEUE => [new SupplierSearchWritePublisherPlugin(), new SupplierSearchDeletePublisherPlugin(), new SupplierLocationSearchWritePublisherPlugin()]
+        // Hint: Map SupplierStorageConfig::SUPPLIER_PUBLISH_STORAGE_QUEUE => [new SupplierStorageWritePublisherPlugin(), new SupplierStorageDeletePublisherPlugin(), new SupplierLocationStorageWritePublisherPlugin()]
         // The delete plugins are provided: they remove a deleted supplier from Elasticsearch and Redis.
+        // The SupplierLocation plugins are provided too: a change of a location republishes its supplier.
         return [
         ];
     }

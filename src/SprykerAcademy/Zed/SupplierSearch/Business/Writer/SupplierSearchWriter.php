@@ -13,6 +13,7 @@ use Generated\Shared\Transfer\SupplierCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierSearchTransfer;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
+use SprykerAcademy\Shared\SupplierSearch\SupplierSearchConfig;
 use SprykerAcademy\Zed\Supplier\Business\SupplierFacadeInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchEntityManagerInterface;
 use SprykerAcademy\Zed\SupplierSearch\Persistence\SupplierSearchRepositoryInterface;
@@ -44,6 +45,22 @@ readonly class SupplierSearchWriter
     }
 
     /**
+     * A location has no document of its own: it lives in its supplier's document. The event of a
+     * pyz_supplier_location row carries the row's foreign keys, and fk_supplier names the supplier to republish.
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    public function writeCollectionBySupplierLocationEvents(array $eventEntityTransfers): void
+    {
+        $supplierIds = $this->eventBehaviorFacade->getEventTransferForeignKeys(
+            $eventEntityTransfers,
+            SupplierSearchConfig::COL_SUPPLIER_LOCATION_FK_SUPPLIER,
+        );
+
+        $this->writeCollectionBySupplierIds(array_values(array_unique($supplierIds)));
+    }
+
+    /**
      * @param array<int> $supplierIds
      */
     protected function writeCollectionBySupplierIds(array $supplierIds): void
@@ -59,7 +76,7 @@ readonly class SupplierSearchWriter
 
         foreach ($supplierTransfersIndexed as $supplierId => $supplierTransfer) {
             // The document matches src/SprykerAcademy/Shared/SupplierSearch/Schema/supplier.json:
-            // id_supplier, name, description, status, email, phone.
+            // id_supplier, name, description, status, email, phone and the supplier_locations list.
             $searchData = $supplierTransfer->toArray();
 
             $supplierSearchTransfer = $supplierSearchTransfersIndexed[$supplierId] ?? new SupplierSearchTransfer();
@@ -91,6 +108,7 @@ readonly class SupplierSearchWriter
 
         // TODO-1: Create a SupplierCriteriaTransfer and populate it with `$supplierIds`.
         // Hint-1: Use `setIdsSupplier()`.
+        // Hint-2: Also `setWithSupplierLocations(true)`: the document carries the supplier's locations.
         // TODO-2: Use the SupplierFacade to fetch the suppliers by ids.
         // Hint-1: `$this->supplierFacade->getSuppliers()` with the criteria transfer created above.
         $supplierTransfers = [];
