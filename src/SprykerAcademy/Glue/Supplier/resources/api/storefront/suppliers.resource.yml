@@ -6,6 +6,7 @@ resource:
     # TODO-1: Add the provider class.
     # Hint-1: Use `SprykerAcademy\Glue\Supplier\Api\Storefront\Provider\SuppliersStorefrontProvider`.
 
+    # GET /suppliers?page[offset]=2&page[limit]=2 - the provider cuts the page out, see provideCollection()
     paginationEnabled: true
     paginationItemsPerPage: 10
 
@@ -21,3 +22,21 @@ resource:
         # TODO-2: Add properties for the Supplier API resource.
         # Hint-1: Add `name`, `description`, `status`, `email`, and `phone`.
         # Hint-2: Use `string` for text fields and `int` for `status`.
+        pagination:
+            type: object
+            objectName: Pagination
+            description: Pagination of the collection. Set on its first item only; Glue builds the first/prev/next/last links from it.
+            writable: false
+            properties:
+                numFound:
+                    type: integer
+                    description: Number of suppliers in all pages
+                currentPage:
+                    type: integer
+                    description: The page of this response, starting at 1
+                maxPage:
+                    type: integer
+                    description: The last page
+                currentItemsPerPage:
+                    type: integer
+                    description: Suppliers per page

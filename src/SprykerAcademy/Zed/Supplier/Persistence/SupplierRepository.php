@@ -9,7 +9,12 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\Supplier\Persistence;
 
+use Generated\Shared\Transfer\PaginationTransfer;
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Propel\Runtime\Collection\ObjectCollection;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
@@ -83,5 +88,80 @@ class SupplierRepository extends AbstractRepository implements SupplierRepositor
         return $this->getFactory()
             ->createSupplierMapper()
             ->mapSupplierEntityToSupplierTransfer($supplierEntity, new SupplierTransfer());
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    #[\Override]
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer
+    {
+        $supplierQuery = $this->getFactory()->createSupplierQuery();
+
+        if ($supplierCriteriaTransfer->getIdsSupplier()) {
+            $supplierQuery->filterByIdSupplier_In($supplierCriteriaTransfer->getIdsSupplier());
+        }
+
+        if ($supplierCriteriaTransfer->getName() !== null) {
+            $supplierQuery->filterByName($supplierCriteriaTransfer->getName());
+        }
+
+        // Count before the page is cut out: the API needs the total to build the "last" and "next" links
+        $paginationTransfer = $supplierCriteriaTransfer->getPagination() ?? new PaginationTransfer();
+        $paginationTransfer->setNbResults($supplierQuery->count());
+
+        // A stable order, or the pages overlap
+        $supplierQuery->orderByIdSupplier();
+
+        if ($paginationTransfer->getLimit() !== null) {
+            $supplierQuery
+                ->offset($paginationTransfer->getOffset() ?? 0)
+                ->limit($paginationTransfer->getLimit());
+        }
+
+        $supplierCollectionTransfer = (new SupplierCollectionTransfer())->setPagination($paginationTransfer);
+        $supplierMapper = $this->getFactory()->createSupplierMapper();
+
+        foreach ($supplierQuery->find() as $supplierEntity) {
+            $supplierCollectionTransfer->addSupplier(
+                $supplierMapper->mapSupplierEntityToSupplierTransfer($supplierEntity, new SupplierTransfer()),
+            );
+        }
+
+        return $supplierCollectionTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    #[\Override]
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        $supplierLocationQuery = $this->getFactory()->createSupplierLocationQuery();
+
+        if ($supplierLocationCriteriaTransfer->getFkSupplier() !== null) {
+            $supplierLocationQuery->filterByFkSupplier($supplierLocationCriteriaTransfer->getFkSupplier());
+        }
+
+        if ($supplierLocationCriteriaTransfer->getIdSupplierLocation() !== null) {
+            $supplierLocationQuery->filterByIdSupplierLocation($supplierLocationCriteriaTransfer->getIdSupplierLocation());
+        }
+
+        $supplierLocationQuery->orderByIdSupplierLocation();
+
+        $supplierLocationCollectionTransfer = new SupplierLocationCollectionTransfer();
+        $supplierMapper = $this->getFactory()->createSupplierMapper();
+
+        foreach ($supplierLocationQuery->find() as $supplierLocationEntity) {
+            $supplierLocationCollectionTransfer->addSupplierLocation(
+                $supplierMapper->mapSupplierLocationEntityToSupplierLocationTransfer(
+                    $supplierLocationEntity,
+                    new SupplierLocationTransfer(),
+                ),
+            );
+        }
+
+        return $supplierLocationCollectionTransfer;
     }
 }

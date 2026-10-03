@@ -1,0 +1,62 @@
+resource:
+    name: Suppliers
+    shortName: Supplier
+    description: Supplier management API for back-office integrations
+
+    # TODO-1: Add the provider class of the Backend API.
+    # Hint-1: Use `SprykerAcademy\Glue\Supplier\Api\Backend\Provider\SuppliersBackendProvider`.
+
+    # GET /suppliers?page[offset]=2&page[limit]=2 - the provider cuts the page out, see provideCollection()
+    paginationEnabled: true
+    paginationItemsPerPage: 10
+
+    operations:
+        - type: Get
+        - type: GetCollection
+
+    # TODO-2: Let clients ask for the locations of a supplier: GET /suppliers?include=supplier-locations
+    # Hint-1: Add an `includes:` list with one entry.
+    # Hint-2: `relationshipName` is the value of ?include= : supplier-locations
+    # Hint-3: `targetResource` is the `name` of the resource in supplier-locations.resource.yml: SupplierLocations
+    # Hint-4: `uriTemplate` is the collection URL of that resource: /suppliers/{idSupplier}/supplier-locations
+    # Hint-5: `uriVariableMappings` tells Glue which property of the supplier fills which URI variable
+    #         of the locations provider: `idSupplier: idSupplier`
+
+    properties:
+        idSupplier:
+            type: int
+            description: The unique supplier identifier
+            identifier: true
+        name:
+            type: string
+            description: Supplier name
+        description:
+            type: string
+            description: Supplier description
+        status:
+            type: int
+            description: Supplier status where 1 is active and 0 is inactive
+        email:
+            type: string
+            description: Supplier email
+        phone:
+            type: string
+            description: Supplier phone
+        pagination:
+            type: object
+            objectName: Pagination
+            description: Pagination of the collection. Set on its first item only; Glue builds the first/prev/next/last links from it.
+            writable: false
+            properties:
+                numFound:
+                    type: integer
+                    description: Number of suppliers in all pages
+                currentPage:
+                    type: integer
+                    description: The page of this response, starting at 1
+                maxPage:
+                    type: integer
+                    description: The last page
+                currentItemsPerPage:
+                    type: integer
+                    description: Suppliers per page
