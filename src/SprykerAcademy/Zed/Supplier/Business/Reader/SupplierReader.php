@@ -9,7 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\Supplier\Business\Reader;
 
+use Generated\Shared\Transfer\SupplierCollectionTransfer;
 use Generated\Shared\Transfer\SupplierCriteriaTransfer;
+use Generated\Shared\Transfer\SupplierLocationCollectionTransfer;
+use Generated\Shared\Transfer\SupplierLocationCriteriaTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use SprykerAcademy\Zed\Supplier\Persistence\SupplierRepositoryInterface;
 
@@ -37,5 +40,22 @@ readonly class SupplierReader
     public function findSupplierById(int $idSupplier): ?SupplierTransfer
     {
         return $this->supplierRepository->findSupplierById($idSupplier);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierCriteriaTransfer $supplierCriteriaTransfer
+     */
+    public function getPaginatedSupplierCollection(SupplierCriteriaTransfer $supplierCriteriaTransfer): SupplierCollectionTransfer
+    {
+        return $this->supplierRepository->getPaginatedSupplierCollection($supplierCriteriaTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer
+     */
+    public function getSupplierLocationCollection(
+        SupplierLocationCriteriaTransfer $supplierLocationCriteriaTransfer,
+    ): SupplierLocationCollectionTransfer {
+        return $this->supplierRepository->getSupplierLocationCollection($supplierLocationCriteriaTransfer);
     }
 }

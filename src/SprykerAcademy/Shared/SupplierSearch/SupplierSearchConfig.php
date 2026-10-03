@@ -59,6 +59,18 @@ class SupplierSearchConfig extends AbstractBundleConfig
     public const string SUPPLIER_RESOURCE_TYPE = 'supplier';
 
     /**
+     * Request parameters of SupplierSearchClient::searchSuppliers() that select one page of the result.
+     *
+     * @api
+     */
+    public const string PARAMETER_OFFSET = 'offset';
+
+    /**
+     * @api
+     */
+    public const string PARAMETER_LIMIT = 'limit';
+
+    /**
      * @api
      */
     public const string KEY_TYPE = 'type';
