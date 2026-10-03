@@ -9,8 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerAcademy\Zed\Supplier\Persistence\Propel\Mapper;
 
+use Generated\Shared\Transfer\SupplierLocationTransfer;
 use Generated\Shared\Transfer\SupplierTransfer;
 use Orm\Zed\Supplier\Persistence\PyzSupplier;
+use Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocation;
 
 class SupplierMapper
 {
@@ -34,5 +36,16 @@ class SupplierMapper
         SupplierTransfer $supplierTransfer,
     ): SupplierTransfer {
         return $supplierTransfer->fromArray($supplierEntity->toArray(), true);
+    }
+
+    /**
+     * @param \Orm\Zed\SupplierLocation\Persistence\PyzSupplierLocation $supplierLocationEntity
+     * @param \Generated\Shared\Transfer\SupplierLocationTransfer $supplierLocationTransfer
+     */
+    public function mapSupplierLocationEntityToSupplierLocationTransfer(
+        PyzSupplierLocation $supplierLocationEntity,
+        SupplierLocationTransfer $supplierLocationTransfer,
+    ): SupplierLocationTransfer {
+        return $supplierLocationTransfer->fromArray($supplierLocationEntity->toArray(), true);
     }
 }
