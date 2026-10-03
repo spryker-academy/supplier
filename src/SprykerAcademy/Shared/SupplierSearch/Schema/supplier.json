@@ -38,6 +38,31 @@
                 },
                 "phone": {
                     "type": "keyword"
+                },
+                "supplier_locations": {
+                    "properties": {
+                        "id_supplier_location": {
+                            "type": "integer"
+                        },
+                        "fk_supplier": {
+                            "type": "integer"
+                        },
+                        "city": {
+                            "type": "keyword"
+                        },
+                        "country": {
+                            "type": "keyword"
+                        },
+                        "address": {
+                            "type": "keyword"
+                        },
+                        "zip_code": {
+                            "type": "keyword"
+                        },
+                        "is_default": {
+                            "type": "boolean"
+                        }
+                    }
                 }
             }
         }

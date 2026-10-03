@@ -32,4 +32,15 @@ interface SupplierSearchFacadeInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
      */
     public function deleteCollectionBySupplierEvents(array $eventEntityTransfers): void;
+
+    /**
+     * Specification:
+     * - Reads the supplier of every pyz_supplier_location event from the event's foreign keys.
+     * - Writes those suppliers, with their current locations, to search.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventEntityTransfers
+     */
+    public function writeCollectionBySupplierLocationEvents(array $eventEntityTransfers): void;
 }
