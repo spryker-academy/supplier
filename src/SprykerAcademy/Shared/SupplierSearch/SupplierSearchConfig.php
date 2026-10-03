@@ -109,4 +109,29 @@ class SupplierSearchConfig extends AbstractBundleConfig
      * @api
      */
     public const string KEY_COMPLETION_TERMS = 'completion-terms';
+
+    /**
+     * A supplier's locations are published inside the supplier's document, so a change of a
+     * pyz_supplier_location row republishes its supplier.
+     *
+     * @api
+     */
+    public const string ENTITY_PYZ_SUPPLIER_LOCATION_CREATE = 'Entity.pyz_supplier_location.create';
+
+    /**
+     * @api
+     */
+    public const string ENTITY_PYZ_SUPPLIER_LOCATION_UPDATE = 'Entity.pyz_supplier_location.update';
+
+    /**
+     * @api
+     */
+    public const string ENTITY_PYZ_SUPPLIER_LOCATION_DELETE = 'Entity.pyz_supplier_location.delete';
+
+    /**
+     * The foreign key of the event that names the supplier of a location.
+     *
+     * @api
+     */
+    public const string COL_SUPPLIER_LOCATION_FK_SUPPLIER = 'pyz_supplier_location.fk_supplier';
 }
