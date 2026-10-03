@@ -7,8 +7,8 @@ namespace SprykerAcademyTest\Zed\Supplier\GlueApi;
 use Codeception\Test\Unit;
 
 /**
- * Structural tests for the Glue Storefront API exercise.
- * Verifies Provider, Mapper, Config, and resource YAML.
+ * Structural tests for the Glue Storefront and Backend API exercise.
+ * Verifies the providers, mappers, config and resource YAML files.
  *
  * Run: vendor/bin/codecept run -c tests/SprykerAcademyTest/Zed/Supplier/ GlueApi
  */
@@ -141,13 +141,93 @@ class GlueApiStructuralTest extends Unit
         $this->assertStringContainsString('identifier: true', $content, 'idSupplier must be marked as identifier.');
     }
 
+    public function testSuppliersResourceYamlHasThePaginationProperty(): void
+    {
+        $path = $this->findResourceYaml('suppliers.resource.yml');
+        $this->assertNotNull($path);
+
+        $content = file_get_contents($path);
+        $this->assertStringContainsString('pagination:', $content, 'The resource needs the `pagination` property the provider sets on the first item.');
+        $this->assertStringContainsString('numFound:', $content, 'The pagination object must have numFound.');
+    }
+
+    // --- Backend API ---
+
+    public function testSuppliersBackendProviderExists(): void
+    {
+        $class = 'SprykerAcademy\Glue\Supplier\Api\Backend\Provider\SuppliersBackendProvider';
+        $this->assertTrue(class_exists($class), 'SuppliersBackendProvider must exist.');
+        $this->assertContains(
+            'ApiPlatform\State\ProviderInterface',
+            class_implements($class),
+            'The Backend provider must implement ApiPlatform\State\ProviderInterface (AbstractBackendProvider does).',
+        );
+    }
+
+    public function testSupplierLocationsBackendProviderExists(): void
+    {
+        $class = 'SprykerAcademy\Glue\Supplier\Api\Backend\Provider\SupplierLocationsBackendProvider';
+        $this->assertTrue(class_exists($class), 'SupplierLocationsBackendProvider must exist.');
+        $this->assertContains('ApiPlatform\State\ProviderInterface', class_implements($class));
+    }
+
+    public function testSuppliersBackendResourceYamlHasProvider(): void
+    {
+        $path = $this->findResourceYaml('suppliers.resource.yml', 'backend');
+        $this->assertNotNull($path, 'resources/api/backend/suppliers.resource.yml must exist.');
+
+        $this->assertMatchesRegularExpression(
+            '/^\s*provider:\s*.*SuppliersBackendProvider\s*$/m',
+            file_get_contents($path),
+            'The Backend resource must name SuppliersBackendProvider as its provider.',
+        );
+    }
+
+    public function testSuppliersBackendResourceYamlIncludesTheSupplierLocations(): void
+    {
+        $path = $this->findResourceYaml('suppliers.resource.yml', 'backend');
+        $this->assertNotNull($path);
+
+        $content = file_get_contents($path);
+        $this->assertMatchesRegularExpression('/^\s*includes:/m', $content, 'The Backend suppliers resource needs an `includes` list.');
+        $this->assertMatchesRegularExpression(
+            '/^\s*-\s*relationshipName:\s*supplier-locations\s*$/m',
+            $content,
+            'The relationship must be named supplier-locations: that is the value of ?include=.',
+        );
+        $this->assertMatchesRegularExpression(
+            '/^\s*targetResource:\s*SupplierLocations\s*$/m',
+            $content,
+            'targetResource is the `name` of the supplier-locations resource: SupplierLocations.',
+        );
+        $this->assertMatchesRegularExpression(
+            '/^\s*uriVariableMappings:\s*\n\s*idSupplier:\s*idSupplier\s*$/m',
+            $content,
+            'uriVariableMappings must pass the supplier\'s idSupplier to the idSupplier URI variable of the locations provider.',
+        );
+    }
+
+    public function testSupplierLocationsBackendResourceYamlHasProviderAndOperations(): void
+    {
+        $path = $this->findResourceYaml('supplier-locations.resource.yml', 'backend');
+        $this->assertNotNull($path, 'resources/api/backend/supplier-locations.resource.yml must exist.');
+
+        $content = file_get_contents($path);
+        $this->assertMatchesRegularExpression(
+            '/^\s*provider:\s*.*SupplierLocationsBackendProvider\s*$/m',
+            $content,
+            'The resource must name SupplierLocationsBackendProvider as its provider.',
+        );
+        $this->assertStringContainsString('/suppliers/{idSupplier}/supplier-locations', $content, 'The collection lives under its supplier.');
+    }
+
     // --- Helpers ---
 
-    private function findResourceYaml(string $filename): ?string
+    private function findResourceYaml(string $filename, string $apiType = 'storefront'): ?string
     {
         $patterns = [
-            __DIR__ . '/../../../../../src/SprykerAcademy/Glue/*/resources/api/storefront/' . $filename,
-            getcwd() . '/src/SprykerAcademy/Glue/*/resources/api/storefront/' . $filename,
+            __DIR__ . '/../../../../../src/SprykerAcademy/Glue/*/resources/api/' . $apiType . '/' . $filename,
+            getcwd() . '/src/SprykerAcademy/Glue/*/resources/api/' . $apiType . '/' . $filename,
         ];
 
         foreach ($patterns as $pattern) {
